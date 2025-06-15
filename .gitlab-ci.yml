@@ -4,14 +4,13 @@ stages:
   - apply
   - destroy
 
-variables:
-  TF_IMAGE: hashicorp/terraform:light
 
 image:
-  name: $TF_IMAGE
+  name: registry.gitlab.com/gitlab-org/gitlab-build-images:terraform
   entrypoint:
     - '/usr/bin/env'
     - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+
 
 before_script:
   - export AWS_ACCESS_KEY=$AWS_ACCESS_KEY_ID
