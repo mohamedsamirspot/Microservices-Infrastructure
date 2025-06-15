@@ -1,6 +1,8 @@
 workflow:
   rules:
-    - when: manual
+    - if: '$CI_PIPELINE_SOURCE == "web"'  # Only run pipelines triggered from the GitLab UI
+      when: always
+    - when: never                        # Block pipelines from all other sources (push, MR, schedules, etc.)
 
 stages:
   - validate
