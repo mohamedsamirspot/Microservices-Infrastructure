@@ -23,26 +23,27 @@ before_script:
       echo "❌ ERROR: 'env' variable is not set (expected: dev or prod)"
       exit 1
     fi
-  - cd $env
-  - echo "Current working dir: $(pwd)"
-  - |
+    cd "$env"
+    echo "Current working dir: $(pwd)"
     cat > backend-config.hcl <<EOF
-    bucket       = "terraform-state-multi-env-spot"
-    key          = "${env}/eks-cluster/terraform.tfstate"
-    region       = "us-east-1"
-    encrypt      = true
-    use_lockfile = true
+bucket       = "terraform-state-multi-env-spot"
+key          = "${env}/eks-cluster/terraform.tfstate"
+region       = "us-east-1"
+encrypt      = true
+use_lockfile = true
 EOF
-  - terraform init -backend-config=backend-config.hcl
+    terraform init -backend-config=backend-config.hcl
 
 Terraform_validate:
   stage: validate
   script:
+    - cd "$env"
     - terraform validate
 
 Terraform_plan:
   stage: plan
   script:
+    - cd "$env"
     - terraform plan -out=tfplan
   artifacts:
     paths:
@@ -51,6 +52,7 @@ Terraform_plan:
 Terraform_apply:
   stage: apply
   script:
+    - cd "$env"
     - terraform apply -auto-approve tfplan
   when: manual
   dependencies:
@@ -59,6 +61,7 @@ Terraform_apply:
 destroy:
   stage: destroy
   script:
+    - cd "$env"
     - terraform destroy -auto-approve
   when: manual
   dependencies:
