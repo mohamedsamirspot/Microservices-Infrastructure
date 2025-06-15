@@ -37,13 +37,11 @@ before_script:
 Terraform_validate:
   stage: validate
   script:
-    - cd "$env"
     - terraform validate
 
 Terraform_plan:
   stage: plan
   script:
-    - cd "$env"
     - terraform plan -out=tfplan
   artifacts:
     paths:
@@ -52,7 +50,6 @@ Terraform_plan:
 Terraform_apply:
   stage: apply
   script:
-    - cd "$env"
     - terraform apply -auto-approve tfplan
   when: manual
   dependencies:
@@ -61,7 +58,6 @@ Terraform_apply:
 destroy:
   stage: destroy
   script:
-    - cd "$env"
     - terraform destroy -auto-approve
   when: manual
   dependencies:
