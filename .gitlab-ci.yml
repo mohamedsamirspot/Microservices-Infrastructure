@@ -1,13 +1,8 @@
 workflow:
   rules:
-    - if: '$CI_PIPELINE_SOURCE == "web"'
+    - if: '$CI_PIPELINE_SOURCE == "web"'  # Only run pipelines triggered from the GitLab UI
       when: always
-    - when: never
-  inputs:
-    env:
-      description: "Environment to deploy to (e.g., dev or prod)"
-      type: string
-      required: true
+    - when: never                        # Block pipelines from all other sources (push, MR, schedules, etc.)
 
 stages:
   - validate
@@ -15,11 +10,14 @@ stages:
   - apply
   - destroy
 
+
 image:
   name: hashicorp/terraform:latest
   entrypoint:
     - '/usr/bin/env'
     - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+
+
 
 before_script:
   - export AWS_ACCESS_KEY=$AWS_ACCESS_KEY_ID
@@ -27,11 +25,10 @@ before_script:
   - rm -rf .terraform
   - terraform --version
   - |
-    if [ -z "$CI_INPUT_ENV" ]; then
-      echo "❌ ERROR: 'env' input is not set (expected: dev or prod)"
+    if [ -z "$env" ]; then
+      echo "❌ ERROR: 'env' variable is not set (expected: dev or prod)"
       exit 1
     fi
-    export env="$CI_INPUT_ENV"
     cd "$env"
     echo "Current working dir: $(pwd)"
     terraform init
