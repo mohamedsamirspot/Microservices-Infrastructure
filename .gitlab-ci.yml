@@ -26,12 +26,12 @@ before_script:
     cd "$env"
     echo "Current working dir: $(pwd)"
     cat > backend-config.hcl <<EOF
-bucket       = "terraform-state-multi-env-spot"
-key          = "${env}/eks-cluster/terraform.tfstate"
-region       = "us-east-1"
-encrypt      = true
-use_lockfile = true
-EOF
+    bucket       = "terraform-state-multi-env-spot"
+    key          = "${env}/eks-cluster/terraform.tfstate"
+    region       = "us-east-1"
+    encrypt      = true
+    use_lockfile = true
+    EOF
     terraform init -backend-config=backend-config.hcl
 
 Terraform_validate:
