@@ -6,7 +6,6 @@ stages:
 
 variables:
   TF_IMAGE: hashicorp/terraform:light
-  env: default
 
 image:
   name: $TF_IMAGE
