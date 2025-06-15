@@ -18,12 +18,12 @@ terraform {
   #   path = "dev/terraform.tfstate"
   # }
 
-  # backend "s3" {
-  #   bucket       = "terraform-state-multi-env-spot"
-  #   key          = "${env}/eks-cluster/terraform.tfstate"
-  #   region       = "us-east-1"
-  #   encrypt      = true
-  #   use_lockfile = true
-  # }
+  backend "s3" {
+    bucket       = "terraform-state-multi-env-spot"
+    key          = "dev/eks-cluster/terraform.tfstate"
+    region       = "us-east-1"
+    encrypt      = true
+    use_lockfile = true
+  }
 }
 
