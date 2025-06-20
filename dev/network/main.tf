@@ -8,6 +8,7 @@ resource "aws_eip" "nat" {
 
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
+  version = "5.21.0"
 
   name                 = "${var.tags["env"]}-${var.name}"
   cidr                 = var.cidr
