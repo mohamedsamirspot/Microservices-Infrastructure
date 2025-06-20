@@ -1,6 +1,6 @@
 # Notes
 ## Just to add a new env just copy one of the directories and make sure to make change the following 2 env name variables
-- ~/variables.tf --> change the env value
+- ~/provider.tf --> backend s3 key env name "${env}/eks-cluster/terraform.tfstate"
 ```bash
   backend "s3" {
     bucket       = "terraform-state-multi-env-spot"
@@ -10,7 +10,7 @@
     use_lockfile = true
   }
 ```
-- ~/provider.tf --> backend s3 key env name
+- ~/variables.tf --> change the default the env value
 ```bash
 variable "env" {
   type        = string
