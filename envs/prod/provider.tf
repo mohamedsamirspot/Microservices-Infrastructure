@@ -9,7 +9,10 @@ terraform {
   required_providers {
     aws = {
       source = "hashicorp/aws"
-      version = "~> 5.0"
+      version = "~> 6.0"
+      # >= 6.0 → allows any version 6.0 and above (includes breaking changes in future versions).
+      # ~> 5.0 → allows versions 5.x only (safe from breaking changes).
+      # 👉 Use ~> 5.0 for stability, and >= 6.0 only if you always want the newest version.
     }
   }
 

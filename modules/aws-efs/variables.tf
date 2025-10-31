@@ -8,7 +8,7 @@ variable "tags" {
   type        = map(string)
   default = {
     Project     = "eks-cluster"
-    env         = "prod"
+    env         = "dev"
     # Owner       = "devops-team"
   }
 }

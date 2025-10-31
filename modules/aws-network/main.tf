@@ -1,6 +1,5 @@
 resource "aws_eip" "nat" {
   count = 1
-  domain = "vpc"
   tags = {
     Name = "${var.tags["env"]}-nat-eip"
   }
@@ -8,7 +7,7 @@ resource "aws_eip" "nat" {
 
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
-  version = "5.21.0"
+  version = "6.5.0"
 
   name                 = "${var.tags["env"]}-${var.name}"
   cidr                 = var.cidr
@@ -39,7 +38,7 @@ module "vpc" {
   private_subnet_tags = {
     "kubernetes.io/role/internal-elb" = 1 # to the aws ingress controller internal load balancers to be created
     # Tags subnets for Karpenter auto-discovery
-    "karpenter.sh/discovery" = var.cluster_name
+    "karpenter.sh/discovery" = "${var.tags["env"]}${var.cluster_name}" 
   }
 }
 

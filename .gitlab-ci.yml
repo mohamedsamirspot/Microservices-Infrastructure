@@ -29,7 +29,7 @@ before_script:
       echo "❌ ERROR: 'env' variable is not set (expected: dev or prod)"
       exit 1
     fi
-    cd "$env"
+    cd "envs/$env"
     echo "Current working dir: $(pwd)"
     terraform init
 

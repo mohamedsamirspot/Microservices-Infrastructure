@@ -3,6 +3,12 @@ variable "cluster_name" {
   default = "my-eks-cluster"
 }
 
+variable "kubernetes_version" {
+  type    = string
+  default = "1.34"
+  description = "Kubernetes / EKS cluster version to create and to use as a default for addon compatibility."
+}
+
 variable "cluster_endpoint_public_access_cidrs" {
   type        = list(string)
   default = [ "45.245.75.56/32" ]
@@ -10,7 +16,7 @@ variable "cluster_endpoint_public_access_cidrs" {
 
 variable "instance_type" {
   type        = list(string)
-  default = ["t3.medium"] 
+  default = ["t3.medium"]  # 2 nodes (2 cores, 2 rams) for karpenter
 }
 
 variable "volume_size" {
@@ -43,7 +49,8 @@ variable "tags" {
   type        = map(string)
   default = {
     Project     = "eks-cluster"
-    env         = "prod"
+    env         = "dev"
+    terraform   = "true"
     # Owner       = "devops-team"
   }
 }
