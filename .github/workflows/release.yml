@@ -15,12 +15,13 @@ jobs:
         with:
           fetch-depth: 0   # needed so the action can see full history/tags
 
-      - name: Bump version and push tag
-        id: tag_version
-        uses: mathieudutour/github-tag-action@v6.2
+      - name: Bump version
+        id: bump
+        uses: phips28/gh-action-bump-version@v10.0.0
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          # Optional inputs below:
-          tag_prefix: "v"
-          default_bump: false
-          fetch_all_tags: true
+          tag-prefix: "v"
+          major-wording: 'BREAKING CHANGE,feat!,major'
+          minor-wording: 'feat'
+          patch-wording: 'fix,perf'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
