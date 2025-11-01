@@ -146,3 +146,25 @@ resource "kubectl_manifest" "karpenter_node_pool" {
   ]
 }
 
+## to make sure karpenter resources are cleaned up before destroy
+resource "null_resource" "karpenter_cleanup" {
+  triggers = {
+    always_run = timestamp()
+  }
+
+  provisioner "local-exec" {
+    when    = destroy
+    command = <<EOT
+      echo "🧹 Cleaning up Karpenter resources..."
+      kubectl delete nodepool --all --ignore-not-found=true
+      kubectl delete ec2nodeclass --all --ignore-not-found=true
+      sleep 60
+      echo "✅ All Karpenter-managed resources cleaned up."
+    EOT
+  }
+
+  depends_on = [
+    kubectl_manifest.karpenter_node_pool,
+    kubectl_manifest.karpenter_node_class
+  ]
+}
