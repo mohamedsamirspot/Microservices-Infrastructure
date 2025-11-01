@@ -22,5 +22,5 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           # Optional inputs below:
           tag_prefix: "v"
-          default_bump: minor
+          default_bump: false
           fetch_all_tags: true
