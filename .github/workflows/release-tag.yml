@@ -15,7 +15,7 @@ jobs:
           fetch-depth: 0
 
       # Include the token #major, #minor, #patch, or #none somewhere in the commit message of the merge commit or the relevant commit. Example: "feat: rewrite API endpoint to new microservice architecture #major"
-      # If none of those tokens are found, it falls back to the default bump defined by DEFAULT_BUMP (which defaults to minor
+      # If none of those tokens are found, it falls back to the default bump defined by DEFAULT_BUMP (which defaults to minor)
       - name: Bump version and push tag
         id: tag_version
         uses: anothrNick/github-tag-action@1.75.0  # Don't use @master or @v1 unless you're happy to test the latest version
