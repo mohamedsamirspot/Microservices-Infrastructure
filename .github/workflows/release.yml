@@ -1,0 +1,24 @@
+name: Auto Tag and Release
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Conventional Changelog
+        uses: conventional-changelog/standard-version@v9
+        with:
+          tag-prefix: "v"
+
+      - name: Push tags
+        run: |
+          git push --follow-tags origin main
