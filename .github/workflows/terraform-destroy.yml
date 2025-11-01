@@ -1,0 +1,42 @@
+name: Terraform Destroy
+
+on:
+  workflow_dispatch:
+    inputs:
+      env:
+        description: 'Environment to destroy (e.g., dev or prod)'
+        required: true
+        default: dev
+
+jobs:
+  terraform-destroy-job:
+    name: Terraform Destroy
+    runs-on: ubuntu-latest
+
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      env: ${{ github.event.inputs.env }}
+
+    container:
+      image: hashicorp/terraform:latest
+      options: --entrypoint "/usr/bin/env"
+      env:
+        PATH: "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Terraform Destroy
+        run: |
+          export AWS_ACCESS_KEY=$AWS_ACCESS_KEY_ID
+          export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
+          if [ -z "$env" ]; then
+            echo "❌ ERROR: 'env' variable is not set (expected: dev or prod)"
+            exit 1
+          fi
+          cd "envs/$env"
+          echo "Destroying environment: $env"
+          terraform init
+          terraform destroy -auto-approve
