@@ -1,5 +1,4 @@
-name: Auto Tag and Release
-
+name: Bump version and tag
 on:
   push:
     branches:
@@ -8,17 +7,20 @@ on:
 jobs:
   release:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write   # needed so the action can push tags
+
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 0   # needed so the action can see full history/tags
 
-      - name: Conventional Changelog
-        uses: conventional-changelog/standard-version@v1
+      - name: Bump version and push tag
+        id: tag_version
+        uses: mathieudutour/github-tag-action@v6.2
         with:
-          tag-prefix: "v"
-
-      - name: Push tags
-        run: |
-          git push --follow-tags origin main
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          # Optional inputs below:
+          tag_prefix: "v"
+          default_bump: minor
+          fetch_all_tags: true
