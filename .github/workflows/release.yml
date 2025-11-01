@@ -1,27 +1,20 @@
-name: Bump version and tag
+name: Bump version
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
-  release:
-    runs-on: ubuntu-latest
+  build:
+    runs-on: ubuntu-22.04
     permissions:
-      contents: write   # needed so the action can push tags
-
+      contents: write
     steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0   # needed so the action can see full history/tags
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: '0'
 
-      - name: Bump version
-        id: bump
-        uses: phips28/gh-action-bump-version@v10.0.0
-        with:
-          tag-prefix: "v"
-          major-wording: 'BREAKING CHANGE,feat!,major'
-          minor-wording: 'feat'
-          patch-wording: 'fix,perf'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Bump version and push tag
+      uses: anothrNick/github-tag-action@v1 # Don't use @master or @v1 unless you're happy to test the latest version
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # if you don't want to set write permissions use a PAT token
