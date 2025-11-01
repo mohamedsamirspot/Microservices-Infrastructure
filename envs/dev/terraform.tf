@@ -1,8 +1,3 @@
-provider "aws" {
-  region = var.region
-}
-
-
 terraform {
   required_version = ">= 1.11.0" # Keep the minimum version constraint of terraform itself
 
@@ -29,4 +24,3 @@ terraform {
     use_lockfile = true
   }
 }
-
