@@ -20,7 +20,11 @@ module "eks" {
 
 module "karpenter" {
   source = "../../k8s-tools/karpenter"
-
+  # The key change is moving provider configurations to the root module provider.tf and passing them explicitly to the Karpenter module, which is the modern approach in Terraform.
+  providers = {
+    kubectl = kubectl
+    helm    = helm
+  }
   cluster_name    = module.eks.cluster_name
   kubernetes_version = module.eks.cluster_version
   cluster_endpoint = module.eks.cluster_endpoint
