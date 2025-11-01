@@ -11,19 +11,19 @@
     use_lockfile = true
   }
 ```
-## The push and commits pipelines are disabled so you need to run the pipeline manually and pass the env variable each time with the right value
-# Gitlab-CI
+# The push and commits pipelines are disabled so you need to run the pipeline manually and pass the env variable each time with the right value
+## Gitlab-CI
 ![Image Description](screenshots/1.png)
 
 
 ![Image Description](screenshots/2.png)
 
-# Github Action
+## Github Action
 ![Image Description](screenshots/3.png)
 
 
 ![Image Description](screenshots/4.png)
-## Infrastructure Installation (Terraform)
+# Infrastructure Installation (Terraform)
 These terraform components (modules and k8s-tools) can create the following so far:
 - aws-network
 - aws-eks
