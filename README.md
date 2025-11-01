@@ -12,13 +12,20 @@
   }
 ```
 ## The push and commits pipelines are disabled so you need to run the pipeline manually and pass the env variable each time with the right value
+# Gitlab-CI
 ![Image Description](screenshots/1.png)
 
 
 ![Image Description](screenshots/2.png)
 
+# Github Action
+![Image Description](screenshots/3.png)
+
+
+![Image Description](screenshots/4.png)
 ## Infrastructure Installation (Terraform)
-Running the terraform manifests that will create the following components in aws (terraform will use my aws credentials from my local creds)
-- vpc
-- subnets
-- eks cluster with karpenter (optional usage) restricted from my ip only
+These terraform components (modules and k8s-tools) can create the following so far:
+- aws-network
+- aws-eks
+- aws-efs
+- k8s-karpenter
