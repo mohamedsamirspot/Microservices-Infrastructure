@@ -29,7 +29,7 @@ jobs:
       # Install AWS CLI inside Terraform container
       - name: Install AWS CLI
         run: |
-          apt-get update && apt-get install -y awscli
+          apk add --no-cache aws-cli
 
       # Configure AWS credentials (sets env vars automatically)
       - name: Configure AWS credentials

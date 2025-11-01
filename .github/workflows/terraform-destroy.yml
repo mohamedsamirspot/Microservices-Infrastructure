@@ -28,9 +28,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # Install AWS CLI inside Terraform container
       - name: Install AWS CLI
         run: |
-          apt-get update && apt-get install -y awscli
+          apk add --no-cache aws-cli
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
