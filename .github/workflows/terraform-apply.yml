@@ -1,7 +1,7 @@
 name: Terraform Apply
 
 on:
-  workflow_dispatch:        # Manual trigger from GitHub UI
+  workflow_dispatch:
     inputs:
       env:
         description: 'Environment to deploy (e.g., dev or prod)'
@@ -9,51 +9,62 @@ on:
         default: dev
 
 jobs:
-  terraform-apply-job:
+  terraform-apply:
     name: Terraform Apply
     runs-on: ubuntu-latest
 
     env:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_REGION: us-east-1
       env: ${{ github.event.inputs.env }}
-
-    container:
-      image: hashicorp/terraform:latest
-      options: --entrypoint "/usr/bin/env"
-      env:
-        PATH: "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Initialize Terraform
-        working-directory: envs/${{ github.event.inputs.env }}
-        run: |
-          export AWS_ACCESS_KEY=$AWS_ACCESS_KEY_ID
-          export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
-          terraform --version
-          terraform init
+      # ------------------ SETUP ------------------
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: latest
 
+      - name: Setup AWS CLI
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Install kubectl
+        run: |
+          curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+          chmod +x kubectl
+          sudo mv kubectl /usr/local/bin/
+
+      # ------------------ INIT ------------------
+      - name: Terraform Init
+        working-directory: envs/${{ github.event.inputs.env }}
+        run: terraform init
 
       # ------------------ VALIDATE ------------------
       - name: Terraform Validate
-        run: terraform validate
         working-directory: envs/${{ github.event.inputs.env }}
+        run: terraform validate
 
       # ------------------ PLAN ------------------
       - name: Terraform Plan
         id: plan
-        run: terraform plan -out=tfplan
         working-directory: envs/${{ github.event.inputs.env }}
+        run: terraform plan -out=tfplan
 
       - name: Upload tfplan artifact
         uses: actions/upload-artifact@v4
         with:
           name: tfplan
           path: envs/${{ github.event.inputs.env }}/tfplan
+
       # ------------------ APPLY ------------------
       - name: Terraform Apply
-        run: terraform apply -auto-approve tfplan
         working-directory: envs/${{ github.event.inputs.env }}
+        run: terraform apply -auto-approve tfplan
