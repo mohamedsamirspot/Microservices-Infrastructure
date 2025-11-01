@@ -1,0 +1,42 @@
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: write  # required for tagging and creating releases
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # Include the token #major, #minor, #patch, or #none somewhere in the commit message of the merge commit or the relevant commit. Example: "feat: rewrite API endpoint to new microservice architecture #major"
+      # If none of those tokens are found, it falls back to the default bump defined by DEFAULT_BUMP (which defaults to minor
+      - name: Bump version and push tag
+        id: tag_version
+        uses: anothrNick/github-tag-action@1.75.0  # Don't use @master or @v1 unless you're happy to test the latest version
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DEFAULT_BUMP: minor # optional: can be patch, minor, or major
+          WITH_V: true        # optional: creates tags like v1.2.3
+
+      - name: Create GitHub Release
+        if: steps.tag_version.outputs.new_tag != ''
+        uses: softprops/action-gh-release@v2
+        with:
+          # If you want to automatically attach build artifacts (for example .zip, .tar.gz, or binaries) to the release, just add:
+          # files: |
+            # dist/*.zip
+            # build/*.tar.gz
+          tag_name: ${{ steps.tag_version.outputs.new_tag }}
+          name: Release ${{ steps.tag_version.outputs.new_tag }}
+          body: |
+            🚀 Automatic release for version ${{ steps.tag_version.outputs.new_tag }}
+
+            Changes included in this release are based on the commits in the `main` branch.
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
