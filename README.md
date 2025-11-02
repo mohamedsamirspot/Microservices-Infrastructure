@@ -11,7 +11,7 @@
     use_lockfile = true
   }
 ```
-# The push and commits pipelines are disabled so you need to run the pipeline manually and pass the env variable each time with the right value
+# Push and commits pipelines are disabled so you need to run the pipeline manually and pass the env variable each time with the right value
 ## Gitlab-CI
 ![Image Description](screenshots/1.png)
 
