@@ -1,3 +1,11 @@
+# Infrastructure Installation (Terraform)
+These terraform components (modules and k8s-tools) can create the following so far:
+- AWS Modules
+  - aws-network
+  - aws-eks
+  - aws-efs
+- k8s-tools
+  - k8s-karpenter
 # Notes
 ## To add a new env just copy one of the directories and make sure to make change the following 2 env name variables
 - `~/envs/${env}/provider.tf --> backend s3 key env name "${env}/eks-cluster/terraform.tfstate"`
@@ -23,9 +31,3 @@
 
 
 ![Image Description](screenshots/4.png)
-# Infrastructure Installation (Terraform)
-These terraform components (modules and k8s-tools) can create the following so far:
-- aws-network
-- aws-eks
-- aws-efs
-- k8s-karpenter

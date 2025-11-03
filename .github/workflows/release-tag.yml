@@ -21,7 +21,7 @@ jobs:
         uses: anothrNick/github-tag-action@1.75.0  # Don't use @master or @v1 unless you're happy to test the latest version
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          DEFAULT_BUMP: minor # optional: can be patch, minor, or major
+          DEFAULT_BUMP: minor # optional: can be none, major, minor, patch
           WITH_V: true        # optional: creates tags like v1.2.3
 
       - name: Create GitHub Release
