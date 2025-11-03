@@ -6,6 +6,8 @@ These terraform components (modules and k8s-tools) can create the following so f
   - aws-efs
 - k8s-tools
   - k8s-karpenter
+  - alb-ingress-controller
+  - argocd
 # Notes
 ## To add a new env just copy one of the directories and make sure to make change the following 2 env name variables
 - `~/envs/${env}/provider.tf --> backend s3 key env name "${env}/eks-cluster/terraform.tfstate"`

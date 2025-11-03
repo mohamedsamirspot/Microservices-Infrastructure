@@ -4,7 +4,7 @@
 
 module "karpenter" {
   source  = "terraform-aws-modules/eks/aws//modules/karpenter"
-  version = "21.8.0"
+  version = "~> 21.0"
 
   cluster_name          = var.cluster_name
   create_pod_identity_association = true
@@ -134,8 +134,8 @@ resource "kubectl_manifest" "karpenter_node_pool" {
             #   operator: Lt
             #   values: ["10240"]  # 10 GB in MB
       limits:
-        cpu: "3"
-        memory: "5Gi"
+        cpu: "6"
+        memory: "8Gi"
       disruption:
         consolidationPolicy: WhenEmpty
         consolidateAfter: 30s

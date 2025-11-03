@@ -1,0 +1,31 @@
+# values-argocd.yaml
+
+# global:
+#   image:
+#     tag: v2.14.1   # optional pinning of Argo CD version (Overrides the global Argo CD image tag whose default is the chart appVersion)
+
+# server:
+#   service:
+#     type: LoadBalancer
+#   ingress:
+#     enabled: false  # set to true if you want ingress
+#     ingressClassName: nginx
+#     hosts:
+#       - argocd.example.com
+
+configs:
+  secret:
+    # example: override admin password (hash your own with bcrypt if desired)
+    argocdServerAdminPassword: "$2a$12$aqdh.yeKGItbClhJdVugbO/9DUjWRkEe.1Wb7u6OJGPcb6Xg7FTz6"
+    # or leave blank to use auto-generated
+
+redis:
+  enabled: true
+  # redis-ha.enabled is false by default, keep it that way for non-HA
+
+applicationController:
+  replicas: 1
+repoServer:
+  replicas: 1
+dex:
+  enabled: false
