@@ -25,34 +25,44 @@ module "karpenter" {
   kubernetes_version = module.eks.cluster_version
   cluster_endpoint = module.eks.cluster_endpoint
   cluster_certificate_authority_data = module.eks.cluster_certificate_authority_data
+
+  # If you’re not using aliases or multiple configs, you can usually omit providers = {…} and let Terraform inject the root provider automatically.
+  # providers = {
+  #   helm = helm
+  #   kubectl = kubectl
+  # }
+
+  depends_on = [ module.eks ]
   tags = {
     env = local.env
   }
 }
 
-module "alb-ingress-controller" {
-  source = "../../k8s-tools/alb-ingress-controller"
-  vpcId             = module.network.vpc_id
-  cluster_name      = module.eks.cluster_name
-  cluster_endpoint  = module.eks.cluster_endpoint
-  cluster_certificate_authority_data = module.eks.cluster_certificate_authority_data
-  oidc_provider_arn = module.eks.oidc_provider_arn
-  
-  tags = {
-    env = local.env
-  }
-}
+# module "alb-ingress-controller" {
+#   source = "../../k8s-tools/alb-ingress-controller"
+#   vpcId             = module.network.vpc_id
+#   cluster_name      = module.eks.cluster_name
+#   cluster_endpoint  = module.eks.cluster_endpoint
+#   cluster_certificate_authority_data = module.eks.cluster_certificate_authority_data
+#   oidc_provider_arn = module.eks.oidc_provider_arn
 
-module "argocd" {
-  source = "../../k8s-tools/argocd"
-  cluster_name      = module.eks.cluster_name
-  cluster_endpoint  = module.eks.cluster_endpoint
-  cluster_certificate_authority_data = module.eks.cluster_certificate_authority_data
-  
-  tags = {
-    env = local.env
-  }
-}
+#   depends_on = [ module.eks, module.karpenter ]
+#   tags = {
+#     env = local.env
+#   }
+# }
+
+# module "argocd" {
+#   source = "../../k8s-tools/argocd"
+#   cluster_name      = module.eks.cluster_name
+#   cluster_endpoint  = module.eks.cluster_endpoint
+#   cluster_certificate_authority_data = module.eks.cluster_certificate_authority_data
+
+#   depends_on = [ module.eks, module.karpenter ]
+#   tags = {
+#     env = local.env
+#   }
+# }
 
 # module "efs" {
 #   source                      = "../../modules/aws-efs"

@@ -26,7 +26,8 @@ module "vpc" {
   enable_dns_support   = true
   enable_dns_hostnames = true
 
-
+  depends_on = [ aws_eip.nat ]
+  
   tags = var.tags
   
 

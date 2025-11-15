@@ -38,7 +38,7 @@ module "eks" {
     # before_compute = true --> means before node group creation
     coredns = {resolve_conflicts_on_update = "PRESERVE"}
     kube-proxy = {resolve_conflicts_on_update = "PRESERVE"}
-    vpc-cni = {resolve_conflicts_on_update = "PRESERVE", before_compute = true}
+    vpc-cni = {resolve_conflicts_on_update = "PRESERVE", before_compute = true ,resolve_conflicts_on_create = "OVERWRITE"}
     aws-ebs-csi-driver = {resolve_conflicts_on_update = "PRESERVE" , service_account_role_arn = module.ebs_csi_driver_irsa.arn}
     aws-efs-csi-driver = {resolve_conflicts_on_update = "PRESERVE"  }
     eks-pod-identity-agent = {resolve_conflicts_on_update = "PRESERVE", before_compute = true}
