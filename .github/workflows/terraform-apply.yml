@@ -8,6 +8,11 @@ on:
         required: true
         default: dev
 
+# This for AWS OIDC authentication
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   terraform-apply:
     name: Terraform Apply
@@ -27,12 +32,19 @@ jobs:
         with:
           terraform_version: latest
 
-      - name: Setup AWS CLI
-        uses: aws-actions/configure-aws-credentials@v2
+      # - name: Setup AWS CLI
+      #   uses: aws-actions/configure-aws-credentials@v2
+      #   with:
+      #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      #     aws-region: ${{ env.AWS_REGION }}
+
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          role-to-assume: arn:aws:iam::948763340657:role/github-action-role
           aws-region: ${{ env.AWS_REGION }}
+
 
       - name: Install kubectl
         run: |
