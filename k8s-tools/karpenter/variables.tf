@@ -14,16 +14,11 @@ variable "cluster_name" {
 
 variable "kubernetes_version" {
   type    = string
-  default = "1.34"
+  default = ""
   description = "Kubernetes / EKS cluster version"
 }
 
 variable "cluster_endpoint" {
-  type    = string
-  default = ""
-}
-
-variable "cluster_certificate_authority_data" {
   type    = string
   default = ""
 }

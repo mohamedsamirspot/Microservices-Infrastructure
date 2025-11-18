@@ -8,10 +8,10 @@ on:
         required: true
         default: dev
 
-# This for AWS OIDC authentication
+# This is required for AWS OIDC authentication
 permissions:
-  id-token: write
-  contents: read
+  id-token: write # It tells GitHub “Yes, this workflow is allowed to request an OIDC token.”
+  contents: read # It tells GitHub “Yes, this workflow is allowed to read the repository’s contents.” It is required because actions/checkout@v4 needs read access.
 
 jobs:
   terraform-apply:

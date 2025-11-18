@@ -59,7 +59,7 @@ resource "helm_release" "karpenter" {
     EOT
   ]
 }
-# recommended minimum "1" for cpu and "1Gi" for memory
+# recommended minimum "1" for cpu and "1Gi" for memory per each karpenter controller replica which is 2 by default
 
 ###############################################################################
 # Karpenter Kubectl

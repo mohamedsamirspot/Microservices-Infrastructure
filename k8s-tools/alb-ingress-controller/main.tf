@@ -20,29 +20,36 @@ resource "helm_release" "aws_load_balancer_controller" {
   chart      = "aws-load-balancer-controller"
   namespace  = "kube-system"
   version    = "1.14.1"
+  values = [
+    templatefile("${path.module}/values-alb-ingress-controller.yaml", {
+      vpcId      = var.vpcId
+      clusterName = var.cluster_name
+      roleArn     = module.aws_load_balancer_controller_irsa_role.arn
+    })
+  ]
 
-  set {
-    name  = "vpcId"
-    value = var.vpcId
-  }
+  # set {
+  #   name  = "vpcId"
+  #   value = var.vpcId
+  # }
 
-  set {
-    name  = "replicaCount"
-    value = 1
-  }
+  # set {
+  #   name  = "replicaCount"
+  #   value = 1
+  # }
 
-  set {
-    name  = "clusterName"
-    value = var.cluster_name
-  }
+  # set {
+  #   name  = "clusterName"
+  #   value = var.cluster_name
+  # }
 
-  set {
-    name  = "serviceAccount.name"
-    value = "aws-load-balancer-controller"
-  }
+  # set {
+  #   name  = "serviceAccount.name"
+  #   value = "aws-load-balancer-controller"
+  # }
 
-  set {
-    name  = "serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
-    value = module.aws_load_balancer_controller_irsa_role.arn
-  }
+  # set {
+  #   name  = "serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
+  #   value = module.aws_load_balancer_controller_irsa_role.arn
+  # }
 }
