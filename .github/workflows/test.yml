@@ -1,47 +1,47 @@
-name: Test 7 Jobs on gha-runner
+name: Test 7 Jobs on gha-runner-scale-set
 
 on:
   workflow_dispatch:
 
 jobs:
   job1:
-    runs-on: [gha-runner]
+    runs-on: [gha-runner-scale-set]
     steps:
       - name: Job 1
         run: echo "Job 1 running on $RUNNER_NAME" && sleep 60
 
   job2:
-    runs-on: [gha-runner]
+    runs-on: [gha-runner-scale-set]
     steps:
       - name: Job 2
         run: echo "Job 2 running on $RUNNER_NAME" && sleep 60
 
   job3:
-    runs-on: [gha-runner]
+    runs-on: [gha-runner-scale-set]
     steps:
       - name: Job 3
         run: echo "Job 3 running on $RUNNER_NAME" && sleep 60
 
   job4:
-    runs-on: [gha-runner]
+    runs-on: [gha-runner-scale-set]
     steps:
       - name: Job 4
         run: echo "Job 4 running on $RUNNER_NAME" && sleep 60
 
   job5:
-    runs-on: [gha-runner]
+    runs-on: [gha-runner-scale-set]
     steps:
       - name: Job 5
         run: echo "Job 5 running on $RUNNER_NAME" && sleep 60
 
   job6:
-    runs-on: [gha-runner]
+    runs-on: [gha-runner-scale-set]
     steps:
       - name: Job 6
         run: echo "Job 6 running on $RUNNER_NAME" && sleep 60
 
   job7:
-    runs-on: [gha-runner]
+    runs-on: [gha-runner-scale-set]
     steps:
       - name: Job 7
         run: echo "Job 7 running on $RUNNER_NAME" && sleep 60
