@@ -14,6 +14,20 @@ module "ebs_csi_driver_irsa" {
   tags = var.tags
 }
 
+module "efs_csi_driver_irsa" {
+  source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
+  name = "efs-csi"
+  version = "~> 6.0"
+  attach_efs_csi_policy = true
+  oidc_providers = {
+    this = {
+      provider_arn               = module.eks.oidc_provider_arn
+      namespace_service_accounts = ["kube-system:efs-csi-controller-sa"]
+    }
+  }
+  tags = var.tags
+}
+
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
   version = "~> 21.0"
@@ -40,7 +54,7 @@ module "eks" {
     kube-proxy = {resolve_conflicts_on_update = "PRESERVE"}
     vpc-cni = {resolve_conflicts_on_update = "PRESERVE", before_compute = true ,resolve_conflicts_on_create = "OVERWRITE"}
     aws-ebs-csi-driver = {resolve_conflicts_on_update = "PRESERVE" , service_account_role_arn = module.ebs_csi_driver_irsa.arn}
-    aws-efs-csi-driver = {resolve_conflicts_on_update = "PRESERVE"  }
+    aws-efs-csi-driver = {resolve_conflicts_on_update = "PRESERVE" , service_account_role_arn = module.efs_csi_driver_irsa.arn}
     eks-pod-identity-agent = {resolve_conflicts_on_update = "PRESERVE", before_compute = true}
     metrics-server = {
       resolve_conflicts_on_update = "PRESERVE"

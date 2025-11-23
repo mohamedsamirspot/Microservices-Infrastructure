@@ -1,3 +1,12 @@
+resource "kubectl_manifest" "aws-load-balancer-controller_namespace" {
+  yaml_body = <<-YAML
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: aws-load-balancer-controller
+YAML
+}
+
 module "aws_load_balancer_controller_irsa_role" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
   version = "6.2.3"
@@ -8,18 +17,19 @@ module "aws_load_balancer_controller_irsa_role" {
   oidc_providers = {
     ex = {
       provider_arn               = var.oidc_provider_arn
-      namespace_service_accounts = ["kube-system:aws-load-balancer-controller"]
+      namespace_service_accounts = ["aws-load-balancer-controller:aws-load-balancer-controller"]
     }
   }
+  depends_on = [kubectl_manifest.aws-load-balancer-controller_namespace]
 }
 
 resource "helm_release" "aws_load_balancer_controller" {
   name = "aws-load-balancer-controller"
-
   repository = "https://aws.github.io/eks-charts"
   chart      = "aws-load-balancer-controller"
-  namespace  = "kube-system"
   version    = "1.14.1"
+  namespace  = "aws-load-balancer-controller"
+
   values = [
     templatefile("${path.module}/values-alb-ingress-controller.yaml", {
       vpcId      = var.vpcId
@@ -27,6 +37,7 @@ resource "helm_release" "aws_load_balancer_controller" {
       roleArn     = module.aws_load_balancer_controller_irsa_role.arn
     })
   ]
+  depends_on = [kubectl_manifest.aws-load-balancer-controller_namespace, module.aws_load_balancer_controller_irsa_role]
 
   # set {
   #   name  = "vpcId"

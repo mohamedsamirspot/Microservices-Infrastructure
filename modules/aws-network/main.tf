@@ -39,7 +39,7 @@ module "vpc" {
   private_subnet_tags = {
     "kubernetes.io/role/internal-elb" = 1 # to the aws ingress controller internal load balancers to be created
     # Tags subnets for Karpenter auto-discovery
-    "karpenter.sh/discovery" = "${var.tags["env"]}${var.cluster_name}" 
+    "karpenter.sh/discovery" = "${var.cluster_name}" 
   }
 }
 

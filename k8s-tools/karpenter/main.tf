@@ -8,7 +8,7 @@ module "karpenter" {
 
   cluster_name          = var.cluster_name
   create_pod_identity_association = true
-
+  namespace           = "karpenter"
   # Used to attach additional IAM policies to the Karpenter node IAM role
   node_iam_role_additional_policies = {
     AmazonSSMManagedInstanceCore = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
@@ -28,11 +28,12 @@ data "aws_ssm_parameter" "eks_ami" {
 ###############################################################################
 
 resource "helm_release" "karpenter" {
-  namespace           = "kube-system"
   name                = "karpenter"
   repository          = "oci://public.ecr.aws/karpenter"
   chart               = "karpenter"
   version             = "1.8.2"
+  namespace           = "karpenter"
+  create_namespace    = true
   wait                = false
 
   depends_on = [module.karpenter]

@@ -43,23 +43,35 @@ module "karpenter" {
   tags = local.default_tags
 }
 
-module "alb-ingress-controller" {
-  source = "../../k8s-tools/alb-ingress-controller"
-  vpcId             = module.network.vpc_id
-  cluster_name      = module.eks.cluster_name
-  oidc_provider_arn = module.eks.oidc_provider_arn
+# module "alb-ingress-controller" {
+#   source = "../../k8s-tools/alb-ingress-controller"
+#   vpcId             = module.network.vpc_id
+#   cluster_name      = module.eks.cluster_name
+#   oidc_provider_arn = module.eks.oidc_provider_arn
 
-  depends_on = [ module.eks, module.karpenter ]
-  tags = local.default_tags
-}
+#   depends_on = [ module.eks, module.karpenter ]
+#   tags = local.default_tags
+# }
 
-module "argocd" {
-  source = "../../k8s-tools/argocd"
-  cluster_name      = module.eks.cluster_name
+# module "argocd" {
+#   source = "../../k8s-tools/argocd"
+#   cluster_name      = module.eks.cluster_name
 
-  depends_on = [ module.eks, module.karpenter ]
-  tags = local.default_tags
-}
+#   depends_on = [ module.eks, module.karpenter ]
+#   tags = local.default_tags
+# }
+
+# module "gha-runner" {
+#   source = "../../k8s-tools/gha-runner"
+#   cluster_name      = module.eks.cluster_name
+#   cluster_endpoint = module.eks.cluster_endpoint
+#   cluster_certificate_authority_data = module.eks.cluster_certificate_authority_data
+#   oidc_provider_arn = module.eks.oidc_provider_arn
+#   cluster_oidc_provider_url = module.eks.cluster_oidc_issuer_url
+
+#   depends_on = [ module.eks, module.karpenter ]
+#   tags = local.default_tags
+# }
 
 # module "efs" {
 #   source                      = "../../modules/aws-efs"
