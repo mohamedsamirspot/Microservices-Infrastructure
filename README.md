@@ -6,9 +6,10 @@ These terraform components (modules and k8s-tools) can create the following so f
   - aws-eks
   - aws-efs
 - k8s-tools
-  - k8s-karpenter
   - alb-ingress-controller
   - argocd
+  - gha-runner
+  - k8s-karpenter
 # Notes
 - This repo is authenticated with aws through OIDC Reference --> https://www.youtube.com/watch?v=Sdzd4N6L5Hg
 - To add a new env just copy one of the directories and make sure to make change the following 2 env name variables
