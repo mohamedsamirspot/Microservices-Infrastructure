@@ -1,0 +1,84 @@
+githubConfigSecret: "gha-runner-secret"
+
+# GitHub only allows self-hosted runners for: repositories, organizations, and enterprises. So it can't be used for a whole personal account.
+githubConfigUrl: "https://github.com/mohamedsamirspot/Microservices-Infrastructure" 
+
+minRunners: 0
+maxRunners: 2
+
+## If any customization is required for dind or kubernetes mode, containerMode should remain
+## empty, and configuration should be applied to the template.
+
+# containerMode: 
+#   type: "dind"
+
+
+
+  # template.spec will be modified if you change the container mode
+  # with containerMode.type=dind, we will populate the template.spec with following pod spec
+template:
+  spec:
+    serviceAccountName: gha-runner-sa
+    initContainers:
+    - name: init-dind-externals
+      image: ghcr.io/actions/actions-runner:latest
+      command: ["cp", "-r", "/home/runner/externals/.", "/home/runner/tmpDir/"]
+      volumeMounts:
+        - name: dind-externals
+          mountPath: /home/runner/tmpDir
+    - name: dind
+      image: docker:dind
+      args:
+        - dockerd
+        - --host=unix:///var/run/docker.sock
+        - --group=$(DOCKER_GROUP_GID)
+      env:
+        - name: DOCKER_GROUP_GID
+          value: "123"
+      securityContext:
+        privileged: true
+      restartPolicy: Always
+      startupProbe:
+        exec:
+          command:
+            - docker
+            - info
+        initialDelaySeconds: 0
+        failureThreshold: 24
+        periodSeconds: 5
+      volumeMounts:
+        - name: work
+          mountPath: /home/runner/_work
+        - name: dind-sock
+          mountPath: /var/run
+        - name: dind-externals
+          mountPath: /home/runner/externals
+    containers:
+    - name: runner
+      image: ghcr.io/actions/actions-runner:latest
+      command: ["/home/runner/run.sh"]
+      env:
+        - name: DOCKER_HOST
+          value: unix:///var/run/docker.sock
+        - name: RUNNER_WAIT_FOR_DOCKER_IN_SECONDS
+          value: "120"
+      volumeMounts:
+        - name: work
+          mountPath: /home/runner/_work
+        - name: dind-sock
+          mountPath: /var/run
+      resources:
+        requests:
+          cpu: "300m"
+          memory: "300Mi"
+        limits:
+          cpu: "300m"
+          memory: "300Mi"
+    volumes:
+    - name: work
+      emptyDir: {}
+    - name: dind-sock
+      emptyDir: {}
+    - name: dind-externals
+      emptyDir: {}
+

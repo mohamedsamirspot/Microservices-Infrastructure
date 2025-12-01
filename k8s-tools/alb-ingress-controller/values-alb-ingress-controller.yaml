@@ -1,0 +1,8 @@
+vpcId: "${vpcId}"
+replicaCount: 1
+clusterName: "${clusterName}"
+
+serviceAccount:
+  name: aws-load-balancer-controller
+  annotations:
+    eks.amazonaws.com/role-arn: "${roleArn}"
