@@ -40,6 +40,7 @@ jobs:
         uses: gruntwork-io/terragrunt-action@v3
         with:
           tg_version: '0.82.2'
+          tofu_version: '1.10.1'
           # tf_path: 'terraform'  # This tells Terragrunt to use Terraform binary
 
       # ------------------ AWS OIDC AUTH ------------------
