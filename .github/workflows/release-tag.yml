@@ -24,6 +24,26 @@ jobs:
           DEFAULT_BUMP: patch # optional: can be none, major, minor, patch
           WITH_V: true        # optional: creates tags like v1.2.3
 
+      - name: Get commit messages since last tag
+        id: commits
+        run: |
+          last_tag=$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || echo "")
+          echo "Last tag: $last_tag"
+
+          if [ -z "$last_tag" ]; then
+            # No previous tags → include all commits
+            log=$(git log --pretty=format:"- %s")
+          else
+            log=$(git log $last_tag..HEAD --pretty=format:"- %s")
+          fi
+
+          # Make the log available as output
+          log="${log//'%'/'%25'}"
+          log="${log//$'\n'/'%0A'}"
+          log="${log//$'\r'/'%0D'}"
+
+          echo "commits=$log" >> $GITHUB_OUTPUT
+
       - name: Create GitHub Release
         if: steps.tag_version.outputs.new_tag != ''
         uses: softprops/action-gh-release@v2
@@ -37,6 +57,7 @@ jobs:
           body: |
             🚀 Automatic release for version ${{ steps.tag_version.outputs.new_tag }}
 
-            Changes included in this release are based on the commits in the `main` branch.
+            ### Commits in this release:
+            ${{ steps.commits.outputs.commits }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
