@@ -1,12 +1,17 @@
-name: Terraform Destroy
+name: Terragrunt Destroy
 
 on:
   workflow_dispatch:
     inputs:
-      env:
-        description: 'Environment to destroy (e.g., dev or prod)'
+      account:
+        description: 'AWS Account directory (e.g., prod-account)'
         required: true
-        default: dev
+      region:
+        description: 'AWS Region directory (e.g., us-east-1)'
+        required: true
+      env:
+        description: 'Environment directory (e.g., dev | stage | prod)'
+        required: true
 
 # This is required for AWS OIDC authentication
 permissions:
@@ -14,51 +19,63 @@ permissions:
   contents: read # It tells GitHub “Yes, this workflow is allowed to read the repository’s contents.” It is required because actions/checkout@v4 needs read access.
 
 jobs:
-  terraform-destroy:
-    name: Terraform Destroy
+  terragrunt-destroy:
+    name: Terragrunt Destroy
     runs-on: ubuntu-latest
 
     env:
-      AWS_REGION: us-east-1
-      env: ${{ github.event.inputs.env }}
+      WORKING_DIR: ${{ github.event.inputs.account }}/${{ github.event.inputs.region }}/${{ github.event.inputs.env }}
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
-      # ------------------ SETUP ------------------
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
+      # ------------------ INSTALL TERRAFORM + TERRAGRUNT ------------------
+      # - name: Setup Terraform
+      #   uses: hashicorp/setup-terraform@v3
+      #   with:
+      #     terraform_version: latest
+
+      - name: Install Terraform & Terragrunt
+        uses: gruntwork-io/terragrunt-action@v3
         with:
-          terraform_version: latest
+          tg_version: '0.82.2'
+          # tf_path: 'terraform'  # This tells Terragrunt to use Terraform binary
 
+      # ------------------ AWS OIDC AUTH ------------------
       # - name: Setup AWS CLI
       #   uses: aws-actions/configure-aws-credentials@v2
       #   with:
       #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
       #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      #     aws-region: ${{ env.AWS_REGION }}
+      #     aws-region: ${{ github.event.inputs.region }}
 
       - name: Configure AWS credentials (OIDC)
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: arn:aws:iam::948763340657:role/github-action-role
-          aws-region: ${{ env.AWS_REGION }}
+          aws-region: ${{ github.event.inputs.region }}
 
+      # ------------------ KUBECTL ------------------
       - name: Install kubectl
         run: |
           curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
           chmod +x kubectl
           sudo mv kubectl /usr/local/bin/
 
-      # ------------------ DESTROY ------------------
-      - name: Terraform Destroy
-        working-directory: envs/${{ github.event.inputs.env }}
+      # ------------------ VERIFY TERRAGRUNT DIRECTORY ------------------
+      - name: Verify Terragrunt directory exists
         run: |
-          if [ -z "$env" ]; then
-            echo "❌ ERROR: 'env' variable is not set (expected: dev or prod)"
+          echo "Checking path: $WORKING_DIR"
+          if [ ! -d "$WORKING_DIR" ]; then
+            echo "❌ Directory does not exist: $WORKING_DIR"
             exit 1
           fi
-          echo "Destroying environment: $env"
-          terraform init
-          terraform destroy -auto-approve
+          echo "✔ Terragrunt path exists"
+
+      # ------------------ TERRAGRUNT DESTROY ------------------
+      - name: Terragrunt Destroy
+        working-directory: ${{ env.WORKING_DIR }}
+        run: |
+          echo "Destroying: $WORKING_DIR"
+          terragrunt run-all destroy --auto-approve

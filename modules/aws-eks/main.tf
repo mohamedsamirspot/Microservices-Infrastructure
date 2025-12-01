@@ -31,7 +31,7 @@ module "efs_csi_driver_irsa" {
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
   version = "~> 21.0"
-  name    = "${var.tags["env"]}-${var.cluster_name}"
+  name    = "${var.cluster_name}"
   kubernetes_version  =  var.kubernetes_version
 
   # Use the outputs from the 'network' module
@@ -116,7 +116,7 @@ module "eks" {
     # NOTE - if creating multiple security groups with this module, only tag the
     # security group that Karpenter should utilize with the following tag
     # (i.e. - at most, only one security group should have this tag in your account)
-    "karpenter.sh/discovery" = "${var.tags["env"]}-${var.cluster_name}"
+    "karpenter.sh/discovery" = "${var.cluster_name}"
   }
 
   # IAM roles for service accounts (IRSA)

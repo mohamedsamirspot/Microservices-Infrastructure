@@ -1,80 +1,106 @@
-name: Terraform Apply
+name: Terragrunt Apply
+
 
 on:
   workflow_dispatch:
     inputs:
-      env:
-        description: 'Environment to deploy (e.g., dev or prod)'
+      account:
+        description: 'AWS Account directory (e.g., prod-account)'
         required: true
-        default: dev
+      region:
+        description: 'AWS Region directory (e.g., us-east-1)'
+        required: true
+      env:
+        description: 'Environment directory (e.g., dev | stage | prod)'
+        required: true
+
 
 # This is required for AWS OIDC authentication
 permissions:
   id-token: write # It tells GitHub “Yes, this workflow is allowed to request an OIDC token.”
   contents: read # It tells GitHub “Yes, this workflow is allowed to read the repository’s contents.” It is required because actions/checkout@v4 needs read access.
 
+
 jobs:
-  terraform-apply:
-    name: Terraform Apply
+  terragrunt-apply:
+    name: Terragrunt Apply
     runs-on: ubuntu-latest
 
     env:
-      AWS_REGION: us-east-1
-      env: ${{ github.event.inputs.env }}
+      WORKING_DIR: ${{ github.event.inputs.account }}/${{ github.event.inputs.region }}/${{ github.event.inputs.env }}
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
-      # ------------------ SETUP ------------------
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
+      # ------------------ INSTALL TERRAFORM + TERRAGRUNT ------------------
+      # - name: Setup Terraform
+      #   uses: hashicorp/setup-terraform@v3
+      #   with:
+      #     terraform_version: latest
+
+      - name: Install Terraform & Terragrunt
+        uses: gruntwork-io/terragrunt-action@v3
         with:
-          terraform_version: latest
+          tg_version: '0.82.2'
+          # tf_path: 'terraform'  # This tells Terragrunt to use Terraform binary
+
+
+      # ------------------ AWS OIDC AUTH ------------------
 
       # - name: Setup AWS CLI
       #   uses: aws-actions/configure-aws-credentials@v2
       #   with:
       #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
       #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      #     aws-region: ${{ env.AWS_REGION }}
+      #     aws-region: ${{ github.event.inputs.region }}
 
       - name: Configure AWS credentials (OIDC)
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: arn:aws:iam::948763340657:role/github-action-role
-          aws-region: ${{ env.AWS_REGION }}
+          aws-region: ${{ github.event.inputs.region }}
 
-
+      # ------------------ KUBECTL ------------------
       - name: Install kubectl
         run: |
           curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
           chmod +x kubectl
           sudo mv kubectl /usr/local/bin/
 
-      # ------------------ INIT ------------------
-      - name: Terraform Init
-        working-directory: envs/${{ github.event.inputs.env }}
-        run: terraform init
+      # ------------------ VERIFY TERRAGRUNT DIRECTORY ------------------
+      - name: Verify Terragrunt directory exists
+        run: |
+          echo "Checking path: $WORKING_DIR"
+          if [ ! -d "$WORKING_DIR" ]; then
+            echo "❌ Directory does not exist: $WORKING_DIR"
+            exit 1
+          fi
+          echo "✔ Found Terragrunt directory"
 
-      # ------------------ VALIDATE ------------------
-      - name: Terraform Validate
-        working-directory: envs/${{ github.event.inputs.env }}
-        run: terraform validate
+      # ------------------ TERRAGRUNT INIT ------------------
+      - name: Terragrunt Init
+        working-directory: ${{ env.WORKING_DIR }}
+        run: terragrunt run-all init
 
-      # ------------------ PLAN ------------------
-      - name: Terraform Plan
+      # ------------------ TERRAGRUNT VALIDATE ------------------
+      - name: Terragrunt Validate
+        working-directory: ${{ env.WORKING_DIR }}
+        run: terragrunt run-all validate
+
+      # ------------------ TERRAGRUNT PLAN ------------------
+      - name: Terragrunt Plan
         id: plan
-        working-directory: envs/${{ github.event.inputs.env }}
-        run: terraform plan -out=tfplan
+        working-directory: ${{ env.WORKING_DIR }}
+        run: terragrunt run-all plan --out tfplan
 
       - name: Upload tfplan artifact
         uses: actions/upload-artifact@v4
         with:
           name: tfplan
-          path: envs/${{ github.event.inputs.env }}/tfplan
+          path: ${{ env.WORKING_DIR }}/tfplan
 
-      # ------------------ APPLY ------------------
-      - name: Terraform Apply
-        working-directory: envs/${{ github.event.inputs.env }}
-        run: terraform apply -auto-approve tfplan
+      # ------------------ TERRAGRUNT APPLY ------------------
+      - name: Terragrunt Apply
+        working-directory: ${{ env.WORKING_DIR }}
+        run: terragrunt run-all apply --auto-approve tfplan

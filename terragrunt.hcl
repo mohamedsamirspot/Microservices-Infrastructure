@@ -1,3 +1,47 @@
+locals {
+  account_vars = read_terragrunt_config(find_in_parent_folders("account.hcl"))
+  region_vars  = read_terragrunt_config(find_in_parent_folders("region.hcl"))
+  env_vars     = read_terragrunt_config(find_in_parent_folders("env.hcl"))
+  tags = {
+      project   = "eks-cluster"
+      terraform = "true"
+      env = local.env_vars.locals.env
+  }
+}
+
+remote_state {
+  backend = "s3"
+  generate = {
+    path      = "backend.tf"
+    if_exists = "overwrite_terragrunt"
+  }
+
+  config = {
+    bucket = "terraform-state-multi-env-spot"
+    key = "${path_relative_to_include()}/terraform.tfstate"
+    region         = "us-east-1"
+    encrypt        = true
+    use_lockfile = true
+  }
+}
+
+
+generate "provider" {
+  path      = "providers.tf"
+  if_exists = "overwrite_terragrunt"
+  contents  = <<EOF
+provider "aws" {
+  region = "${local.region_vars.locals.aws_region}"
+}
+EOF
+}
+
+
+
+generate "required_providers_versions" {
+  path      = "required_providers_versions.tf"
+  if_exists = "overwrite_terragrunt"
+  contents  = <<EOF
 terraform {
   required_version = ">= 1.11.0" # Keep the minimum version constraint of terraform itself
 
@@ -22,17 +66,6 @@ terraform {
       version = "~> 2.0"
     }
   }
-
-  # varaiables are not supported in the backend block in terraform
-  # backend "local" {
-  #   path = "dev/terraform.tfstate"
-  # }
-
-  backend "s3" {
-    bucket       = "terraform-state-multi-env-spot"
-    key          = "dev/eks-cluster/terraform.tfstate"
-    region       = "us-east-1"
-    encrypt      = true
-    use_lockfile = true
-  }
+}
+EOF
 }

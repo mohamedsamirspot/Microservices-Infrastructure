@@ -5,12 +5,12 @@ on:
 
 jobs:
   release-tag:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     permissions:
       contents: write  # required for tagging and creating releases
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
 

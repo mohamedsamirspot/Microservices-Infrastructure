@@ -16,3 +16,7 @@
 *.pem
 *bkup
 *bkp
+
+# Terragrunt
+*.terragrunt-cache
+.terragrunt-cache

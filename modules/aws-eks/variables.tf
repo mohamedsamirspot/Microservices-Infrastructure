@@ -49,10 +49,9 @@ variable "tags" {
   description = "Map of tags to assign"
   type        = map(string)
   default = {
-    Project     = "eks-cluster"
-    env         = "dev"
+    project     = "eks-cluster"
+    env         = "env"
     terraform   = "true"
-    # Owner       = "devops-team"
   }
 }
 
