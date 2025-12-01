@@ -51,7 +51,7 @@ jobs:
       #     aws-region: ${{ github.event.inputs.region }}
 
       - name: Configure AWS credentials (OIDC)
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@v5
         with:
           role-to-assume: arn:aws:iam::948763340657:role/github-action-role
           aws-region: ${{ github.event.inputs.region }}
