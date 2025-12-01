@@ -15,6 +15,6 @@ include "root" {
 }
 
 inputs = {
- cluster_name = "${local.account}-${local.region}-${local.env}-eks"
+ cluster_name = "${local.account}-${local.env}-eks"
  tags = include.root.locals.tags
 }
