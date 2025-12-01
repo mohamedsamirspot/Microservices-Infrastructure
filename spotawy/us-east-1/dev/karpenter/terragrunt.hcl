@@ -8,6 +8,13 @@ locals {
   env     = include.root.locals.env_vars.locals.env
 }
 
+# apply and destroy ordering
+dependencies {
+  paths = [
+    "${get_terragrunt_dir()}/../eks"
+  ]
+}
+
 dependency "eks" {
   config_path = "${get_terragrunt_dir()}/../eks"
     # Fix for run-all init

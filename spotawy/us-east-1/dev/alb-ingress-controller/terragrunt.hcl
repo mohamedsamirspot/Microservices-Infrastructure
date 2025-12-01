@@ -8,6 +8,15 @@ locals {
   env     = include.root.locals.env_vars.locals.env
 }
 
+# apply and destroy ordering
+dependencies {
+  paths = [
+    "${get_terragrunt_dir()}/../network",
+    "${get_terragrunt_dir()}/../eks",
+    "${get_terragrunt_dir()}/../karpenter"
+  ]
+}
+
 dependency "vpc" {
   config_path = "${get_terragrunt_dir()}/../network"
     # Fix for run-all init

@@ -14,6 +14,13 @@ include "root" {
   expose = true
 }
 
+# apply and destroy ordering
+dependencies {
+  paths = [
+    "${get_terragrunt_dir()}/../network"
+  ]
+}
+
 dependency "vpc" {
   config_path = "${get_terragrunt_dir()}/../network"
     # Fix for run-all init
