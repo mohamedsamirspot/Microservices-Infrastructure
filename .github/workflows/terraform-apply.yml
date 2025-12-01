@@ -90,17 +90,10 @@ jobs:
 
       # ------------------ TERRAGRUNT PLAN ------------------
       - name: Terragrunt Plan
-        id: plan
         working-directory: ${{ env.WORKING_DIR }}
-        run: terragrunt run-all plan --out tfplan
-
-      - name: Upload tfplan artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: tfplan
-          path: ${{ env.WORKING_DIR }}/tfplan
+        run: terragrunt run-all plan
 
       # ------------------ TERRAGRUNT APPLY ------------------
       - name: Terragrunt Apply
         working-directory: ${{ env.WORKING_DIR }}
-        run: terragrunt run-all apply --auto-approve tfplan
+        run: terragrunt run-all apply --auto-approve --terragrunt-non-interactive

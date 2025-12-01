@@ -78,4 +78,4 @@ jobs:
         working-directory: ${{ env.WORKING_DIR }}
         run: |
           echo "Destroying: $WORKING_DIR"
-          terragrunt run-all destroy --auto-approve
+          terragrunt run-all destroy --auto-approve --terragrunt-non-interactive
