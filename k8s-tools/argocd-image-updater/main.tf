@@ -3,7 +3,7 @@ resource "helm_release" "argocd-image-updater" {
   repository       = "https://argoproj.github.io/argo-helm"
   chart            = "argocd-image-updater"
   version          = var.argocd_chart_version
-  namespace        = "argocd-image-updater"
+  namespace        = "argocd"
   create_namespace = true
 
   # values = [
