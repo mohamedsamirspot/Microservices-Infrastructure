@@ -126,21 +126,21 @@ module "eks" {
   # Cluster access entry
   # To add the current caller identity as an administrator
   enable_cluster_creator_admin_permissions = true
-  # access_entries = {
+  access_entries = {
     # you can use users or roles arns only no groups so you need to put more than one user or just put one role and make all the users you want to assume it so they can have access from one access entry only
-    # mohamed-emary = {
-    #   principal_arn     = "arn:aws:iam::104725311182:user/mohamed-emary"
-    #   policy_associations = {
-    #     example = {
-    #       policy_arn = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy"
-    #       access_scope = {
-    #             type = "cluster"
-    #       }
-    #     }
-    #   }
-    # }
+    mohamed-emary = {
+      principal_arn     = "arn:aws:iam::948763340657:user/spot"
+      policy_associations = {
+        example = {
+          policy_arn = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy"
+          access_scope = {
+                type = "cluster"
+          }
+        }
+      }
+    }
     # moataznaguib = {
-    #   principal_arn     = "arn:aws:iam::104725311182:user/moataznaguib"
+    #   principal_arn     = "arn:aws:iam::948763340657:user/moataznaguib"
     #   policy_associations = {
     #     example = {
     #       policy_arn = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy"
@@ -161,7 +161,7 @@ module "eks" {
     #     }
     #   }
     # }
-  # }
+  }
   
   tags = var.tags
 
