@@ -8,6 +8,7 @@ These terraform components (modules and k8s-tools) can create the following so f
 - k8s-tools
   - alb-ingress-controller
   - argocd
+  - argocd-image-updater
   - gha-runner
   - k8s-karpenter
 # Notes
