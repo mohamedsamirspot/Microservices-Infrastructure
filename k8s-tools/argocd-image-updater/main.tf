@@ -6,9 +6,9 @@ resource "helm_release" "argocd-image-updater" {
   namespace        = "argocd"
   create_namespace = true
 
-  values = [
-    file("${path.module}/values-argocd-image-updater.yaml")
-  ]
+  # values = [
+  #   file("${path.module}/values-argocd-image-updater.yaml")
+  # ]
 
   # Example of inline value override
   # set {
