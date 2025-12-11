@@ -15,5 +15,5 @@ variable "cluster_name" {
 variable "argocd_chart_version" {
   description = "Version of the argocd-image-updater Helm chart"
   type        = string
-  default     = "1.0.1"
+  default     = "0.14.0"
 }
