@@ -11,6 +11,7 @@ These terraform components (modules and k8s-tools) can create the following so f
   - argocd-image-updater
   - gha-runner
   - k8s-karpenter
+  - stakater-reloader
 # Notes
 - This repo is authenticated with aws through OIDC Reference --> https://www.youtube.com/watch?v=Sdzd4N6L5Hg
 - Push and commits pipelines are disabled so you need to run the pipeline manually and pass the env variable each time with the right value
@@ -19,5 +20,3 @@ These terraform components (modules and k8s-tools) can create the following so f
   - Gitlab-CI
 ![Image Description](screenshots/1.png)
 ![Image Description](screenshots/2.png)
-
-

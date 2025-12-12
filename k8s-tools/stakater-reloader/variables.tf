@@ -12,8 +12,8 @@ variable "cluster_name" {
   type        = string
 }
 
-variable "argocd-image-updater_chart_version" {
-  description = "Version of the argocd-image-updater Helm chart"
+variable "stakater-reloader_chart_version" {
+  description = "Version of the stakater-reloader Helm chart"
   type        = string
-  default     = "0.14.0"
+  default     = "2.2.6"
 }
