@@ -15,5 +15,5 @@ variable "cluster_name" {
 variable "stakater-reloader_chart_version" {
   description = "Version of the stakater-reloader Helm chart"
   type        = string
-  default     = "chart-v2.2.6"
+  default     = "2.2.6"
 }
