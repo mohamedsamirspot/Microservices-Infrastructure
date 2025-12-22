@@ -41,7 +41,7 @@ module "eks" {
   control_plane_subnet_ids = var.subnet_ids   # private subnets for the control plane
 
 
-  endpoint_public_access  = true # Controls whether the EKS control plane (API server) is accessible over the internet via a public endpoint. --> Even when the control plane resides in private subnets, AWS provides a way to access it externally via a managed public endpoint. 
+  endpoint_public_access  = true # Controls whether the EKS control plane (API server) is accessible over the internet via a public endpoint. --> Even when the control plane resides in private subnets, AWS provides a way to access it externally via a managed public endpoint.
   endpoint_private_access = true # Controls whether the EKS control plane (API server) is accessible only from within the VPC using its private IP address.
   endpoint_public_access_cidrs = var.cluster_endpoint_public_access_cidrs # Specifies the allowed CIDR ranges for accessing the EKS control plane public endpoint when cluster_endpoint_public_access is true. Default: If not set explicitly, AWS defaults this to allow access from 0.0.0.0/0 (i.e., from anywhere).
 
@@ -162,7 +162,7 @@ module "eks" {
     #   }
     # }
   }
-  
+
   tags = var.tags
 
   # [!CAUTION] Due to the current EKS Auto Mode API, to disable EKS Auto Mode you will have to explicity set:

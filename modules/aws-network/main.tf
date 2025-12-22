@@ -27,9 +27,9 @@ module "vpc" {
   enable_dns_hostnames = true
 
   depends_on = [ aws_eip.nat ]
-  
+
   tags = var.tags
-  
+
 
 
   public_subnet_tags = {
@@ -39,8 +39,6 @@ module "vpc" {
   private_subnet_tags = {
     "kubernetes.io/role/internal-elb" = 1 # to the aws ingress controller internal load balancers to be created
     # Tags subnets for Karpenter auto-discovery
-    "karpenter.sh/discovery" = "${var.cluster_name}" 
+    "karpenter.sh/discovery" = "${var.cluster_name}"
   }
 }
-
-

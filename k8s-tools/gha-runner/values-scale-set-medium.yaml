@@ -1,7 +1,7 @@
 githubConfigSecret: "gha-runner-secret"
 
 # GitHub only allows self-hosted runners for: repositories, organizations, and enterprises. So it can't be used for a whole personal account.
-githubConfigUrl: "https://github.com/mohamedsamirspot/Microservices-Infrastructure" 
+githubConfigUrl: "https://github.com/mohamedsamirspot/Microservices-Infrastructure"
 
 minRunners: 0
 maxRunners: 2
@@ -9,7 +9,7 @@ maxRunners: 2
 ## If any customization is required for dind or kubernetes mode, containerMode should remain
 ## empty, and configuration should be applied to the template.
 
-# containerMode: 
+# containerMode:
 #   type: "dind"
 
 
@@ -81,4 +81,3 @@ template:
       emptyDir: {}
     - name: dind-externals
       emptyDir: {}
-
