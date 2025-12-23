@@ -109,7 +109,7 @@ resource "helm_release" "gha-runner-scale-set-controller" {
   namespace  = "gha-runner"
   chart      = "gha-runner-scale-set-controller"
   repository = "oci://ghcr.io/actions/actions-runner-controller-charts"
-  version    = "0.13.0"
+  version    = "0.13.1"
   values = [
     file("${path.module}/values-scale-set-controller.yaml")
   ]
