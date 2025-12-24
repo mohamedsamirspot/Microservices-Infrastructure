@@ -24,7 +24,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      WORKING_DIR: ${{ github.event.inputs.account }}/${{ github.event.inputs.region }}/${{ github.event.inputs.env }}
+      WORKING_DIR: aws-accounts/${{ github.event.inputs.account }}/${{ github.event.inputs.region }}/${{ github.event.inputs.env }}
 
     steps:
       - name: Checkout repository
