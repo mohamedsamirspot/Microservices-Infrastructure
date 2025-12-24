@@ -1,3 +1,5 @@
+skip = !read_terragrunt_config(find_in_parent_folders("env.hcl")).locals.enable_gha_runner
+
 terraform {
   source = "${find_in_parent_folders("k8s-tools")}/gha-runner"
 }

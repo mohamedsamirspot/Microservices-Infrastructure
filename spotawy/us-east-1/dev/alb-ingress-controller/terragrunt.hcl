@@ -1,3 +1,5 @@
+skip = !read_terragrunt_config(find_in_parent_folders("env.hcl")).locals.enable_alb_ingress_controller
+
 terraform {
   source = "${find_in_parent_folders("k8s-tools")}/alb-ingress-controller"
 }

@@ -1,3 +1,5 @@
+skip = !read_terragrunt_config(find_in_parent_folders("env.hcl")).locals.enable_karpenter
+
 terraform {
   source = "${find_in_parent_folders("k8s-tools")}/karpenter"
 }

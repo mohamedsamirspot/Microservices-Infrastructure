@@ -1,3 +1,5 @@
+skip = !read_terragrunt_config(find_in_parent_folders("env.hcl")).locals.enable_network
+
 terraform {
   source = "${find_in_parent_folders("modules")}/aws-network"
 }
