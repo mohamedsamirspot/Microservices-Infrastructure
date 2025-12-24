@@ -4,10 +4,9 @@ terraform {
   source = "${find_in_parent_folders("k8s-tools")}/karpenter"
 }
 
-locals {
-  account = include.root.locals.account_vars.locals.account_alias
-  region  = include.root.locals.region_vars.locals.aws_region
-  env     = include.root.locals.env_vars.locals.env
+include "root" {
+  path   = find_in_parent_folders("root.hcl")
+  expose = true
 }
 
 # apply and destroy ordering
@@ -28,17 +27,11 @@ dependency "eks" {
   }
 }
 
-
-include "root" {
-  path   = find_in_parent_folders()
-  expose = true
-}
-
 inputs = {
   cluster_name = dependency.eks.outputs.cluster_name
   kubernetes_version = dependency.eks.outputs.cluster_version
   cluster_endpoint = dependency.eks.outputs.cluster_endpoint
-  tags = include.root.locals.tags
+  tags = read_terragrunt_config(find_in_parent_folders("env.hcl")).locals.tags
 }
 
 generate "provider-karpenter" {

@@ -4,10 +4,9 @@ terraform {
   source = "${find_in_parent_folders("k8s-tools")}/alb-ingress-controller"
 }
 
-locals {
-  account = include.root.locals.account_vars.locals.account_alias
-  region  = include.root.locals.region_vars.locals.aws_region
-  env     = include.root.locals.env_vars.locals.env
+include "root" {
+  path   = find_in_parent_folders("root.hcl")
+  expose = true
 }
 
 # apply and destroy ordering
@@ -43,17 +42,10 @@ dependency "karpenter" {
   skip_outputs = true
 }
 
-
-include "root" {
-  path   = find_in_parent_folders()
-  expose = true
-}
-
 inputs = {
   vpcId             = dependency.vpc.outputs.vpc_id
   cluster_name     = dependency.eks.outputs.cluster_name
   oidc_provider_arn = dependency.eks.outputs.oidc_provider_arn
-  tags = include.root.locals.tags
 }
 generate "provider-alb-ingress-controller" {
   path      = "provider-alb-ingress-controller.tf"

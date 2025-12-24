@@ -4,10 +4,9 @@ terraform {
   source = "${find_in_parent_folders("k8s-tools")}/gha-runner"
 }
 
-locals {
-  account = include.root.locals.account_vars.locals.account_alias
-  region  = include.root.locals.region_vars.locals.aws_region
-  env     = include.root.locals.env_vars.locals.env
+include "root" {
+  path   = find_in_parent_folders("root.hcl")
+  expose = true
 }
 
 # apply and destroy ordering
@@ -35,18 +34,12 @@ dependency "karpenter" {
   skip_outputs = true
 }
 
-include "root" {
-  path   = find_in_parent_folders()
-  expose = true
-}
-
 inputs = {
   cluster_name      = dependency.eks.outputs.cluster_name
   cluster_endpoint = dependency.eks.outputs.cluster_endpoint
   cluster_certificate_authority_data = dependency.eks.outputs.cluster_certificate_authority_data
   oidc_provider_arn = dependency.eks.outputs.oidc_provider_arn
   cluster_oidc_provider_url = dependency.eks.outputs.cluster_oidc_issuer_url
-  tags = include.root.locals.tags
 }
 
 

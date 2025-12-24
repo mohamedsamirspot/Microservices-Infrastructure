@@ -1,12 +1,5 @@
 locals {
-  account_vars = read_terragrunt_config(find_in_parent_folders("account.hcl"))
   region_vars  = read_terragrunt_config(find_in_parent_folders("region.hcl"))
-  env_vars     = read_terragrunt_config(find_in_parent_folders("env.hcl"))
-  tags = {
-      project   = "eks-cluster"
-      terraform = "true"
-      env = local.env_vars.locals.env
-  }
 }
 
 remote_state {
@@ -15,16 +8,14 @@ remote_state {
     path      = "backend.tf"
     if_exists = "overwrite_terragrunt"
   }
-
   config = {
     bucket = "terraform-state-multi-env-spot"
     key = "${path_relative_to_include()}/terraform.tfstate"
-    region         = "us-east-1"
+    region         = "${local.region_vars.locals.aws_region}"
     encrypt        = true
     use_lockfile = true
   }
 }
-
 
 generate "provider" {
   path      = "providers.tf"
@@ -35,8 +26,6 @@ provider "aws" {
 }
 EOF
 }
-
-
 
 generate "required_providers_versions" {
   path      = "required_providers_versions.tf"
@@ -53,7 +42,6 @@ terraform {
       # ~> 5.0 → allows versions 5.x only (safe from breaking changes).
       # 👉 Use ~> 5.0 for stability, and >= 6.0 only if you always want the newest version.
     }
-
 
     # required_providers is a module-level declaration and is not automatically “passed” down. Provider configuration blocks (provider "name" { ... }) from the root are handed to child modules when the provider type (namespace/name) matches, but the child should still declare the provider names it expects in its own terraform { required_providers { ... } } to avoid warnings and to be explicit.
     # so this required providers block here is for the root module and not for the child modules but we still need to declare them here for kubectl and helm authentication which is defined in the provider.tf here to work in the child modules

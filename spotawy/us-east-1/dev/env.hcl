@@ -8,4 +8,9 @@ locals {
   enable_karpenter = true
   enable_network = true
   enable_stakater_reloader = true
+  tags = {
+      project   = "eks-cluster"
+      terraform = "true"
+      env = local.env
+  }
 }

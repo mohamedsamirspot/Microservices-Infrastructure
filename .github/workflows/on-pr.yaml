@@ -1,4 +1,4 @@
-name: PR
+name: on-pr
 
 on:
   workflow_dispatch:

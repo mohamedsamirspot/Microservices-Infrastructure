@@ -1,12 +1,3 @@
-variable "tags" {
-  description = "Map of tags to assign"
-  type        = map(string)
-  default = {
-    env         = "dev"
-    terraform   = "true"
-  }
-}
-
 variable "vpcId" {
   type    = string
   default = ""

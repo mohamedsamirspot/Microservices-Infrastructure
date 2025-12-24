@@ -4,10 +4,9 @@ terraform {
   source = "${find_in_parent_folders("k8s-tools")}/stakater-reloader"
 }
 
-locals {
-  account = include.root.locals.account_vars.locals.account_alias
-  region  = include.root.locals.region_vars.locals.aws_region
-  env     = include.root.locals.env_vars.locals.env
+include "root" {
+  path   = find_in_parent_folders("root.hcl")
+  expose = true
 }
 
 # apply and destroy ordering
@@ -33,15 +32,8 @@ dependency "karpenter" {
   skip_outputs = true
 }
 
-
-include "root" {
-  path   = find_in_parent_folders()
-  expose = true
-}
-
 inputs = {
   cluster_name = dependency.eks.outputs.cluster_name
-  tags = include.root.locals.tags
 }
 
 generate "provider-stakater-reloader" {

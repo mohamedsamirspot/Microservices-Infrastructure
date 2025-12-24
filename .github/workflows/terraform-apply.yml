@@ -1,5 +1,4 @@
-name: Terragrunt Apply
-
+name: terraform-apply
 
 on:
   workflow_dispatch:
