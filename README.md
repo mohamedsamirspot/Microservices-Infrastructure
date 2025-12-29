@@ -10,7 +10,8 @@ These terraform components (modules and k8s-tools) can create the following so f
   - argocd
   - argocd-image-updater
   - gha-runner
-  - k8s-karpenter
+  - karpenter
+  - kube-downscaler
   - stakater-reloader
 # Notes
 - This repo is authenticated with aws through OIDC Reference --> https://www.youtube.com/watch?v=Sdzd4N6L5Hg

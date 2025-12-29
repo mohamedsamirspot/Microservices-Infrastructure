@@ -47,7 +47,6 @@ module "eks" {
   endpoint_public_access_cidrs = var.cluster_endpoint_public_access_cidrs # Specifies the allowed CIDR ranges for accessing the EKS control plane public endpoint when cluster_endpoint_public_access is true. Default: If not set explicitly, AWS defaults this to allow access from 0.0.0.0/0 (i.e., from anywhere).
 
 
-
   addons = {
     # Automatically picks the version that matches the cluster version
     # before_compute = true --> means before node group creation
