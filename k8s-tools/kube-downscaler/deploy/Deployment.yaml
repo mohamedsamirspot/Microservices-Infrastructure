@@ -25,13 +25,10 @@ spec:
           # dry run by default, remove to perform downscaling
           # - --dry-run
           # run every minute
+          - '--default-downtime=Fri-Fri 05:00-23:59 Africa/Cairo'
           - --interval=60
           - --exclude-namespaces=kube-system,kube-downscaler,karpenter
           - --include-resources=deployments,statefulsets
-        envFrom:
-          - configMapRef:
-              name: kube-downscaler
-              optional: true
         resources:
           limits:
             memory: 100Mi

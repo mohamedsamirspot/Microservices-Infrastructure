@@ -1,8 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: kube-downscaler
-  namespace: kube-downscaler
-data:
-  # downscale for non-work hours
-  DEFAULT_UPTIME: "Tue-Sun 07:30-20:30 CET"
