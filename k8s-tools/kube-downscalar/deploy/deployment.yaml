@@ -40,13 +40,13 @@ spec:
           readOnlyRootFilesystem: true
           runAsNonRoot: true
           runAsUser: 1000
-        affinity:
-          nodeAffinity:
-            requiredDuringSchedulingIgnoredDuringExecution:
-              nodeSelectorTerms:
-                - matchExpressions:
-                    - key: karpenter.sh/nodepool
-                      operator: DoesNotExist
-        tolerations:
-        - key: CriticalAddonsOnly
-          operator: Exists
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: karpenter.sh/nodepool
+                    operator: DoesNotExist
+      tolerations:
+      - key: CriticalAddonsOnly
+        operator: Exists
