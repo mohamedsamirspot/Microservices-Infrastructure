@@ -27,7 +27,7 @@ spec:
           # run every minute
           - --interval=60
           - --exclude-namespaces=kube-system,kube-downscaler,karpenter
-          - --include_resources=deployments,statefulsets
+          - --include-resources=deployments,statefulsets
         envFrom:
           - configMapRef:
               name: kube-downscaler
