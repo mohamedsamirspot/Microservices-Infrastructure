@@ -1,7 +1,7 @@
-skip = !read_terragrunt_config(find_in_parent_folders("env.hcl")).locals.enable_kube_downscalar
+skip = !read_terragrunt_config(find_in_parent_folders("env.hcl")).locals.enable_kube_downscaler
 
 terraform {
-  source = "${find_in_parent_folders("k8s-tools")}/kube-downscalar"
+  source = "${find_in_parent_folders("k8s-tools")}/kube-downscaler"
 }
 
 include "root" {
@@ -29,8 +29,8 @@ dependency "eks" {
 }
 
 
-generate "provider-kube-downscalar" {
-  path      = "provider-kube-downscalar.tf"
+generate "provider-kube-downscaler" {
+  path      = "provider-kube-downscaler.tf"
   if_exists = "overwrite_terragrunt"
   contents  = <<EOF
 

@@ -23,9 +23,11 @@ spec:
         image: hjacobs/kube-downscaler:23.2.0
         args:
           # dry run by default, remove to perform downscaling
-          - --dry-run
+          # - --dry-run
           # run every minute
           - --interval=60
+          - --exclude-namespaces=kube-system,kube-downscaler,karpenter
+          - --include_resources=deployments,statefulsets
         envFrom:
           - configMapRef:
               name: kube-downscaler

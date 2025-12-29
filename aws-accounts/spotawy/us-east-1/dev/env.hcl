@@ -6,7 +6,7 @@ locals {
   enable_eks = true
   enable_gha_runner = true
   enable_karpenter = true
-  enable_kube_downscalar = true
+  enable_kube_downscaler = true
   enable_network = true
   enable_stakater_reloader = true
   tags = {
