@@ -40,6 +40,7 @@ module "eks" {
   subnet_ids               = var.subnet_ids # Use private subnets for worker nodes
   control_plane_subnet_ids = var.subnet_ids   # private subnets for the control plane
 
+  iam_role_use_name_prefix = false
 
   endpoint_public_access  = true # Controls whether the EKS control plane (API server) is accessible over the internet via a public endpoint. --> Even when the control plane resides in private subnets, AWS provides a way to access it externally via a managed public endpoint.
   endpoint_private_access = true # Controls whether the EKS control plane (API server) is accessible only from within the VPC using its private IP address.
@@ -72,6 +73,7 @@ module "eks" {
       # Starting on 1.30, AL2023 is the default AMI type for EKS managed node groups
       ami_type       = "AL2023_x86_64_STANDARD"
       instance_types = var.instance_type
+      iam_role_use_name_prefix = false
 
       min_size     = var.min_size
       max_size     = var.max_size
