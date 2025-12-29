@@ -45,7 +45,7 @@ module "eks" {
   endpoint_private_access = true # Controls whether the EKS control plane (API server) is accessible only from within the VPC using its private IP address.
   endpoint_public_access_cidrs = var.cluster_endpoint_public_access_cidrs # Specifies the allowed CIDR ranges for accessing the EKS control plane public endpoint when cluster_endpoint_public_access is true. Default: If not set explicitly, AWS defaults this to allow access from 0.0.0.0/0 (i.e., from anywhere).
 
-
+  iam_role_use_name_prefix = false
 
   addons = {
     # Automatically picks the version that matches the cluster version
