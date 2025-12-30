@@ -40,6 +40,7 @@ module "eks" {
   subnet_ids               = var.subnet_ids # Use private subnets for worker nodes
   control_plane_subnet_ids = var.subnet_ids   # private subnets for the control plane
 
+  iam_role_name           = "${var.cluster_name}-role"
   iam_role_use_name_prefix = false
 
   endpoint_public_access  = true # Controls whether the EKS control plane (API server) is accessible over the internet via a public endpoint. --> Even when the control plane resides in private subnets, AWS provides a way to access it externally via a managed public endpoint.
@@ -71,8 +72,10 @@ module "eks" {
   eks_managed_node_groups = {
     bootstrapping-node-group = {
       # Starting on 1.30, AL2023 is the default AMI type for EKS managed node groups
+      # name          = "bootstrapping-node-group" --> nodes name so if you set it all of them will have the same name
       ami_type       = "AL2023_x86_64_STANDARD"
       instance_types = var.instance_type
+      iam_role_name           = "${var.cluster_name}-node-group-role"
       iam_role_use_name_prefix = false
 
       min_size     = var.min_size
@@ -129,8 +132,19 @@ module "eks" {
   enable_cluster_creator_admin_permissions = true
   access_entries = {
     # you can use users or roles arns only no groups so you need to put more than one user or just put one role and make all the users you want to assume it so they can have access from one access entry only
-    # mohamed-emary = {
+    # spot = {
     #   principal_arn     = "arn:aws:iam::948763340657:user/spot"
+    #   policy_associations = {
+    #     example = {
+    #       policy_arn = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy"
+    #       access_scope = {
+    #             type = "cluster"
+    #       }
+    #     }
+    #   }
+    # }
+    # github-action-role = {
+    #   principal_arn     = "arn:aws:iam::948763340657:role/github-action-role"
     #   policy_associations = {
     #     example = {
     #       policy_arn = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy"

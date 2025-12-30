@@ -32,10 +32,6 @@ dependency "karpenter" {
   skip_outputs = true
 }
 
-inputs = {
-  cluster_name = dependency.eks.outputs.cluster_name
-}
-
 generate "provider-stakater-reloader" {
   path      = "provider-stakater-reloader.tf"
   if_exists = "overwrite_terragrunt"

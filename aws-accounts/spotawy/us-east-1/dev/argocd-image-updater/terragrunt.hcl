@@ -32,10 +32,6 @@ dependency "karpenter" {
   skip_outputs = true
 }
 
-inputs = {
-  cluster_name = dependency.eks.outputs.cluster_name
-}
-
 generate "provider-argocd-image-updater" {
   path      = "provider-argocd-image-updater.tf"
   if_exists = "overwrite_terragrunt"

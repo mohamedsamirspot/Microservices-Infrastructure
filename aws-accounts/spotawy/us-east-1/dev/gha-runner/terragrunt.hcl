@@ -36,7 +36,6 @@ dependency "karpenter" {
 
 inputs = {
   cluster_name      = dependency.eks.outputs.cluster_name
-  cluster_endpoint = dependency.eks.outputs.cluster_endpoint
   cluster_certificate_authority_data = dependency.eks.outputs.cluster_certificate_authority_data
   oidc_provider_arn = dependency.eks.outputs.oidc_provider_arn
   cluster_oidc_provider_url = dependency.eks.outputs.cluster_oidc_issuer_url
