@@ -1,3 +1,5 @@
+# https://codeberg.org/hjacobs/kube-downscaler
+
 resource "kubectl_manifest" "kube_downscaler_namespace" {
   yaml_body = <<-YAML
 apiVersion: v1
