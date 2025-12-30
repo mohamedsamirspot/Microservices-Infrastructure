@@ -7,7 +7,6 @@ metadata:
 YAML
 }
 
-
 resource "kubectl_manifest" "kube_downscaler" {
   for_each = fileset("${path.module}/deploy", "*.yaml")
 
@@ -15,4 +14,3 @@ resource "kubectl_manifest" "kube_downscaler" {
 
   depends_on = [kubectl_manifest.kube_downscaler_namespace]
 }
-
