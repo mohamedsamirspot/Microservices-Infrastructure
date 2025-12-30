@@ -73,6 +73,7 @@ module "eks" {
     bootstrapping-node-group = {
       # Starting on 1.30, AL2023 is the default AMI type for EKS managed node groups
       name          = "${var.cluster_name}-bootstrapping-node-group"
+      node_group_name_prefix = false
       ami_type       = "AL2023_x86_64_STANDARD"
       instance_types = var.instance_type
       iam_role_name           = "${var.cluster_name}-node-group-role"
