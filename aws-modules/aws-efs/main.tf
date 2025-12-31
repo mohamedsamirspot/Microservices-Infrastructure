@@ -67,15 +67,19 @@ module "efs" {
   security_group_description = "Example EFS security group"
   security_group_vpc_id      = var.vpc_id # The VPC ID where the security group will be created
   security_group_rules = {
-    vpc = {
-      # relying on the defaults provdied for EFS/NFS (2049/TCP + ingress)
-      description = "NFS ingress from VPC private subnets"
-      cidr_blocks = var.vpc_cidr
+    security_group_rules = {
+      for idx, cidr in var.private_subnets_cidr_blocks :
+      "subnet_${idx}" => {
+        # relying on the defaults provdied for EFS/NFS (2049/TCP + ingress)
+        description = "NFS ingress from VPC private subnets"
+        cidr_ipv4   = cidr
+      }
       # The rule allows ingress (inbound) traffic on port 2049 (NFS) from the provided private subnet CIDR blocks.
       # Prevents Public Access:
       #   Only resources within the specified private subnet CIDR ranges can access the EFS mount targets.
       #   This ensures the EFS is not exposed to external or unauthorized traffic.
     }
+
     # vpc_2 = {
     #   # relying on the defaults provided for EFS/NFS (2049/TCP + ingress)
     #   description = "NFS ingress from VPC private subnets"
