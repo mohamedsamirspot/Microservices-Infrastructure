@@ -1,4 +1,4 @@
-skip = !read_terragrunt_config(find_in_parent_folders("env.hcl")).locals.enable_eks
+skip = !read_terragrunt_config(find_in_parent_folders("env.hcl")).locals.enable_aws_eks
 
 terraform {
   source = "${find_in_parent_folders("aws-modules")}/aws-eks"
@@ -10,7 +10,7 @@ include "root" {
 }
 
 locals {
-  account = read_terragrunt_config(find_in_parent_folders("account.hcl")).locals.account_alias
+  account = read_terragrunt_config(find_in_parent_folders("account.hcl")).locals.account_id
   env     = read_terragrunt_config(find_in_parent_folders("env.hcl")).locals.env
   cluster_endpoint_public_access_cidrs = [ "0.0.0.0/0" ]
 }
@@ -18,12 +18,12 @@ locals {
 # apply and destroy ordering
 dependencies {
   paths = [
-    "${get_terragrunt_dir()}/../network"
+    "${get_terragrunt_dir()}/../aws-network"
   ]
 }
 
 dependency "vpc" {
-  config_path = "${get_terragrunt_dir()}/../network"
+  config_path = "${get_terragrunt_dir()}/../aws-network"
     # Fix for run-all init
   mock_outputs = {
     vpc_id                = "vpc-mock"
