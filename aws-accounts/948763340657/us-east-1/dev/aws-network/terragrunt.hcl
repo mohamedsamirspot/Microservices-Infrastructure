@@ -1,4 +1,4 @@
-skip = !read_terragrunt_config(find_in_parent_folders("env.hcl")).locals.enable_network
+skip = !read_terragrunt_config(find_in_parent_folders("env.hcl")).locals.enable_aws_network
 
 terraform {
   source = "${find_in_parent_folders("aws-modules")}/aws-network"
@@ -19,7 +19,7 @@ include "root" {
 }
 
 locals {
-  account = read_terragrunt_config(find_in_parent_folders("account.hcl")).locals.account_alias
+  account = read_terragrunt_config(find_in_parent_folders("account.hcl")).locals.account_id
   env     = read_terragrunt_config(find_in_parent_folders("env.hcl")).locals.env
 }
 

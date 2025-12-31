@@ -1,4 +1,4 @@
-skip = !read_terragrunt_config(find_in_parent_folders("env.hcl")).locals.enable_eks
+skip = !read_terragrunt_config(find_in_parent_folders("env.hcl")).locals.enable_aws_eks
 
 terraform {
   source = "${find_in_parent_folders("aws-modules")}/aws-eks"
@@ -10,7 +10,7 @@ include "root" {
 }
 
 locals {
-  account = read_terragrunt_config(find_in_parent_folders("account.hcl")).locals.account_alias
+  account = read_terragrunt_config(find_in_parent_folders("account.hcl")).locals.account_id
   env     = read_terragrunt_config(find_in_parent_folders("env.hcl")).locals.env
   cluster_endpoint_public_access_cidrs = [ "0.0.0.0/0" ]
 }
