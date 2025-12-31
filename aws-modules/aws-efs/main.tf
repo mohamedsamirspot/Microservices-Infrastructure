@@ -68,14 +68,16 @@ module "efs" {
   security_group_vpc_id      = var.vpc_id # The VPC ID where the security group will be created
 
   security_group_ingress_rules = {
-    nfs_from_private_subnets = {
-      description = "NFS ingress from private subnets"
+    for idx, cidr in var.private_subnets_cidr_blocks : 
+    "nfs_subnet_${idx}" => {
+      description = "NFS ingress from private subnet ${cidr}"
       from_port   = 2049
       to_port     = 2049
-      protocol    = "tcp"
-      cidr_blocks = var.private_subnets_cidr_blocks
+      ip_protocol = "tcp"
+      cidr_ipv4   = cidr
     }
   }
+
 
 
   # Access point(s)
