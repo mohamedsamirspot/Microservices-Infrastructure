@@ -1,17 +1,9 @@
 ######################## this config will create one sg ##############################
-
 locals {
   # region = "eu-east-1"
   # name   = "ex-${basename(path.cwd)}"
-
   # 0,2 if they are 2 az and 0,3 if they are 3 azs
   azs = slice(data.aws_availability_zones.available.names, 0, 2)
-
-  # tags = {
-  #   Name       = local.name
-  #   Example    = local.name
-  #   Repository = "https://github.com/terraform-aws-modules/terraform-aws-efs"
-  # }
 }
 
 data "aws_availability_zones" "available" {}
@@ -19,8 +11,6 @@ data "aws_availability_zones" "available" {}
 module "efs" {
   source = "terraform-aws-modules/efs/aws"
   version = "~> 2.0.0"
-
-  # File system
   name           = "${var.name}"
   # creation_token = "example-token"
   encrypted      = true
@@ -77,8 +67,6 @@ module "efs" {
       cidr_ipv4   = cidr
     }
   }
-
-
 
   # Access point(s)
   # access_points = {
