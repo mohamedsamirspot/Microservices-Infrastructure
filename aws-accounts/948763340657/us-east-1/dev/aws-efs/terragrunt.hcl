@@ -28,12 +28,14 @@ dependency "vpc" {
     vpc_id                = "vpc-mock"
     private_subnet_ids    = ["subnet-mock1", "subnet-mock2"]
     private_subnets_cidr_blocks = ["10.0.1.0/24", "10.0.2.0/24"]
+    cidr = "10.0.0.0/16"
   }
 }
 
 inputs = {
   name                                 = "${local.account}-${local.env}-efs"
   vpc_id                               = dependency.vpc.outputs.vpc_id
+  vpc_cidr                             = dependency.vpc.outputs.cidr
   private_subnets                      = dependency.vpc.outputs.private_subnet_ids
   private_subnets_cidr_blocks          = dependency.vpc.outputs.private_subnets_cidr_blocks
   tags                                 = read_terragrunt_config(find_in_parent_folders("env.hcl")).locals.tags

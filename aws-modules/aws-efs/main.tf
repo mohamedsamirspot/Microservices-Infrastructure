@@ -17,7 +17,7 @@ locals {
 data "aws_availability_zones" "available" {}
 
 module "efs" {
-  source = "terraform-aws-modules/efs/aws"
+  source  = "terraform-aws-modules/efs/aws"
   version = "~> 2.0.0"
 
   # File system
@@ -70,7 +70,7 @@ module "efs" {
     vpc = {
       # relying on the defaults provdied for EFS/NFS (2049/TCP + ingress)
       description = "NFS ingress from VPC private subnets"
-      cidr_blocks = var.private_subnets_cidr_blocks
+      cidr_blocks = var.vpc_cidr
       # The rule allows ingress (inbound) traffic on port 2049 (NFS) from the provided private subnet CIDR blocks.
       # Prevents Public Access:
       #   Only resources within the specified private subnet CIDR ranges can access the EFS mount targets.
