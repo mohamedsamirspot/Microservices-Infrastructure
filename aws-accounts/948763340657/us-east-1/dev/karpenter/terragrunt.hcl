@@ -12,12 +12,12 @@ include "root" {
 # apply and destroy ordering
 dependencies {
   paths = [
-    "${get_terragrunt_dir()}/../eks"
+    "${get_terragrunt_dir()}/../aws-eks"
   ]
 }
 
 dependency "eks" {
-  config_path = "${get_terragrunt_dir()}/../eks"
+  config_path = "${get_terragrunt_dir()}/../aws-eks"
     # Fix for run-all init
   mock_outputs = {
     cluster_name           = "eks-mock-cluster"

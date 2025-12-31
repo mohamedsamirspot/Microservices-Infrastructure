@@ -17,12 +17,12 @@ locals {
 # apply and destroy ordering
 dependencies {
   paths = [
-    "${get_terragrunt_dir()}/../network"
+    "${get_terragrunt_dir()}/../aws-network"
   ]
 }
 
 dependency "vpc" {
-  config_path = "${get_terragrunt_dir()}/../network"
+  config_path = "${get_terragrunt_dir()}/../aws-network"
     # Fix for run-all init
   mock_outputs = {
     vpc_id                = "vpc-mock"
