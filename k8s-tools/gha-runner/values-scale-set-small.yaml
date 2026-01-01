@@ -72,7 +72,7 @@ template:
           cpu: "200m"
           memory: "200Mi"
         limits:
-          cpu: "200m"
+          # cpu: "200m"
           memory: "200Mi"
     volumes:
     - name: work
