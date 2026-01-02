@@ -18,7 +18,7 @@ module "vpc" {
 
   name                 = "${var.tags["env"]}-${var.name}"
   cidr                 = var.cidr
-  azs                  = var.azs
+  azs                  = local.azs
   public_subnets   = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 8, k)]
   private_subnets  = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 8, k + 3)]
   database_subnets = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 8, k + 6)]

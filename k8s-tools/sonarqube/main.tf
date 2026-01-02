@@ -41,14 +41,16 @@ module "db" {
   allocated_storage = 20
   max_allocated_storage = 100
 
-  manage_master_user_password = true
+  
 
   # NOTE: Do NOT use 'user' as the value for 'username' as it throws:
   # "Error creating DB Instance: InvalidParameterValue: MasterUsername
   # user cannot be used as it is a reserved word used by the engine"
   # Description: The DB name to create. If omitted, no database is created initially
+  # So this will create aws secret with this username and a random password
   db_name  = "sonarqube"
-  username = "sonarqube"
+  username = "sonarqube" # Username for the master DB user
+  manage_master_user_password = true
   port     = 5432
 
   db_subnet_group_name   = var.database_subnet_group_name
@@ -64,18 +66,8 @@ module "db" {
 #   secret_id = "terraform/github-token"
 # }
 
-# resource "kubectl_manifest" "monitoring_passcode" {
-#   yaml_body = <<-YAML
-# apiVersion: v1
-# kind: Secret
-# metadata:
-#   name: monitoringpasscode
-#   namespace: sonarqube
-# type: Opaque
-# data:
-#   pass-key: "${base64encode(jsondecode(data.aws_secretsmanager_secret_version.monitoring_passcode.secret_string)["github-token"])}"
-# YAML
-#   depends_on = [helm_release.sonarqube]
+# data "aws_secretsmanager_secret_version" "sonarpassword" {
+#   secret_id = db.module.db_master_password_secret_arn
 # }
 
 # resource "helm_release" "sonarqube" {
@@ -87,7 +79,9 @@ module "db" {
 #   create_namespace = true
 
 #   values = [
-#     file("${path.module}/values-sonarqube.yaml")
+#     templatefile("${path.module}/values-sonarqube.yaml", {
+#       vpcId      = "${base64encode(jsondecode(data.aws_secretsmanager_secret_version.sonarpassword.secret_string)["username"])}"
+#     })
 #   ]
 
 #   depends_on = [module.db]
