@@ -62,32 +62,44 @@ module "db" {
 }
 
 #---------------------------------- SonarQube Helm Chart ----------------------------------
-# data "aws_secretsmanager_secret_version" "monitoring_passcode" {
-#   secret_id = "terraform/github-token"
-# }
+module "monitoring_passcode" {
+  source = "terraform-aws-modules/secrets-manager/aws"
+  version = "2.0.1"
+  # Secret
+  name_prefix             = "monitoring_passcode"
+  description             = "monitoring_passcode Secrets Manager secret"
 
-# data "aws_secretsmanager_secret_version" "sonarpassword" {
-#   secret_id = db.module.db_master_password_secret_arn
-# }
+  # Version
+  create_random_password           = true
+  random_password_length           = 64
+  random_password_override_special = "!@#$%^&*()_+"
 
-# resource "helm_release" "sonarqube" {
-#   name             = "sonarqube"
-#   repository       = "https://SonarSource.github.io/helm-chart-sonarqube"
-#   chart            = "sonarqube"
-#   version          = var.sonarqube_chart_version
-#   namespace        = "sonarqube"
-#   create_namespace = true
+  tags = var.tags
+}
 
-#   values = [
-#     templatefile("${path.module}/values-sonarqube.yaml", {
-#       vpcId      = "${base64encode(jsondecode(data.aws_secretsmanager_secret_version.sonarpassword.secret_string)["username"])}"
-#     })
-#   ]
+data "aws_secretsmanager_secret_version" "sonarpassword" {
+  secret_id = db.module.db_master_password_secret_arn
+}
 
-#   depends_on = [module.db]
-#   # Example of inline value override
-#   # set {
-#   #   name  = "server.service.type"
-#   #   value = "LoadBalancer"
-#   # }
-# }
+resource "helm_release" "sonarqube" {
+  name             = "sonarqube"
+  repository       = "https://SonarSource.github.io/helm-chart-sonarqube"
+  chart            = "sonarqube"
+  version          = var.sonarqube_chart_version
+  namespace        = "sonarqube"
+  create_namespace = true
+
+  values = [
+    templatefile("${path.module}/values-sonarqube.yaml", {
+      vpcId      = "${base64encode(jsondecode(data.aws_secretsmanager_secret_version.sonarpassword.secret_string)["username"])}"
+      monitoringpasscode = module.monitoring_passcode.secret_string
+    })
+  ]
+
+  depends_on = [module.db]
+  # Example of inline value override
+  # set {
+  #   name  = "server.service.type"
+  #   value = "LoadBalancer"
+  # }
+}
