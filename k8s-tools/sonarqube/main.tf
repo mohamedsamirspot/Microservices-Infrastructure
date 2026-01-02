@@ -97,7 +97,7 @@ resource "helm_release" "sonarqube" {
     })
   ]
 
-  depends_on = [module.db]
+  depends_on = [module.db, module.monitoring_passcode]
   # Example of inline value override
   # set {
   #   name  = "server.service.type"
