@@ -62,21 +62,6 @@ module "db" {
 }
 
 #---------------------------------- SonarQube Helm Chart ----------------------------------
-module "monitoring_passcode" {
-  source = "terraform-aws-modules/secrets-manager/aws"
-  version = "2.0.1"
-  # Secret
-  name_prefix             = "monitoring_passcode"
-  description             = "monitoring_passcode Secrets Manager secret"
-
-  # Version
-  create_random_password           = true
-  random_password_length           = 64
-  random_password_override_special = "!@#$%^&*()_+"
-
-  tags = var.tags
-}
-
 data "aws_secretsmanager_secret_version" "sonarpassword" {
   secret_id = module.db.db_instance_master_user_secret_arn
 }
@@ -92,12 +77,12 @@ resource "helm_release" "sonarqube" {
   values = [
     templatefile("${path.module}/values-sonarqube.yaml", {
       sonarpassword      = jsondecode(data.aws_secretsmanager_secret_version.sonarpassword.secret_string)["password"]
-      monitoringpasscode = "fsdfsd"
-      endpoint   = "jdbc:postgresql://${module.db.db_instance_endpoint}:5432/sonarqube"
+      monitoringpasscode = jsondecode(data.aws_secretsmanager_secret_version.sonarpassword.secret_string)["password"]
+      endpoint   = "jdbc:postgresql://${module.db.db_instance_endpoint}/sonarqube"
     })
   ]
 
-  depends_on = [module.db, module.monitoring_passcode]
+  depends_on = [module.db]
   # Example of inline value override
   # set {
   #   name  = "server.service.type"

@@ -12,7 +12,7 @@ replicaCount: 1
 jdbcOverwrite:
   enabled: true
   jdbcUrl: "${endpoint}"
-  jdbcUsername: "username"
+  jdbcUsername: "sonarqube"
   jdbcPassword: "${sonarpassword}"
 
 persistence:
@@ -24,9 +24,11 @@ postgresql:
   enabled: false
 
 resources:
-  requests:
-    cpu: 200m
-    memory: 2Gi
   limits:
-    cpu: 500m
-    memory: 2Gi
+    cpu: 800m
+    memory: 6144M
+    ephemeral-storage: 512000M
+  requests:
+    cpu: 400m
+    memory: 2048M
+    ephemeral-storage: 1536M
