@@ -13,7 +13,7 @@ jdbcOverwrite:
   enabled: false
 
 persistence:
-  enabled: true
+  enabled: false
 
 monitoringPasscodeSecretName: "monitoringpasscode"
 monitoringPasscodeSecretKey: "pass-key"
