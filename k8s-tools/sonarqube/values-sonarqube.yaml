@@ -1,0 +1,34 @@
+# This will:
+#   Run SonarQube Community Build
+#   Use the embedded PostgreSQL (suitable for dev/test)
+#   Require no license
+
+community:
+  enabled: true
+  buildNumber: "25.12.0.117093"
+
+replicaCount: 1
+
+jdbcOverwrite:
+  enabled: true
+  jdbcUrl: "${endpoint}"
+  jdbcUsername: "sonarqube"
+  jdbcPassword: "${sonarpassword}"
+
+persistence:
+  enabled: false
+
+monitoringPasscode: "${monitoringpasscode}"
+
+postgresql:
+  enabled: false
+
+resources:
+  limits:
+    cpu: 800m
+    memory: 6144M
+    ephemeral-storage: 512000M
+  requests:
+    cpu: 400m
+    memory: 2048M
+    ephemeral-storage: 1536M

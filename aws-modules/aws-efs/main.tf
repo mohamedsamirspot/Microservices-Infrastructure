@@ -1,12 +1,10 @@
 ######################## this config will create one sg ##############################
-locals {
-  # region = "eu-east-1"
-  # name   = "ex-${basename(path.cwd)}"
-  # 0,2 if they are 2 az and 0,3 if they are 3 azs
-  azs = slice(data.aws_availability_zones.available.names, 0, 2)
-}
 
 data "aws_availability_zones" "available" {}
+locals {
+  # 0,2 if they are 2 az and 0,3 if they are 3 azs
+  azs      = slice(data.aws_availability_zones.available.names, 0, 3)
+}
 
 module "efs" {
   source = "terraform-aws-modules/efs/aws"
