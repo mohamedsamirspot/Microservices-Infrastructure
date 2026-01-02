@@ -93,7 +93,7 @@ resource "helm_release" "sonarqube" {
     templatefile("${path.module}/values-sonarqube.yaml", {
       sonarpassword      = "${base64encode(jsondecode(data.aws_secretsmanager_secret_version.sonarpassword.secret_string)["password"])}"
       monitoringpasscode = module.monitoring_passcode.secret_string
-      endpoint   = module.db.db_instance_endpoint
+      endpoint   = "jdbc:postgresql://${module.db.db_instance_endpoint}:5432/sonarqube"
     })
   ]
 

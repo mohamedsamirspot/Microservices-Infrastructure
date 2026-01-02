@@ -11,7 +11,7 @@ replicaCount: 1
 
 jdbcOverwrite:
   enabled: true
-  jdbcUrl: "jdbc:postgresql://${endpoint}:5432/sonarqube"
+  jdbcUrl: "${endpoint}"
   jdbcUsername: "username"
   jdbcPassword: "${sonarpassword}"
 
