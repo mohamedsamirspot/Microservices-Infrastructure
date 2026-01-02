@@ -1,5 +1,6 @@
+# https://artifacthub.io/packages/helm/sonarqube/sonarqube
+# https://github.com/SonarSource/helm-chart-sonarqube/tree/master/charts/sonarqube
 #---------------------------------- RDS Database Module ----------------------------------
-
 module "security_group" {
   source  = "terraform-aws-modules/security-group/aws"
   version = "~> 5.0"
