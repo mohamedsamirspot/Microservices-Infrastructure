@@ -11,7 +11,7 @@ metadata:
   namespace: sonarqube
 type: Opaque
 data:
-  pass-key: "${base64encode(jsondecode(data.aws_secretsmanager_secret_version.github_token.secret_string)["github-token"])}"
+  pass-key: "${base64encode(jsondecode(data.aws_secretsmanager_secret_version.monitoring_passcode.secret_string)["github-token"])}"
 YAML
   depends_on = [helm_release.sonarqube]
 }
