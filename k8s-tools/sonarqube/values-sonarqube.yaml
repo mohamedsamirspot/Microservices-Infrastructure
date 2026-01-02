@@ -15,7 +15,7 @@ jdbcOverwrite:
 persistence:
   enabled: true
 
-monitoringPasscodeSecretName: "monitoring_passcode"
+monitoringPasscodeSecretName: "monitoringpasscode"
 monitoringPasscodeSecretKey: "pass-key"
 
 resources:

@@ -7,7 +7,7 @@ resource "kubectl_manifest" "monitoring_passcode" {
 apiVersion: v1
 kind: Secret
 metadata:
-  name: monitoring_passcode
+  name: monitoringpasscode
   namespace: sonarqube
 type: Opaque
 data:
