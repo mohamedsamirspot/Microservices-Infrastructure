@@ -1,13 +1,12 @@
 resource "aws_eip" "nat" {
   count = 1
-  tags = {
-    Name = "${var.tags["env"]}-nat-eip"
-  }
+  tags = var.tags
 }
 
 data "aws_availability_zones" "available" {}
 
 locals {
+  name     = "eks-vpc"
   vpc_cidr = "10.0.0.0/16"
   azs      = slice(data.aws_availability_zones.available.names, 0, 3)
 }
@@ -16,8 +15,8 @@ module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
   version = "6.5.1"
 
-  name                 = "${var.tags["env"]}-${var.name}"
-  cidr                 = var.cidr
+  name                 = "${var.tags["env"]}-${local.name}"
+  cidr                 = local.vpc_cidr
   azs                  = local.azs
   public_subnets   = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 8, k)]
   private_subnets  = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 8, k + 3)]

@@ -42,7 +42,6 @@ module "db" {
   allocated_storage = 20
   max_allocated_storage = 100
 
-  
 
   # NOTE: Do NOT use 'user' as the value for 'username' as it throws:
   # "Error creating DB Instance: InvalidParameterValue: MasterUsername
