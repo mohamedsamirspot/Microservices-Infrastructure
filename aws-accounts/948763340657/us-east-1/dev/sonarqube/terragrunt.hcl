@@ -12,9 +12,20 @@ include "root" {
 # apply and destroy ordering
 dependencies {
   paths = [
+    "${get_terragrunt_dir()}/../aws-network",
     "${get_terragrunt_dir()}/../aws-eks",
     "${get_terragrunt_dir()}/../karpenter"
   ]
+}
+
+dependency "vpc" {
+  config_path = "${get_terragrunt_dir()}/../aws-network"
+    # Fix for run-all init
+  mock_outputs = {
+    vpc_id                = "vpc-mock"
+    vpc_cidr_block        = "10.0.0.0/16"
+    database_subnet_group_name = "db-subnet-group-mock"
+  }
 }
 
 dependency "eks" {
@@ -30,6 +41,13 @@ dependency "eks" {
 dependency "karpenter" {
   config_path = "${get_terragrunt_dir()}/../karpenter"
   skip_outputs = true
+}
+
+inputs = {
+  vpc_id                               = dependency.vpc.outputs.vpc_id
+  vpc_cidr_block                       = dependency.vpc.outputs.vpc_cidr_block
+  database_subnet_group_name           = dependency.vpc.outputs.database_subnet_group_name
+  tags = read_terragrunt_config(find_in_parent_folders("env.hcl")).locals.tags
 }
 
 generate "provider-sonarqube" {

@@ -5,6 +5,13 @@ resource "aws_eip" "nat" {
   }
 }
 
+data "aws_availability_zones" "available" {}
+
+locals {
+  vpc_cidr = "10.0.0.0/16"
+  azs      = slice(data.aws_availability_zones.available.names, 0, 3)
+}
+
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
   version = "6.5.1"
@@ -12,8 +19,10 @@ module "vpc" {
   name                 = "${var.tags["env"]}-${var.name}"
   cidr                 = var.cidr
   azs                  = var.azs
-  private_subnets      = var.private_subnets
-  public_subnets       = var.public_subnets
+  public_subnets   = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 8, k)]
+  private_subnets  = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 8, k + 3)]
+  database_subnets = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 8, k + 6)]
+  create_database_subnet_group = true
 
   enable_nat_gateway   = true
   single_nat_gateway   = true # Single NAT Gateway to reduce costs
@@ -41,4 +50,24 @@ module "vpc" {
     # Tags subnets for Karpenter auto-discovery
     "karpenter.sh/discovery" = "${var.cluster_name}"
   }
+}
+
+
+
+
+module "vpc" {
+  source  = "terraform-aws-modules/vpc/aws"
+  version = "~> 6.0"
+
+  name = local.name
+  cidr = local.vpc_cidr
+
+  azs              = local.azs
+  public_subnets   = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 8, k)]
+  private_subnets  = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 8, k + 3)]
+  database_subnets = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 8, k + 6)]
+
+  create_database_subnet_group = true
+
+  tags = local.tags
 }
