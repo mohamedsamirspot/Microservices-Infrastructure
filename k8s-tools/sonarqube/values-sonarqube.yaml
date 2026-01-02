@@ -15,6 +15,9 @@ jdbcOverwrite:
 persistence:
   enabled: true
 
+monitoringPasscodeSecretName: "monitoring_passcode"
+monitoringPasscodeSecretKey: "pass-key"
+
 resources:
   requests:
     cpu: 200m
