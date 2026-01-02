@@ -4,7 +4,7 @@ module "security_group" {
   source  = "terraform-aws-modules/security-group/aws"
   version = "~> 5.0"
 
-  name        = postgresql-db-sg
+  name        = "postgresql-db-sg"
   vpc_id      = var.vpc_id
 
   # ingress
