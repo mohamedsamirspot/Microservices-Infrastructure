@@ -20,6 +20,9 @@ persistence:
 
 monitoringPasscode: "${monitoringpasscode}"
 
+postgresql:
+  enabled: false
+
 resources:
   requests:
     cpu: 200m
