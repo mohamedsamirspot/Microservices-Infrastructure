@@ -12,7 +12,7 @@ replicaCount: 1
 jdbcOverwrite:
   enabled: true
   jdbcUrl: "jdbc:postgresql://sonarqube-db.abc123.us-east-1.rds.amazonaws.com:5432/sonarqube"
-  jdbcUsername: "sonaruser"
+  jdbcUsername: "username"
   jdbcPassword: "${sonarpassword}"
 
 persistence:
