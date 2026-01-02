@@ -78,7 +78,7 @@ module "monitoring_passcode" {
 }
 
 data "aws_secretsmanager_secret_version" "sonarpassword" {
-  secret_id = module.db.db_master_password_secret_arn
+  secret_id = module.db.db_instance_master_user_secret_arn
 }
 
 resource "helm_release" "sonarqube" {
