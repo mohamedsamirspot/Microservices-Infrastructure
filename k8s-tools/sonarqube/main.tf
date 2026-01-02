@@ -91,8 +91,9 @@ resource "helm_release" "sonarqube" {
 
   values = [
     templatefile("${path.module}/values-sonarqube.yaml", {
-      vpcId      = "${base64encode(jsondecode(data.aws_secretsmanager_secret_version.sonarpassword.secret_string)["password"])}"
+      sonarpassword      = "${base64encode(jsondecode(data.aws_secretsmanager_secret_version.sonarpassword.secret_string)["password"])}"
       monitoringpasscode = module.monitoring_passcode.secret_string
+      endpoint   = module.db.db_instance_endpoint
     })
   ]
 
