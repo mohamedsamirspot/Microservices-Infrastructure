@@ -48,8 +48,6 @@ provider "helm" {
     }
   }
 }
-EOF
-}
 
 provider "kubectl" {
   apply_retry_count      = 5
