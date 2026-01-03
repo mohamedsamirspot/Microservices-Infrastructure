@@ -31,7 +31,7 @@ module "db" {
 
   create_db_option_group    = false
   create_db_parameter_group = false
-
+  
   # All available versions: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_PostgreSQL.html#PostgreSQL.Concepts
   engine               = "postgres"
   engine_version       = "17"
@@ -39,6 +39,7 @@ module "db" {
   major_engine_version = "17"         # DB option group
   instance_class       = "db.t3.medium"
 
+  storage_type         = "gp3"
   allocated_storage = 20
   max_allocated_storage = 100
 
@@ -55,6 +56,8 @@ module "db" {
 
   db_subnet_group_name   = var.database_subnet_group_name
   vpc_security_group_ids = [module.security_group.security_group_id]
+
+  skip_final_snapshot       = true
 
   tags = var.tags
 
