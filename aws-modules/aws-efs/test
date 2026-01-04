@@ -7,6 +7,22 @@ provisioner: efs.csi.aws.com
 apiVersion: v1
 kind: PersistentVolume
 metadata:
+  name: efs-pv-nginx
+spec:
+  capacity:
+    storage: 5Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: efs-sc
+  csi:
+    driver: efs.csi.aws.com
+    volumeHandle: fs-0292a5fd4fd4bad6e::ap-xxxxxxxxxxxx
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
   name: efs-pv
 spec:
   capacity:
@@ -20,7 +36,7 @@ spec:
     driver: efs.csi.aws.com
     volumeHandle: fs-0292a5fd4fd4bad6e   # Replace with your EFS FS ID
     volumeAttributes:
-      path: "/"                 # Optional, can use Access Point path
+      path: "/nginx"                 # Optional, can use Access Point path
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
