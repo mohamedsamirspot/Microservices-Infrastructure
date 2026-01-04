@@ -9,7 +9,7 @@ locals {
   enable_gha_runner = false
   enable_karpenter = true
   enable_kube_downscaler = false
-  enable_sonarqube = true
+  enable_sonarqube = false
   enable_stakater_reloader = false
   tags = {
       project   = "eks-cluster"

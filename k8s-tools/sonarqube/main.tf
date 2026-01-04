@@ -31,7 +31,7 @@ module "db" {
 
   create_db_option_group    = false
   create_db_parameter_group = false
-  
+
   # All available versions: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_PostgreSQL.html#PostgreSQL.Concepts
   engine               = "postgres"
   engine_version       = "17"
@@ -53,6 +53,12 @@ module "db" {
   username = "sonarqube" # Username for the master DB user
   manage_master_user_password = true
   port     = 5432
+
+  # publicly_accessible = true --> RDS gets both a private IP and a public IP
+  # RDS always has a single endpoint (DNS name). --> That DNS name resolves to different IPs depending on where it’s queried from (the VPC or the internet).
+  # Public subnet + publicly_accessible = true → RDS can be accessed from the internet (if SG/NACL allow).
+  # Private subnet + publicly_accessible = true → RDS is NOT accessible from the internet.
+  publicly_accessible = false
 
   db_subnet_group_name   = var.database_subnet_group_name
   vpc_security_group_ids = [module.security_group.security_group_id]

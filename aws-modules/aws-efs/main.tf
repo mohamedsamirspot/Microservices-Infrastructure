@@ -4,6 +4,9 @@ data "aws_availability_zones" "available" {}
 locals {
   # 0,2 if they are 2 az and 0,3 if they are 3 azs
   azs      = slice(data.aws_availability_zones.available.names, 0, 3)
+  efs_directories = [
+    "sonarqube",
+  ]
 }
 
 module "efs" {
@@ -52,13 +55,13 @@ module "efs" {
   #     subnet_id = "subnet-fghi345a"
   #   }
   # }
-  security_group_description = "Example EFS security group"
+  security_group_description = "EFS security group"
   security_group_vpc_id      = var.vpc_id # The VPC ID where the security group will be created
 
   security_group_ingress_rules = {
     for idx, cidr in var.private_subnets_cidr_blocks :
     "nfs_subnet_${idx}" => {
-      description = "NFS ingress from private subnet ${cidr}"
+      description = "NFS ingress from private subnets ${cidr}"
       from_port   = 2049
       to_port     = 2049
       ip_protocol = "tcp"
@@ -66,31 +69,23 @@ module "efs" {
     }
   }
 
-  # Access point(s)
-  # access_points = {
-  #   posix_example = {
-  #     name = "posix-example"
-  #     posix_user = {
-  #       gid            = 1001
-  #       uid            = 1001
-  #       secondary_gids = [1002]
-  #     }
 
-  #     tags = {
-  #       Additionl = "yes"
-  #     }
-  #   }
-  #   root_example = {
-  #     root_directory = {
-  #       path = "/example"
-  #       creation_info = {
-  #         owner_gid   = 1001
-  #         owner_uid   = 1001
-  #         permissions = "755"
-  #       }
-  #     }
-  #   }
-  # }
+  #In Kubernetes, an EFS Access Point’s owner_uid/owner_gid defines the POSIX identity EFS enforces for the mounted directory, independent of the pod’s user, ensuring consistent permissions and access isolation.
+  # And this will create the dirs dynamically when a pod or ec2 using that access point is created.
+  access_points = {
+    for dir in local.efs_directories : dir => {
+      root_directory = {
+        name = "${dir}"
+        path = "/${dir}"
+        creation_info = {
+        owner_uid   = 1000
+        owner_gid   = 1000
+        permissions = "755"
+        }
+        tags = var.tags
+      }
+    }
+  }
 
   # # Backup policy
   # enable_backup_policy = true
