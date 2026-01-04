@@ -71,7 +71,7 @@ module "efs" {
 
 
   #In Kubernetes, an EFS Access Point’s owner_uid/owner_gid defines the POSIX identity EFS enforces for the mounted directory, independent of the pod’s user, ensuring consistent permissions and access isolation.
-  # And this will create the dirs dynamically when a pod using that access point is created.
+  # And this will create the dirs dynamically when a pod or ec2 using that access point is created.
   access_points = {
     for dir in local.efs_directories : dir => {
       root_directory = {
