@@ -4,6 +4,7 @@ metadata:
   name: efs-sc
 provisioner: efs.csi.aws.com
 ---
+############ Access Point based PV/PVC and Deployment example ############
 apiVersion: v1
 kind: PersistentVolume
 metadata:
@@ -20,6 +21,7 @@ spec:
     driver: efs.csi.aws.com
     volumeHandle: fs-0f8962363a380ac42::fsap-02c234520f4235110
 ---
+############Root Volume based PV/PVC and Deployment example ############
 apiVersion: v1
 kind: PersistentVolume
 metadata:
@@ -36,7 +38,7 @@ spec:
     driver: efs.csi.aws.com
     volumeHandle: fs-0f8962363a380ac42   # Replace with your EFS FS ID
     volumeAttributes:
-      path: "/nginx"                 # Optional, can use Access Point path
+      path: "/"                 # path: "/nginx"  Optional, can use Access Point path if is created already
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
