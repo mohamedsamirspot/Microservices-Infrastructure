@@ -5,7 +5,6 @@ locals {
   # 0,2 if they are 2 az and 0,3 if they are 3 azs
   azs      = slice(data.aws_availability_zones.available.names, 0, 3)
   efs_directories = [
-    "nginx",
     "sonarqube",
   ]
 }
