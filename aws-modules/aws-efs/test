@@ -18,7 +18,7 @@ spec:
   storageClassName: efs-sc
   csi:
     driver: efs.csi.aws.com
-    volumeHandle: fs-0292a5fd4fd4bad6e::ap-xxxxxxxxxxxx
+    volumeHandle: fs-0f8962363a380ac42::fsap-02c234520f4235110
 ---
 apiVersion: v1
 kind: PersistentVolume
@@ -34,7 +34,7 @@ spec:
   storageClassName: efs-sc
   csi:
     driver: efs.csi.aws.com
-    volumeHandle: fs-0292a5fd4fd4bad6e   # Replace with your EFS FS ID
+    volumeHandle: fs-0f8962363a380ac42   # Replace with your EFS FS ID
     volumeAttributes:
       path: "/nginx"                 # Optional, can use Access Point path
 ---

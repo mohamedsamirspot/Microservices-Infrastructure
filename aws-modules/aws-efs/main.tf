@@ -75,6 +75,11 @@ module "efs" {
     for dir in local.efs_directories : dir => {
       root_directory = {
         path = "/${dir}"
+        creation_info = {
+        owner_uid   = 1000
+        owner_gid   = 1000
+        permissions = "755"
+        }
         tags = var.tags
       }
     }
