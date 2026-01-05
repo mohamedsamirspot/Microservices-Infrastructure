@@ -1,6 +1,5 @@
 # ARC = community-driven, flexible, Kubernetes-based autoscaling.
 # GHA Runner Scale Sets = GitHub-native, centralized autoscaling, modern, recommended. (we are using this one)
-# Reference: https://medium.com/@bhrth.dsra1/deploy-gha-self-hosted-runners-on-aws-eks-with-terraform-and-helm-6624815738b6 and ask chatgpt about the github app creation steps for your case
 
 resource "kubectl_manifest" "gha-runner_namespace" {
   yaml_body = <<-YAML
@@ -11,7 +10,7 @@ metadata:
 YAML
 }
 
-#------------------------------------------To give aws access to pod--------------------------------------------------------------
+#------------------------------------------To give aws access to pod uisng IRSA--------------------------------------------------------------
 # IAM policy
 resource "aws_iam_policy" "gha_runner_policy" {
   name        = "gha-runner-policy-${var.cluster_name}"
@@ -73,8 +72,8 @@ YAML
   depends_on = [kubectl_manifest.gha-runner_namespace]
 }
 
-#----------------------------------------To give aws access to github actions repo or organization-----------------------------------------------------------
-
+#----------------------------------------To create github runners dynamically using githup app-----------------------------------------------------------
+# Reference: https://medium.com/@bhrth.dsra1/deploy-gha-self-hosted-runners-on-aws-eks-with-terraform-and-helm-6624815738b6 and ask chatgpt about the github app creation steps for your case
 data "aws_secretsmanager_secret_version" "github_privatekey" {
   secret_id = "terraform/github-app-privatekey"
 }
@@ -101,8 +100,6 @@ YAML
   depends_on = [kubectl_manifest.gha-runner_namespace]
 }
 # github_app_private_key: "${base64encode(file("${path.module}/samirspot-gha-runner.2025-11-18.private-key.pem"))}"
-
-#---------------------------------------------------------------------------------------------------------------------
 
 resource "helm_release" "gha-runner-scale-set-controller" {
   name       = "gha-runner-scale-set-controller"
