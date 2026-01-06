@@ -22,12 +22,13 @@ resource "helm_release" "secrets-store-csi-driver-provider-aws" {
   version          = var.secrets-store-csi-driver-provider-aws_chart_version
   namespace        = "secrets-store-csi-driver"
   create_namespace = true
-  values = [yamlencode({
-    serviceAccount = {
-      create = false
-      name   = "secrets-store-csi-driver"
-    }
-  })]
+  values = [
+    yamlencode({
+      secrets-store-csi-driver = {
+        enabled = false
+      }
+    })
+  ]
   depends_on = [ helm_release.secrets-store-csi-driver ]
 }
 
