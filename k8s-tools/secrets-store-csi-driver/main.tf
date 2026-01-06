@@ -94,3 +94,21 @@ YAML
   depends_on = [aws_iam_role.csi-eks-secrets-manager_role]
 }
 
+module "secrets_manager" {
+  source = "terraform-aws-modules/secrets-manager/aws"
+
+  # Secret
+  name             = "microservices-secret"
+  recovery_window_in_days = 30
+
+  ignore_secret_changes = true
+
+  # Policy
+  create_policy       = false
+  block_public_policy = true
+  
+  # This creates an "empty" secret
+  secret_string            = jsonencode({})
+
+  tags = var.tags
+}
