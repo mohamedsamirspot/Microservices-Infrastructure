@@ -1,3 +1,8 @@
+# References: 
+#   https://www.youtube.com/watch?v=MTnQW9MxnRI
+#   https://secrets-store-csi-driver.sigs.k8s.io/getting-started/installation.html
+#   https://github.com/aws/secrets-store-csi-driver-provider-aws
+
 resource "helm_release" "secrets-store-csi-driver" {
   name             = "secrets-store-csi-driver"
   repository       = "https://kubernetes-sigs.github.io/secrets-store-csi-driver/charts"
@@ -63,6 +68,20 @@ resource "aws_iam_role_policy_attachment" "csi-eks-secrets-manager_attach" {
   role       = aws_iam_role.csi-eks-secrets-manager_role.name
   policy_arn = aws_iam_policy.csi-eks-secrets-manager_policy.arn
   depends_on = [ aws_iam_policy.csi-eks-secrets-manager, aws_iam_role.csi-eks-secrets-manager_role ]
+}
+
+# Kubernetes ServiceAccount annotated with IAM role
+resource "kubectl_manifest" "csi-eks-secrets-manager-sa" {
+  yaml_body = <<-YAML
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: csi-eks-secrets-manager-sa
+  namespace: secrets-store-csi-driver
+  annotations:
+    eks.amazonaws.com/role-arn: "${aws_iam_role.csi-eks-secrets-manager_role.arn}"
+YAML
+  depends_on = [aws_iam_role.csi-eks-secrets-manager_role]
 }
 
 module "secrets_manager" {
