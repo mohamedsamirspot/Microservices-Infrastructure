@@ -10,9 +10,10 @@ resource "helm_release" "argocd" {
     file("${path.module}/values-argocd.yaml")
   ]
 
-  # Example of inline value override
-  # set {
-  #   name  = "server.service.type"
-  #   value = "LoadBalancer"
-  # }
+  # values = [yamlencode({
+  #   serviceAccount = {
+  #     create = false
+  #     name   = "secrets-store-csi-driver"
+  #   }
+  # })]
 }
