@@ -25,11 +25,7 @@ resource "helm_release" "secrets-store-csi-driver-provider-aws" {
   values = [
     yamlencode({
       secrets-store-csi-driver = {
-        enabled = false
-      }
-      serviceAccount = {
-        create = false
-        name   = "secrets-store-csi-driver"
+        install = false
       }
     })
   ]
@@ -105,9 +101,16 @@ module "secrets_manager" {
   name             = "microservices-secret"
   recovery_window_in_days = 30
 
+  ignore_secret_changes = true
+
   # Policy
   create_policy       = false
   block_public_policy = true
+
+  # Version
+  create_random_password           = true
+  random_password_length           = 64
+  random_password_override_special = "!@#$%^&*()_+"
 
   tags = var.tags
 }
