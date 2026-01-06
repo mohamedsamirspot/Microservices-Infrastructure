@@ -1,4 +1,4 @@
-# References: 
+# References:
 #   https://www.youtube.com/watch?v=MTnQW9MxnRI
 #   https://secrets-store-csi-driver.sigs.k8s.io/getting-started/installation.html
 #   https://github.com/aws/secrets-store-csi-driver-provider-aws
@@ -115,7 +115,7 @@ module "secrets_manager" {
   # Policy
   create_policy       = false
   block_public_policy = true
-  
+
   # This creates an "empty" secret
   secret_string            = jsonencode({})
 
