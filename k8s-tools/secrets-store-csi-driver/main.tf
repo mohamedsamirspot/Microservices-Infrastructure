@@ -61,7 +61,7 @@ resource "aws_iam_role" "csi-eks-secrets-manager_role" {
     ]
   })
   tags = var.tags
-  depends_on = [ aws_iam_policy.csi-eks-secrets-manager ]
+  depends_on = [ aws_iam_policy.csi-eks-secrets-manager_policy ]
 }
 
 resource "aws_iam_role_policy_attachment" "csi-eks-secrets-manager_attach" {
