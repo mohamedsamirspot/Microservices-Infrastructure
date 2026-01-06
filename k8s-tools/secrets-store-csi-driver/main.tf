@@ -67,7 +67,7 @@ resource "aws_iam_role" "csi-eks-secrets-manager_role" {
 resource "aws_iam_role_policy_attachment" "csi-eks-secrets-manager_attach" {
   role       = aws_iam_role.csi-eks-secrets-manager_role.name
   policy_arn = aws_iam_policy.csi-eks-secrets-manager_policy.arn
-  depends_on = [ aws_iam_policy.csi-eks-secrets-manager, aws_iam_role.csi-eks-secrets-manager_role ]
+  depends_on = [ aws_iam_policy.csi-eks-secrets-manager_policy, aws_iam_role.csi-eks-secrets-manager_role ]
 }
 
 # Kubernetes ServiceAccount annotated with IAM role
