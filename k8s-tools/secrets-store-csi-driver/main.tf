@@ -65,7 +65,7 @@ resource "aws_iam_role" "csi-eks-secrets-manager_role" {
         Condition = {
           StringEquals = {
             # "${replace(var.cluster_oidc_provider_url, "https://", "")}:sub" = "system:serviceaccount:secrets-store-csi-driver:csi-eks-secrets-manager-sa"
-            "${replace(var.cluster_oidc_provider_url, "https://", "")}:sub" = "system:serviceaccount:*:*"
+            "${replace(var.cluster_oidc_provider_url, "https://", "")}:sub" = "system:serviceaccount:default:csi-eks-secrets-manager-sa-aws-secrets"
           }
         }
       }
@@ -88,7 +88,7 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: csi-eks-secrets-manager-sa
-  namespace: secrets-store-csi-driver
+  namespace: default
   annotations:
     eks.amazonaws.com/role-arn: "${aws_iam_role.csi-eks-secrets-manager_role.arn}"
 YAML

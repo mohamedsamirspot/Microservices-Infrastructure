@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  namespace: default
+  labels:
+    app: nginx-irsa
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nginx-irsa
+  template:
+    metadata:
+      labels:
+        app: nginx-irsa
+    spec:
+      serviceAccountName: csi-eks-secrets-manager-sa
+      volumes:
+      - name: secrets-store-inline
+        csi:
+          driver: secrets-store.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+            secretProviderClass: "csi-eks-secrets-manager-sa-aws-secrets"
+      containers:
+      - name: nginx-irsa-deployment
+        image: nginx
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: secrets-store-inline
+          mountPath: "/mnt/secrets-store"
+          readOnly: true
+---
+apiVersion: secrets-store.csi.x-k8s.io/v1
+kind: SecretProviderClass
+metadata:
+  name: csi-eks-secrets-manager-sa-aws-secrets
+  namespace: default
+spec:
+  provider: aws
+  parameters:
+    objects: |
+        - objectName: "microservices-secret-2"
+          objectType: "secretsmanager"
