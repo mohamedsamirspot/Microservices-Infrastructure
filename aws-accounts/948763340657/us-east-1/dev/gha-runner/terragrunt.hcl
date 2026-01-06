@@ -41,7 +41,6 @@ inputs = {
   cluster_oidc_provider_url = dependency.eks.outputs.cluster_oidc_issuer_url
 }
 
-
 generate "provider-gha" {
   path      = "provider-gha.tf"
   if_exists = "overwrite_terragrunt"
