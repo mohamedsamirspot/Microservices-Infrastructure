@@ -64,7 +64,8 @@ resource "aws_iam_role" "csi-eks-secrets-manager_role" {
         Action = "sts:AssumeRoleWithWebIdentity"
         Condition = {
           StringEquals = {
-            "${replace(var.cluster_oidc_provider_url, "https://", "")}:sub" = "system:serviceaccount:secrets-store-csi-driver:csi-eks-secrets-manager-sa"
+            # "${replace(var.cluster_oidc_provider_url, "https://", "")}:sub" = "system:serviceaccount:secrets-store-csi-driver:csi-eks-secrets-manager-sa"
+            "${replace(var.cluster_oidc_provider_url, "https://", "")}:sub" = "system:serviceaccount:*:*"
           }
         }
       }
