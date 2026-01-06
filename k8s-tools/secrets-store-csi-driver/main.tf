@@ -27,6 +27,10 @@ resource "helm_release" "secrets-store-csi-driver-provider-aws" {
       secrets-store-csi-driver = {
         enabled = false
       }
+      serviceAccount = {
+        create = false
+        name   = "secrets-store-csi-driver"
+      }
     })
   ]
   depends_on = [ helm_release.secrets-store-csi-driver ]
