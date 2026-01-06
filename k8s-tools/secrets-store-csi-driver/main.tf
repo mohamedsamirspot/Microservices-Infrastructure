@@ -23,8 +23,8 @@ resource "helm_release" "secrets-store-csi-driver-provider-aws" {
 }
 
 # AWS IAM policy
-resource "aws_iam_policy" "csi-eks-secrets-manager" {
-  name        = "csi-eks-secrets-manager-${var.cluster_name}"
+resource "aws_iam_policy" "csi-eks-secrets-manager_policy" {
+  name        = "csi-eks-secrets-manager-policy-${var.cluster_name}"
   description = "Policy for the secrets-store-csi-driver-provider-aws to access AWS resources (secrets from secrets manager) uisng IRSA"
   policy = jsonencode({
 
@@ -88,7 +88,7 @@ module "secrets_manager" {
   source = "terraform-aws-modules/secrets-manager/aws"
 
   # Secret
-  name             = "microservices-secrets"
+  name             = "microservices-secret"
   recovery_window_in_days = 30
 
   # Policy
