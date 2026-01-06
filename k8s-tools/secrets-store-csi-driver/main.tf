@@ -63,17 +63,25 @@ resource "aws_iam_role" "csi-eks-secrets-manager_role" {
         }
         Action = "sts:AssumeRoleWithWebIdentity"
         Condition = {
+          StringLike = {
+            "${replace(var.cluster_oidc_provider_url, "https://", "")}:sub" = [
+              "system:serviceaccount:default:csi-eks-secrets-manager-sa-aws-secrets",
+              "system:serviceaccount:microservices:csi-eks-secrets-manager-sa-aws-secrets",
+              "system:serviceaccount:secrets-store-csi-driver:csi-eks-secrets-manager-sa-aws-secrets"
+            ]
+          }
           StringEquals = {
-            # "${replace(var.cluster_oidc_provider_url, "https://", "")}:sub" = "system:serviceaccount:secrets-store-csi-driver:csi-eks-secrets-manager-sa"
-            "${replace(var.cluster_oidc_provider_url, "https://", "")}:sub" = "system:serviceaccount:default:csi-eks-secrets-manager-sa-aws-secrets"
+            "${replace(var.cluster_oidc_provider_url, "https://", "")}:aud" = "sts.amazonaws.com"
           }
         }
       }
     ]
   })
-  tags = var.tags
-  depends_on = [ aws_iam_policy.csi-eks-secrets-manager_policy ]
+
+  tags       = var.tags
+  depends_on = [aws_iam_policy.csi-eks-secrets-manager_policy]
 }
+
 
 resource "aws_iam_role_policy_attachment" "csi-eks-secrets-manager_attach" {
   role       = aws_iam_role.csi-eks-secrets-manager_role.name
@@ -82,18 +90,18 @@ resource "aws_iam_role_policy_attachment" "csi-eks-secrets-manager_attach" {
 }
 
 # Kubernetes ServiceAccount annotated with IAM role
-resource "kubectl_manifest" "csi-eks-secrets-manager-sa" {
-  yaml_body = <<-YAML
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: csi-eks-secrets-manager-sa
-  namespace: default
-  annotations:
-    eks.amazonaws.com/role-arn: "${aws_iam_role.csi-eks-secrets-manager_role.arn}"
-YAML
-  depends_on = [aws_iam_role.csi-eks-secrets-manager_role]
-}
+# resource "kubectl_manifest" "csi-eks-secrets-manager-sa" {
+#   yaml_body = <<-YAML
+# apiVersion: v1
+# kind: ServiceAccount
+# metadata:
+#   name: csi-eks-secrets-manager-sa
+#   namespace: default
+#   annotations:
+#     eks.amazonaws.com/role-arn: "${aws_iam_role.csi-eks-secrets-manager_role.arn}"
+# YAML
+#   depends_on = [aws_iam_role.csi-eks-secrets-manager_role]
+# }
 
 module "secrets_manager" {
   source = "terraform-aws-modules/secrets-manager/aws"

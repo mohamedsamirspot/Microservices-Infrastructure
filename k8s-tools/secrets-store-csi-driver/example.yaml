@@ -1,3 +1,11 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: csi-eks-secrets-manager-sa
+  namespace: default
+  annotations:
+    eks.amazonaws.com/role-arn: "${aws_iam_role.csi-eks-secrets-manager_role.arn}"
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
