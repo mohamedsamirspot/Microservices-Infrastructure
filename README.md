@@ -12,6 +12,7 @@ These terraform components (modules and k8s-tools) can create the following so f
   - gha-runner
   - karpenter
   - kube-downscaler
+  - secrets-store-csi-driver
   - sonarqube
   - stakater-reloader
 # Notes
