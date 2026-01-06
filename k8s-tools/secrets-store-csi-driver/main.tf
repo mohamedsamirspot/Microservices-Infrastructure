@@ -10,6 +10,9 @@ resource "helm_release" "secrets-store-csi-driver" {
   version          = var.secrets-store-csi-driver_chart_version
   namespace        = "secrets-store-csi-driver"
   create_namespace = true
+  values = [
+    file("${path.module}/values-secrets-store-csi-driver.yaml")
+  ]
 }
 
 resource "helm_release" "secrets-store-csi-driver-provider-aws" {
@@ -19,6 +22,12 @@ resource "helm_release" "secrets-store-csi-driver-provider-aws" {
   version          = var.secrets-store-csi-driver-provider-aws_chart_version
   namespace        = "secrets-store-csi-driver"
   create_namespace = true
+  values = [yamlencode({
+    serviceAccount = {
+      create = false
+      name   = "secrets-store-csi-driver"
+    }
+  })]
   depends_on = [ helm_release.secrets-store-csi-driver ]
 }
 
