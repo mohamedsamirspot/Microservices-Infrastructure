@@ -107,10 +107,6 @@ module "secrets_manager" {
   create_policy       = false
   block_public_policy = true
 
-  # Version
-  create_random_password           = true
-  random_password_length           = 64
-  random_password_override_special = "!@#$%^&*()_+"
 
   tags = var.tags
 }
