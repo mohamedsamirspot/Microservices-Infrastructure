@@ -65,9 +65,9 @@ resource "aws_iam_role" "csi-eks-secrets-manager_role" {
         Condition = {
           StringLike = {
             "${replace(var.cluster_oidc_provider_url, "https://", "")}:sub" = [
-              "system:serviceaccount:default:csi-eks-secrets-manager-sa-aws-secrets",
-              "system:serviceaccount:microservices:csi-eks-secrets-manager-sa-aws-secrets",
-              "system:serviceaccount:secrets-store-csi-driver:csi-eks-secrets-manager-sa-aws-secrets"
+              "system:serviceaccount:default:csi-aws-secrets-manager",
+              "system:serviceaccount:microservices:csi-aws-secrets-manager",
+              "system:serviceaccount:secrets-store-csi-driver:csi-aws-secrets-manager"
             ]
           }
           StringEquals = {
@@ -82,7 +82,6 @@ resource "aws_iam_role" "csi-eks-secrets-manager_role" {
   depends_on = [aws_iam_policy.csi-eks-secrets-manager_policy]
 }
 
-
 resource "aws_iam_role_policy_attachment" "csi-eks-secrets-manager_attach" {
   role       = aws_iam_role.csi-eks-secrets-manager_role.name
   policy_arn = aws_iam_policy.csi-eks-secrets-manager_policy.arn
@@ -90,6 +89,7 @@ resource "aws_iam_role_policy_attachment" "csi-eks-secrets-manager_attach" {
 }
 
 # Kubernetes ServiceAccount annotated with IAM role
+######################## just create it in with the app manifests itself ########################
 # resource "kubectl_manifest" "csi-eks-secrets-manager-sa" {
 #   yaml_body = <<-YAML
 # apiVersion: v1
