@@ -96,7 +96,7 @@ spec:
       auth:
         jwt:
           serviceAccountRef:
-            name: external-secrets-operator-sa 
+            name: external-secrets-operator-sa
             namespace: external-secrets-operator
 YAML
   depends_on = [aws_iam_role.external-secrets-operator_role]
