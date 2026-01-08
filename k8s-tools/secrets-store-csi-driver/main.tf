@@ -103,6 +103,8 @@ resource "aws_iam_role_policy_attachment" "csi-eks-secrets-manager_attach" {
 #   depends_on = [aws_iam_role.csi-eks-secrets-manager_role]
 # }
 
+#--------------------------------------------------------------------------------------------------------
+
 module "secrets_manager" {
   source = "terraform-aws-modules/secrets-manager/aws"
 

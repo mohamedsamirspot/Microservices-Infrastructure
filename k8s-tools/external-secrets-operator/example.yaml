@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  namespace: default
+  labels:
+    app: nginx-irsa
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nginx-irsa
+  template:
+    metadata:
+      labels:
+        app: nginx-irsa
+    spec:
+      serviceAccountName: external-secrets-operator-sa
+      containers:
+      - name: nginx-irsa-deployment
+        image: nginx
+        ports:
+        - containerPort: 80
+        envFrom:
+          - SecretRef:
+              name: nginx-secret
+---
+# apiVersion: external-secrets.io/v1
+# kind: SecretStore
+# metadata:
+#   name: secretstore
+#   namespace: default
+# spec:
+#   provider:
+#     aws:
+#       service: SecretsManager
+#       region: eu-central-1
+#       auth:
+#         jwt:
+#           serviceAccountRef:
+#             name: my-serviceaccount
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: nginx-external-secret
+  namespace: default
+spec:
+  refreshPolicy: Periodic
+  refreshInterval: 30s  # Update every hour
+  secretStoreRef:
+    name: clustersecretstore
+    kind: ClusterSecretStore
+  target:
+    name: nginx-secret
+  dataFrom:
+    - extract:
+        key: microservices-secret-2
