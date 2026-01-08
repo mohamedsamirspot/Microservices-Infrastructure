@@ -47,7 +47,7 @@ metadata:
   namespace: default
 spec:
   refreshPolicy: Periodic
-  refreshInterval: 1m  # Update every hour
+  refreshInterval: 30s  # Update every hour
   secretStoreRef:
     name: clustersecretstore
     kind: ClusterSecretStore
