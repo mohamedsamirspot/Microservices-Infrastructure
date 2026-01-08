@@ -46,8 +46,6 @@ resource "aws_iam_role" "external-secrets-operator_role" {
         Condition = {
           StringLike = {
             "${replace(var.cluster_oidc_provider_url, "https://", "")}:sub" = [
-              "system:serviceaccount:default:external-secrets-operator",
-              "system:serviceaccount:microservices:external-secrets-operator",
               "system:serviceaccount:external-secrets-operator:external-secrets-operator-sa"
             ]
           }
