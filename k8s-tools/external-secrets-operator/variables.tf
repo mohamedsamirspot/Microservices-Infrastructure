@@ -17,6 +17,10 @@ variable "cluster_oidc_provider_url" {
   type        = string
 }
 
+variable "region" {
+  type        = string
+}
+
 variable "tags" {
   description = "Map of tags to assign"
   type        = map(string)
