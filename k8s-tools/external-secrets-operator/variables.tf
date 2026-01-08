@@ -17,7 +17,7 @@ variable "cluster_oidc_provider_url" {
   type        = string
 }
 
-variable "region" {
+variable "aws_region" {
   type        = string
 }
 
