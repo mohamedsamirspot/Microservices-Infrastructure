@@ -29,6 +29,9 @@ spec:
         image: nginx
         ports:
         - containerPort: 80
+        envFrom:
+          - SecretRef:
+              name: {{ .Values.configmap.name }}
 ---
 # apiVersion: external-secrets.io/v1
 # kind: SecretStore
@@ -57,3 +60,6 @@ spec:
     kind: ClusterSecretStore
   target:
     name: nginx-secret
+  dataFrom:
+    - extract:
+        key: microservices-secret-2
