@@ -39,7 +39,7 @@ inputs = {
   cluster_certificate_authority_data = dependency.eks.outputs.cluster_certificate_authority_data
   oidc_provider_arn = dependency.eks.outputs.oidc_provider_arn
   cluster_oidc_provider_url = dependency.eks.outputs.cluster_oidc_issuer_url
-  region = read_terragrunt_config(find_in_parent_folders("region.hcl")).locals.aws_region
+  aws_region = read_terragrunt_config(find_in_parent_folders("region.hcl")).locals.aws_region
   tags = read_terragrunt_config(find_in_parent_folders("env.hcl")).locals.tags
 }
 
