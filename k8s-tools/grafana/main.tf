@@ -37,7 +37,7 @@ resource "helm_release" "grafana" {
 
   values = [
     templatefile("${path.module}/values-grafana.yaml", {
-        grafanaadminpassword      = jsondecode(data.aws_secretsmanager_secret_version.grafana_admin.secret_string)
+        grafanaadminpassword      = data.aws_secretsmanager_secret_version.grafana_admin.secret_string
       })
   ]
 
