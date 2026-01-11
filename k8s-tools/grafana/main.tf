@@ -20,7 +20,8 @@ module "secrets_manager" {
 }
 
 data "aws_secretsmanager_secret_version" "grafana_admin" {
-  secret_id = module.secrets_manager.secret_id
+  secret_id  = module.secrets_manager.secret_id
+  version_id = module.secrets_manager.secret_version_id
 }
 
 resource "helm_release" "grafana" {
@@ -31,15 +32,14 @@ resource "helm_release" "grafana" {
   namespace        = "monitoring"
   create_namespace = true
 
-  values = [
-    file("${path.module}/values-grafana.yaml")
-  ]
 
-  # set_sensitive can accept null during plan and will only resolve the value at apply time. You don’t need to use templatefile.
-  set_sensitive {
-    name  = "adminPassword"
-    value = data.aws_secretsmanager_secret_version.grafana_admin.secret_string
-  }
+  # Read the secret via a data source instead of the module output. This ensures Terraform sees a computed value, not null
+
+  values = [
+    templatefile("${path.module}/values-grafana.yaml", {
+        grafanaadminpassword      = jsondecode(data.aws_secretsmanager_secret_version.grafana_admin.secret_string)["password"]
+      })
+  ]
 
   depends_on = [ module.secrets_manager ]
 }
