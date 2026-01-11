@@ -19,6 +19,9 @@ module "secrets_manager" {
   tags = var.tags
 }
 
+data "aws_secretsmanager_secret_version" "grafana_admin" {
+  secret_id = module.secrets_manager.secret_id
+}
 
 resource "helm_release" "grafana" {
   name             = "grafana"
@@ -35,7 +38,7 @@ resource "helm_release" "grafana" {
   # set_sensitive can accept null during plan and will only resolve the value at apply time. You don’t need to use templatefile.
   set_sensitive {
     name  = "adminPassword"
-    value = module.secrets_manager.secret_string
+    value = data.aws_secretsmanager_secret_version.grafana_admin.secret_string
   }
 
   depends_on = [ module.secrets_manager ]
