@@ -32,7 +32,8 @@ resource "helm_release" "grafana" {
     file("${path.module}/values-grafana.yaml")
   ]
 
-  set_sensitive = {
+  # set_sensitive can accept null during plan and will only resolve the value at apply time. You don’t need to use templatefile.
+  set_sensitive {
     name  = "adminPassword"
     value = module.secrets_manager.secret_string
   }
