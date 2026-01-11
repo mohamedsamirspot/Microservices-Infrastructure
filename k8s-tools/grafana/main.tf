@@ -28,11 +28,14 @@ resource "helm_release" "grafana" {
   namespace        = "monitoring"
   create_namespace = true
 
+  values = [
+    file("${path.module}/values-grafana.yaml")
+  ]
+
   set_sensitive = {
-    name  = "grafanaadminpassword"
+    name  = "adminPassword"
     value = module.secrets_manager.secret_string
   }
-
 
   depends_on = [ module.secrets_manager ]
 }

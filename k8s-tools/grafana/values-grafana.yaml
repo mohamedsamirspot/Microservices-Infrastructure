@@ -2,4 +2,3 @@ persistence:
   enabled: false
 
 adminUser: admin
-adminPassword: "${grafanaadminpassword}"
