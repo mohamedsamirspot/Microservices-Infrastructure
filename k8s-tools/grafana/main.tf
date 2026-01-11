@@ -19,9 +19,6 @@ module "secrets_manager" {
   tags = var.tags
 }
 
-data "aws_secretsmanager_secret_version" "grafana-admin-password" {
-  secret_id = "grafana-admin-password"
-}
 
 resource "helm_release" "grafana" {
   name             = "grafana"
