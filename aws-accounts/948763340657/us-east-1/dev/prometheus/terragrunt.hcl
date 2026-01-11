@@ -1,7 +1,7 @@
-skip = !read_terragrunt_config(find_in_parent_folders("env.hcl")).locals.enable_grafana
+skip = !read_terragrunt_config(find_in_parent_folders("env.hcl")).locals.enable_prometheus
 
 terraform {
-  source = "${find_in_parent_folders("k8s-tools")}/monitoring/grafana"
+  source = "${find_in_parent_folders("k8s-tools")}/monitoring/prometheus"
 }
 
 include "root" {
@@ -32,8 +32,8 @@ dependency "karpenter" {
   skip_outputs = true
 }
 
-generate "provider-grafana" {
-  path      = "provider-grafana.tf"
+generate "provider-prometheus" {
+  path      = "provider-prometheus.tf"
   if_exists = "overwrite_terragrunt"
   contents  = <<EOF
 

@@ -32,9 +32,6 @@ resource "helm_release" "grafana" {
   namespace        = "monitoring"
   create_namespace = true
 
-
-  # Read the secret via a data source instead of the module output. This ensures Terraform sees a computed value, not null
-
   values = [
     templatefile("${path.module}/values-grafana.yaml", {
         grafanaadminpassword      = data.aws_secretsmanager_secret_version.grafana_admin.secret_string
