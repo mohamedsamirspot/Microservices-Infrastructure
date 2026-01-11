@@ -1,7 +1,6 @@
-persistentVolume:
-  enabled: false
-
 server:
+  persistentVolume:
+    enabled: false
   retention: 10d
   global:
     scrape_interval: 1m
