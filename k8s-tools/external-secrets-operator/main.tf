@@ -105,7 +105,7 @@ YAML
 module "secrets_manager" {
   source = "terraform-aws-modules/secrets-manager/aws"
   version = "2.1.0"
-  
+
   # Secret
   name             = "microservices-secret-2"
   recovery_window_in_days = 0
