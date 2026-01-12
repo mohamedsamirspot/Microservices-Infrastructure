@@ -13,6 +13,9 @@ These terraform components (modules and k8s-tools) can create the following so f
   - gha-runner
   - karpenter
   - kube-downscaler
+  - monitoring
+    - grafana
+    - prometheus
   - secrets-store-csi-driver
   - sonarqube
   - stakater-reloader
