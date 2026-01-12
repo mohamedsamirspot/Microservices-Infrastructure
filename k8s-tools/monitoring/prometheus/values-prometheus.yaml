@@ -1,0 +1,15 @@
+server:
+  persistentVolume:
+    enabled: false
+  retention: 10d
+  global:
+    scrape_interval: 1m
+    external_labels:
+      cluster: dev-cluster
+
+prometheus-pushgateway:
+  enabled: false
+
+alertmanager:
+  persistence:
+    enabled: false
