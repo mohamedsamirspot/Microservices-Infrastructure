@@ -19,9 +19,10 @@ datasources:
     - name: Prometheus
       uid: bdvw8iqhzrm68d
       type: prometheus
-      url: prometheus-server
+      url: http://prometheus-server:9090
       access: proxy
       isDefault: true
+      editable: true
 
 dashboards:
   default:
