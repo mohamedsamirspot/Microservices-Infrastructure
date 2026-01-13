@@ -27,4 +27,4 @@ datasources:
 dashboards:
   default:
     custom-dashboard:
-      file: dashboards/k8s-pods.json
+      url: https://raw.githubusercontent.com/mohamedsamirspot/Microservices-Infrastructure/blob/test/k8s-tools/monitoring/grafana/dashboards/k8s-pods.json
