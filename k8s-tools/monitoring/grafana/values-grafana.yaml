@@ -27,4 +27,4 @@ datasources:
 dashboards:
   default:
     custom-dashboard:
-      file: dashboards/k8s-nodes.json
+      file: dashboards/k8s-pods.json
