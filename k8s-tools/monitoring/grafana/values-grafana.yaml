@@ -11,3 +11,13 @@ resources:
   requests:
     cpu: 100m
     memory: 128Mi
+
+datasources:
+  datasources.yaml:
+    apiVersion: 1
+    datasources:
+    - name: Prometheus
+      type: prometheus
+      url: http://prometheus.monitoring.svc.cluster.local
+      access: proxy
+      isDefault: true
