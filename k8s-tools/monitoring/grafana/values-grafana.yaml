@@ -19,7 +19,7 @@ datasources:
     - name: Prometheus
       uid: bdvw8iqhzrm68d
       type: prometheus
-      url: http://prometheus-server:9090
+      url: http://prometheus-server.monitoring.svc.cluster.local
       access: proxy
       isDefault: true
       editable: true
