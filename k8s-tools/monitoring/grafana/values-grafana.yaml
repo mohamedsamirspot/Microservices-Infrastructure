@@ -17,7 +17,13 @@ datasources:
     apiVersion: 1
     datasources:
     - name: Prometheus
+      uid: bdvw8iqhzrm68d
       type: prometheus
-      url: http://prometheus.monitoring.svc.cluster.local
+      url: prometheus-server
       access: proxy
       isDefault: true
+
+dashboards:
+  default:
+    custom-dashboard:
+      file: dashboards/k8s-nodes.json
