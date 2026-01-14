@@ -37,14 +37,14 @@ dashboardProviders:
   dashboardproviders.yaml:
     apiVersion: 1
     providers:
-      - name: default
+      - name: general
         orgId: 1
-        folder: ""
+        folder: ""                # This puts dashboards in the 'General' folder in Grafana UI
         type: file
         disableDeletion: false
         editable: true
         options:
-          path: /var/lib/grafana/dashboards/default
+          path: /var/lib/grafana/dashboards/  # dashboards go directly here
       
       - name: kubernetes
         orgId: 1
@@ -57,12 +57,12 @@ dashboardProviders:
 
 # Define dashboards to be imported
 dashboards:
-  default:    
+  general:    
     blackbox-exporter:
-      file: dashboards/blackbox-exporter.json
+      url: https://raw.githubusercontent.com/mohamedsamirspot/Microservices-Infrastructure/refs/heads/test/k8s-tools/monitoring/grafana/dashboards/blackbox-exporter.json
   kubernetes:
     k8s-pods:
-      file: dashboards/k8s-pods.json
+      url: https://raw.githubusercontent.com/mohamedsamirspot/Microservices-Infrastructure/refs/heads/test/k8s-tools/monitoring/grafana/dashboards/k8s-pods.json
 
 # cd /var/lib/grafana/plugins --> here you define the plugins to be installed
 plugins:
