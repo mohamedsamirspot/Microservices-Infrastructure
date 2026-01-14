@@ -30,13 +30,12 @@ dashboardProviders:
     providers:
       - name: kubernetes
         orgId: 1
-        folder: Kubernetes
+        folder: ""
         type: file
         disableDeletion: false
         editable: true
         options:
           path: /var/lib/grafana/dashboards/kubernetes
-
 
 dashboardsConfigMaps:
   kubernetes: grafana-dashboards
