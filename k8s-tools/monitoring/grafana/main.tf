@@ -19,15 +19,6 @@ module "secrets_manager" {
   tags = var.tags
 }
 
-resource "kubectl_manifest" "monitoring_namespace" {
-  yaml_body = <<-YAML
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: monitoring
-YAML
-}
-
 data "aws_secretsmanager_secret_version" "grafana_admin" {
   secret_id  = module.secrets_manager.secret_id
   version_id = module.secrets_manager.secret_version_id
