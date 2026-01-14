@@ -39,12 +39,12 @@ dashboardProviders:
     providers:
       - name: default
         orgId: 1
-        folder: ""                # This puts dashboards in the 'General' folder in Grafana UI
+        folder: ""
         type: file
         disableDeletion: false
         editable: true
         options:
-          path: /var/lib/grafana/dashboards/  # dashboards go directly here
+          path: /var/lib/grafana/dashboards/default
       
       - name: kubernetes
         orgId: 1
