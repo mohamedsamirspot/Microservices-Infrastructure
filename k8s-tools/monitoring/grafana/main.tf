@@ -49,20 +49,3 @@ resource "helm_release" "grafana" {
 
   depends_on = [ module.secrets_manager, kubectl_manifest.monitoring_namespace ]
 }
-
-resource "kubectl_manifest" "grafana_dashboards" {
-  yaml_body = <<-YAML
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: grafana-dashboards
-  namespace: monitoring
-  labels:
-    grafana_dashboard: "1"
-data:
-  k8s-pods.json: |
-${indent(4, file("${path.module}/dashboards/k8s-pods.json"))}
-YAML
-
-  depends_on = [ kubectl_manifest.monitoring_namespace ]
-}
