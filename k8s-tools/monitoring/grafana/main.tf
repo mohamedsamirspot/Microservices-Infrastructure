@@ -19,6 +19,15 @@ module "secrets_manager" {
   tags = var.tags
 }
 
+resource "kubectl_manifest" "monitoring_namespace" {
+  yaml_body = <<-YAML
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: monitoring
+YAML
+}
+
 data "aws_secretsmanager_secret_version" "grafana_admin" {
   secret_id  = module.secrets_manager.secret_id
   version_id = module.secrets_manager.secret_version_id
@@ -38,5 +47,22 @@ resource "helm_release" "grafana" {
       })
   ]
 
-  depends_on = [ module.secrets_manager ]
+  depends_on = [ module.secrets_manager, kubectl_manifest.monitoring_namespace ]
+}
+
+resource "kubectl_manifest" "grafana_dashboards" {
+  yaml_body = <<-YAML
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-dashboards
+  namespace: monitoring
+  labels:
+    grafana_dashboard: "1"
+data:
+  k8s-pods.json: |
+${indent(4, file("${path.module}/dashboards/k8s-pods.json"))}
+YAML
+
+  depends_on = [ kubectl_manifest.monitoring_namespace ]
 }
