@@ -37,7 +37,14 @@ dashboardProviders:
   dashboardproviders.yaml:
     apiVersion: 1
     providers:
-
+      - name: default
+        orgId: 1
+        folder: ""                # This puts dashboards in the 'General' folder in Grafana UI
+        type: file
+        disableDeletion: false
+        editable: true
+        options:
+          path: /var/lib/grafana/dashboards/  # dashboards go directly here
       
       - name: kubernetes
         orgId: 1
@@ -50,7 +57,7 @@ dashboardProviders:
 
 # Define dashboards to be imported
 dashboards:
-  defualt:    
+  default:    
     blackbox-exporter:
       file: dashboards/blackbox-exporter.json
   kubernetes:
