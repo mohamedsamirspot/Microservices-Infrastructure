@@ -25,4 +25,4 @@ datasources:
       editable: true
 
 dashboardsConfigMaps:
-  - grafana-dashboards
+  kubernetes: grafana-dashboards
