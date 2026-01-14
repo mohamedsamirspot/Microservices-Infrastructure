@@ -36,16 +36,16 @@ dashboardProviders:
   dashboardproviders.yaml:
     apiVersion: 1
     providers:
-      - name: default
+
+      
+      - name: kubernetes
         orgId: 1
-        folder: ""
+        folder: "kubernetes"
         type: file
         disableDeletion: false
         editable: true
         options:
-          path: /var/lib/grafana/dashboards/
-      
-
+          path: /var/lib/grafana/dashboards/kubernetes
 
 # cd /var/lib/grafana/dashboards --> here you define the actual dashboards to be imported
 dashboards:
