@@ -23,3 +23,6 @@ datasources:
       access: proxy
       isDefault: true
       editable: true
+
+dashboardsConfigMaps:
+  - grafana-dashboards
