@@ -64,4 +64,4 @@ dashboards:
       url: https://raw.githubusercontent.com/mohamedsamirspot/Microservices-Infrastructure/refs/heads/test/k8s-tools/monitoring/grafana/dashboards/blackbox-exporter.json
 
 plugins:
-  - GitHub
+  - grafana-github-datasource
