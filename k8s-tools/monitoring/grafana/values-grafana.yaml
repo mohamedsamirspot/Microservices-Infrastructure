@@ -23,8 +23,3 @@ datasources:
       access: proxy
       isDefault: true
       editable: true
-
-dashboards:
-  default:
-    custom-dashboard:
-      url: https://raw.githubusercontent.com/mohamedsamirspot/Microservices-Infrastructure/blob/test/k8s-tools/monitoring/grafana/dashboards/k8s-pods.json
