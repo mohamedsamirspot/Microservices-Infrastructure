@@ -27,13 +27,18 @@ datasources:
       editable: true
 
 # cd /etc/grafana/provisioning/dashboards --> here you just define the place where the dashboards are located
+## Configure grafana dashboard to import
+## NOTE: To use dashboards you must also enable/configure dashboardProviders
+## ref: https://grafana.com/dashboards
+##
+## dashboards per provider, use provider name as key.
 dashboardProviders:
   dashboardproviders.yaml:
     apiVersion: 1
     providers:
       - name: default
         orgId: 1
-        folder: "default"
+        folder: ""
         type: file
         disableDeletion: false
         editable: true
@@ -49,6 +54,7 @@ dashboardProviders:
         options:
           path: /var/lib/grafana/dashboards/kubernetes
 
+# cd /var/lib/grafana/dashboards --> here you define the actual dashboards to be imported
 dashboards:
   kubernetes:
     k8s-pods:
