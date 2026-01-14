@@ -38,5 +38,5 @@ resource "helm_release" "grafana" {
       })
   ]
 
-  depends_on = [ module.secrets_manager, kubectl_manifest.monitoring_namespace ]
+  depends_on = [ module.secrets_manager]
 }
