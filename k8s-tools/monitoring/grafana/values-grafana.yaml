@@ -41,8 +41,9 @@ dashboardProviders:
           path: /var/lib/grafana/dashboards/
 
 dashboards:
-  default:
+  kubernetes:
     k8s-pods:
       url: https://raw.githubusercontent.com/mohamedsamirspot/Microservices-Infrastructure/refs/heads/test/k8s-tools/monitoring/grafana/dashboards/k8s-pods.json
+  default:    
     blackbox-exporter:
       url: https://raw.githubusercontent.com/mohamedsamirspot/Microservices-Infrastructure/refs/heads/test/k8s-tools/monitoring/grafana/dashboards/blackbox-exporter.json
