@@ -38,5 +38,5 @@ resource "helm_release" "grafana" {
       })
   ]
 
-  depends_on = [ module.secrets_manager ]
+  depends_on = [ module.secrets_manager]
 }

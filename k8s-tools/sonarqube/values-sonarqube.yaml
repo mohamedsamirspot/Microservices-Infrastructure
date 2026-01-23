@@ -1,6 +1,6 @@
 # This will:
 #   Run SonarQube Community Build
-#   Use the embedded PostgreSQL (suitable for dev/test)
+#   The embedded PostgreSQL is deprecated
 #   Require no license
 
 community:
