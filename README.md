@@ -9,6 +9,7 @@ These terraform components (modules and k8s-tools) can create the following so f
   - alb-ingress-controller
   - argocd
   - argocd-image-updater
+  - envoy-gateway-api
   - external-secrets-operator
   - gha-runner
   - karpenter

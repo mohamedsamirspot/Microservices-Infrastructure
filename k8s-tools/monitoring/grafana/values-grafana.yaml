@@ -45,7 +45,7 @@ dashboardProviders:
         editable: true
         options:
           path: /var/lib/grafana/dashboards/  # dashboards go directly here
-      
+
       - name: kubernetes
         orgId: 1
         folder: "kubernetes"
@@ -57,7 +57,7 @@ dashboardProviders:
 
 # Define dashboards to be imported
 dashboards:
-  general:    
+  general:
     blackbox-exporter:
       url: https://raw.githubusercontent.com/mohamedsamirspot/Microservices-Infrastructure/refs/heads/test/k8s-tools/monitoring/grafana/dashboards/blackbox-exporter.json
   kubernetes:

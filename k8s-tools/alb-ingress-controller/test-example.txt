@@ -28,7 +28,7 @@ spec:
   ports:
   - port: 8080
     protocol: TCP
-  type: NodePort
+  type: ClusterIP
   selector:
     app: echoserver
 ---
