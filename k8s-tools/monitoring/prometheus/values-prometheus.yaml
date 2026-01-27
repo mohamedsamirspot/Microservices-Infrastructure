@@ -4,11 +4,7 @@ server:
   retention: 10d
   global:
     scrape_interval: 1m
-
-serverFiles:
-  prometheus.yml:
-    global:
-      external_labels:
+    external_labels:
         cluster: my-cluster-name
 
 prometheus-pushgateway:
