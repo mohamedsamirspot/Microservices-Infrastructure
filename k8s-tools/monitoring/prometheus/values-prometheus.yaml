@@ -1,19 +1,9 @@
 server:
-  extraScrapeConfigs: |
-    - job_name: add-cluster-label
-      static_configs:
-        - targets: []
-      relabel_configs:
-        - action: replace
-          target_label: cluster
-          replacement: "my-cluster-name"
-
   persistentVolume:
     enabled: false
   retention: 10d
   global:
     scrape_interval: 1m
-
 
     # only identified from remote cluster (remote-write)
     # external_labels:
