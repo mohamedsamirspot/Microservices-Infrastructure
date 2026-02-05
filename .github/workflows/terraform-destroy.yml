@@ -52,7 +52,7 @@ jobs:
 
       # Reference: https://aws.amazon.com/blogs/security/use-iam-roles-to-connect-github-actions-to-actions-in-aws/
       - name: Configure AWS credentials (OIDC)
-        uses: aws-actions/configure-aws-credentials@v5
+        uses: aws-actions/configure-aws-credentials@v6
         with:
           role-to-assume: arn:aws:iam::${{ github.event.inputs.account-id }}:role/github-action-role
           aws-region: ${{ github.event.inputs.region }}
