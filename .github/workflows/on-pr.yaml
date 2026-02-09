@@ -12,8 +12,7 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
-      - uses: actions/setup-python@v6
+
+      - uses: mohamedsamirspot/Microservices-Github-Actions/.github/actions/pre-commit@main
         with:
-          python-version: '3.14'
-      - run: pip install pre-commit
-      - run: pre-commit run --all-files
+          python-version: "3.14"
