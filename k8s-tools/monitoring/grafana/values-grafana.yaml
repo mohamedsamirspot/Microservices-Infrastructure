@@ -5,7 +5,6 @@ persistence:
 # adminPassword: "${grafanaadminpassword}"
 
 admin:
-  ## Name of the secret. Can be templated.
   existingSecret: "grafana-admin-credentials"
   userKey: userKey
   passwordKey: passwordKey
