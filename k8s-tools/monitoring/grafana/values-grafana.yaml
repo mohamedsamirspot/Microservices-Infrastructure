@@ -1,8 +1,13 @@
 persistence:
   enabled: false
 
-adminUser: admin
-adminPassword: "${grafanaadminpassword}"
+# adminUser: admin
+# adminPassword: "${grafanaadminpassword}"
+
+admin:
+  existingSecret: "grafana-admin-credentials"
+  userKey: userKey
+  passwordKey: passwordKey
 
 resources:
   limits:
