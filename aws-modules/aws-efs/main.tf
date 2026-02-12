@@ -11,7 +11,7 @@ locals {
 
 module "efs" {
   source = "terraform-aws-modules/efs/aws"
-  version = "~> 2.1.0"
+  version = "~> 2.2.0"
   name           = "${var.name}"
   # creation_token = "example-token"
   encrypted      = true
