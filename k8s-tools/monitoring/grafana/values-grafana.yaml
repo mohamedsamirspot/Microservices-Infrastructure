@@ -17,6 +17,18 @@ resources:
     cpu: 100m
     memory: 128Mi
 
+# 2. grafana.ini section (enables SMTP in Grafana) ⬅️ THIS WAS MISSING!
+grafana.ini:
+  smtp:
+    enabled: true
+    host: smtp.gmail.com:587
+    user: $__file{/etc/secrets/smtp/user}
+    password: $__file{/etc/secrets/smtp/password}
+    from_address: mohamed.samir.emary@gmail.com
+    from_name: Grafana Alerts
+    startTLS_policy: MandatoryStartTLS
+    skip_verify: false
+
 # smtp:
 #   enabled: true
 #   host: smtp.gmail.com:587
@@ -36,14 +48,15 @@ smtp:
   startTLSPolicy: "MandatoryStartTLS"
 
 # cd /var/lib/grafana/plugins --> here you define the plugins to be installed
-plugins:
-  - grafana-github-datasource
+# plugins:
+#   - grafana-github-datasource
 
 # ==================== SIDECAR CONFIGURATION ====================
-# All datasources, dashboards, and alerts are managed via ConfigMaps
+# All datasources, dashboards, plugins, and alerts are managed via ConfigMaps
 
 sidecar:
   # Datasources sidecar
+  # cd /etc/grafana/provisioning/datasources
   datasources:
     enabled: true
     label: grafana_datasource
@@ -51,6 +64,7 @@ sidecar:
     searchNamespace: monitoring
     reloadURL: "http://localhost:3000/api/admin/provisioning/datasources/reload"
   
+  # cd /etc/grafana/provisioning/dashboards --> here you just define the place where the dashboards are located
   # Dashboards sidecar
   dashboards:
     enabled: true
@@ -63,6 +77,7 @@ sidecar:
       foldersFromFilesStructure: true
   
   # Alerts sidecar
+  # cd /etc/grafana/provisioning/alerting
   alerts:
     enabled: true
     label: grafana_alert
@@ -71,20 +86,15 @@ sidecar:
     searchNamespace: monitoring
     reloadURL: "http://localhost:3000/api/admin/provisioning/alerting/reload"
 
+  plugins:
+    enabled: true
+    label: grafana_plugin
+    labelValue: "1"
+    searchNamespace: monitoring
+    initPlugins: true  # Install before Grafana starts
 
 
-# # cd /etc/grafana/datasources
-# datasources:
-#   datasources.yaml:
-#     apiVersion: 1
-#     datasources:
-#     - name: Prometheus
-#       uid: bdvw8iqhzrm68d
-#       type: prometheus
-#       url: http://prometheus-server.monitoring.svc.cluster.local
-#       access: proxy
-#       isDefault: true
-#       editable: true
+
 
 # # cd /etc/grafana/provisioning/dashboards --> here you just define the place where the dashboards are located
 # ## Configure grafana dashboard to import
