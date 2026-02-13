@@ -59,6 +59,14 @@ YAML
   depends_on = [kubectl_manifest.monitoring_namespace]
 }
 
+resource "kubectl_manifest" "grafana-configmaps" {
+  for_each = fileset("${path.module}/grafana-configmaps", "*.yaml")
+
+  yaml_body = file("${path.module}/grafana-configmaps/${each.value}")
+
+  depends_on = [kubectl_manifest.monitoring_namespace]
+}
+
 resource "helm_release" "grafana" {
   name             = "grafana"
   repository       = "https://grafana.github.io/helm-charts"
