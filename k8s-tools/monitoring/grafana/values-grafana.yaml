@@ -72,3 +72,31 @@ dashboards:
 # cd /var/lib/grafana/plugins --> here you define the plugins to be installed
 plugins:
   - grafana-github-datasource
+
+# ==================== ALERTING CONFIGURATION ====================
+
+# smtp:
+#   enabled: true
+#   host: smtp.gmail.com:587
+#   existingSecret: "grafana-smtp-secret"
+#   userKey: user
+#   passwordKey: password
+#   fromAddress: mohamed.samir.emary@gmail.com
+#   fromName: Grafana
+#   startTLSPolicy: "MandatoryStartTLS"
+smtp:
+  enabled: true
+  host: smtp.gmail.com:587
+  user: mohamed.samir.emary@gmail.com
+  password: "urzxrxlwneyiapcw"  # Use App Password, not your regular Gmail password
+  fromAddress: mohamed.samir.emary@gmail.com
+  fromName: Grafana
+  startTLSPolicy: "MandatoryStartTLS"
+
+alerting:
+  contactpoints.yaml:
+    url: https://raw.githubusercontent.com/mohamedsamirspot/Microservices-Infrastructure/refs/heads/test/k8s-tools/monitoring/grafana/alerting/contactpoints.yaml
+  policies.yaml:
+    url: https://raw.githubusercontent.com/mohamedsamirspot/Microservices-Infrastructure/refs/heads/test/k8s-tools/monitoring/grafana/alerting/policies.yaml
+  rules.yaml:
+    url: https://raw.githubusercontent.com/mohamedsamirspot/Microservices-Infrastructure/refs/heads/test/k8s-tools/monitoring/grafana/alerting/rules.yaml

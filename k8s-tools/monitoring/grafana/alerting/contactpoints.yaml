@@ -1,0 +1,11 @@
+apiVersion: 1
+contactPoints:
+  - orgId: 1
+    name: Email - Mohamed
+    receivers:
+      - uid: email-mohamed
+        type: email
+        settings:
+          addresses: mohamed.samir.emary@gmail.com
+          singleEmail: false
+        disableResolveMessage: false
