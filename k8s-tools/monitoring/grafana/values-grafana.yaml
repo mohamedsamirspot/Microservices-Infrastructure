@@ -17,6 +17,8 @@ resources:
     cpu: 100m
     memory: 128Mi
 
+# Disable password leak detection (allows inline passwords)
+assertNoLeakedSecrets: false
 # 2. grafana.ini section (enables SMTP in Grafana) ⬅️ THIS WAS MISSING!
 grafana.ini:
   smtp:
