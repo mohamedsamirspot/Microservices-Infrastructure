@@ -22,13 +22,14 @@ grafana.ini:
   smtp:
     enabled: true
     host: smtp.gmail.com:587
-    user: $__file{/etc/secrets/smtp/user}
-    password: $__file{/etc/secrets/smtp/password}
+    user: mohamed.samir.emary@gmail.com
+    password: urzxrxlwneyiapcw
     from_address: mohamed.samir.emary@gmail.com
     from_name: Grafana Alerts
     startTLS_policy: MandatoryStartTLS
     skip_verify: false
 
+# The smtp: section in the Grafana Helm chart is primarily for mounting secrets. Since you're using inline credentials, you can remove it.
 # smtp:
 #   enabled: true
 #   host: smtp.gmail.com:587
@@ -38,18 +39,15 @@ grafana.ini:
 #   fromAddress: mohamed.samir.emary@gmail.com
 #   fromName: Grafana
 #   startTLSPolicy: "MandatoryStartTLS"
-smtp:
-  enabled: true
-  host: smtp.gmail.com:587
-  user: mohamed.samir.emary@gmail.com
-  password: "urzxrxlwneyiapcw"  # Use App Password, not your regular Gmail password
-  fromAddress: mohamed.samir.emary@gmail.com
-  fromName: Grafana
-  startTLSPolicy: "MandatoryStartTLS"
 
-# cd /var/lib/grafana/plugins --> here you define the plugins to be installed
-# plugins:
-#   - grafana-github-datasource
+# smtp:
+#   enabled: true
+#   host: smtp.gmail.com:587
+#   user: mohamed.samir.emary@gmail.com
+#   password: "urzxrxlwneyiapcw"  # Use App Password, not your regular Gmail password
+#   fromAddress: mohamed.samir.emary@gmail.com
+#   fromName: Grafana
+#   startTLSPolicy: "MandatoryStartTLS"
 
 # ==================== SIDECAR CONFIGURATION ====================
 # All datasources, dashboards, plugins, and alerts are managed via ConfigMaps
@@ -86,6 +84,7 @@ sidecar:
     searchNamespace: monitoring
     reloadURL: "http://localhost:3000/api/admin/provisioning/alerting/reload"
 
+  # cd /var/lib/grafana/plugins --> here you define the plugins to be installed
   plugins:
     enabled: true
     label: grafana_plugin
