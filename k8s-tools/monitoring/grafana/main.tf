@@ -59,33 +59,30 @@ YAML
   depends_on = [kubectl_manifest.monitoring_namespace]
 }
 
-locals {
-  dashboard_folders = {
-    "k8s-pods.json"          = "Kubernetes"
-    "blackbox-exporter.json" = "General"
-  }
-}
-
-# Dashboards from JSON files
 resource "kubectl_manifest" "grafana_dashboard_configmaps" {
-  for_each = fileset("${path.module}/grafana-configmaps/dashboards", "*.json")
+  for_each = fileset("${path.module}/grafana-configmaps/dashboards", "**/*.json")
 
   yaml_body = yamlencode({
     apiVersion = "v1"
     kind       = "ConfigMap"
     metadata = {
-      name      = "grafana-dashboard-${trimsuffix(each.value, ".json")}"
+      name      = "grafana-dashboard-${replace(trimsuffix(each.value, ".json"), "/", "-")}"
       namespace = "monitoring"
       labels    = { grafana_dashboard = "1" }
-      annotations = { grafana_folder = lookup(local.dashboard_folders, each.value, "General") }
+
+      annotations = {
+        grafana_folder = dirname(each.value)
+      }
     }
+
     data = {
-      (each.value) = file("${path.module}/grafana-configmaps/dashboards/${each.value}")
+      basename(each.value) = file("${path.module}/grafana-configmaps/dashboards/${each.value}")
     }
   })
 
   depends_on = [kubectl_manifest.monitoring_namespace]
 }
+
 
 # Other ConfigMaps (datasources, plugins, alerts)
 resource "kubectl_manifest" "grafana_other_configmaps" {
