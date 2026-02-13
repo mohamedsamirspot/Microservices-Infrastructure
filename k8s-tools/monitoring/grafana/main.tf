@@ -60,7 +60,7 @@ YAML
 }
 
 resource "kubectl_manifest" "grafana-configmaps" {
-  for_each = fileset("${path.module}/grafana-configmaps", "*.yaml")
+  for_each = fileset("${path.module}/grafana-configmaps", "**/*.yaml")
 
   yaml_body = file("${path.module}/grafana-configmaps/${each.value}")
 
