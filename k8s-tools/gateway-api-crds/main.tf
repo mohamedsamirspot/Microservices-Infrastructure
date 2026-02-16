@@ -3,5 +3,10 @@ data "http" "gateway_api_crds" {
 }
 
 resource "kubectl_manifest" "gateway_api_crds" {
-  yaml_body = data.http.gateway_api_crds.response_body
+  for_each = { for manifest in split("---", data.http.gateway_api_crds.response_body) : 
+    try(yamldecode(manifest).metadata.name, md5(manifest)) => manifest
+    if trimspace(manifest) != "" && can(yamldecode(manifest))
+  }
+  
+  yaml_body = each.value
 }
