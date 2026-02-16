@@ -1,5 +1,5 @@
 data "http" "gateway_api_crds" {
-  url = "https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.4.1/experimental-install.yaml"
+  url = "https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.4.1/standard-install.yaml"
 }
 
 resource "kubectl_manifest" "gateway_api_crds" {
@@ -9,8 +9,4 @@ resource "kubectl_manifest" "gateway_api_crds" {
   }
   
   yaml_body = each.value
-  
-  # Use server-side apply to avoid annotation size limits
-  server_side_apply = true
-  force_conflicts    = true
 }
