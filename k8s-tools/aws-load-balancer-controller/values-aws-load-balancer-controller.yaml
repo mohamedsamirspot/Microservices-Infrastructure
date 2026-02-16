@@ -6,3 +6,7 @@ serviceAccount:
   name: aws-load-balancer-controller
   annotations:
     eks.amazonaws.com/role-arn: "${roleArn}"
+
+controller:
+  extraArgs:
+    feature-gates: "NLBGatewayAPI=true,ALBGatewayAPI=true"
