@@ -8,5 +8,5 @@ resource "helm_release" "envoy-gateway-api" {
   version          = var.envoy-gateway-api_chart_version
   namespace        = "envoy-gateway-api"
   create_namespace = true
-  skip_crds        = true
+  skip_crds        = false
 }
