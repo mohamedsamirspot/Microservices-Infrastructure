@@ -11,6 +11,7 @@ These terraform components (modules and k8s-tools) can create the following so f
   - aws-load-balancer-controller
   - envoy-gateway-api
   - external-secrets-operator
+  - gateway-api-crds
   - gha-runner
   - karpenter
   - kube-downscaler

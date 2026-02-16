@@ -5,6 +5,7 @@ locals {
   enable_aws_load_balancer_controller = true
   enable_envoy_gateway_api = false
   enable_external_secrets_operator = false
+  enable_gateway_api_crds = true
   enable_aws_efs = false
   enable_aws_eks = true
   enable_aws_network = true
