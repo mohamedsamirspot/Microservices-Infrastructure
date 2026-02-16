@@ -9,4 +9,8 @@ resource "kubectl_manifest" "gateway_api_crds" {
   }
   
   yaml_body = each.value
+  
+  # Use server-side apply to avoid annotation size limits
+  server_side_apply = true
+  force_conflicts    = true
 }
