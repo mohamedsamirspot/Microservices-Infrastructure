@@ -7,6 +7,7 @@ serviceAccount:
   annotations:
     eks.amazonaws.com/role-arn: "${roleArn}"
 
-controller:
-  extraArgs:
-    feature-gates: "NLBGatewayAPI=true,ALBGatewayAPI=true"
+controllerConfig:
+  featureGates:
+    NLBGatewayAPI: true
+    ALBGatewayAPI: true
