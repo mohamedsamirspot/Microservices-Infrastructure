@@ -1,7 +1,7 @@
-skip = !read_terragrunt_config(find_in_parent_folders("env.hcl")).locals.enable_grafana
+skip = !read_terragrunt_config(find_in_parent_folders("env.hcl")).locals.enable_prometheus
 
 terraform {
-  source = "${find_in_parent_folders("k8s-tools")}/monitoring/grafana"
+  source = "${find_in_parent_folders("k8s-tools")}/monitoring/prometheus"
 }
 
 include "root" {
@@ -12,13 +12,13 @@ include "root" {
 # apply and destroy ordering
 dependencies {
   paths = [
-    "${get_terragrunt_dir()}/../../aws-eks",
-    "${get_terragrunt_dir()}/../../karpenter"
+    "${get_terragrunt_dir()/../aws-eks",
+    "${get_terragrunt_dir()}/../karpenter"
   ]
 }
 
 dependency "eks" {
-  config_path = "${get_terragrunt_dir()}/../../aws-eks"
+  config_path = "${get_terragrunt_dir()}/../aws-eks"
     # Fix for run-all init
   mock_outputs = {
     cluster_name           = "eks-mock-cluster"
@@ -28,12 +28,12 @@ dependency "eks" {
 }
 
 dependency "karpenter" {
-  config_path = "${get_terragrunt_dir()}/../../karpenter"
+  config_path = "${get_terragrunt_dir()}/../karpenter"
   skip_outputs = true
 }
 
-generate "provider-grafana" {
-  path      = "provider-grafana.tf"
+generate "provider-prometheus" {
+  path      = "provider-prometheus.tf"
   if_exists = "overwrite_terragrunt"
   contents  = <<EOF
 
@@ -46,18 +46,6 @@ provider "helm" {
       command     = "aws"
       args        = ["eks", "get-token", "--cluster-name", "${dependency.eks.outputs.cluster_name}"]
     }
-  }
-}
-
-provider "kubectl" {
-  apply_retry_count      = 5
-  host                   = "${dependency.eks.outputs.cluster_endpoint}"
-  cluster_ca_certificate = base64decode("${dependency.eks.outputs.cluster_certificate_authority_data}")
-  load_config_file       = false
-  exec {
-    api_version = "client.authentication.k8s.io/v1beta1"
-    command     = "aws"
-    args        = ["eks", "get-token", "--cluster-name", "${dependency.eks.outputs.cluster_name}"]
   }
 }
 EOF
