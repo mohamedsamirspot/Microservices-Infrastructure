@@ -1,8 +1,8 @@
 locals {
   env = basename(get_terragrunt_dir())
-  enable_alb_ingress_controller = false
   enable_argocd = false
   enable_argocd_image_updater = false
+  enable_aws_load_balancer_controller = true
   enable_envoy_gateway_api = false
   enable_external_secrets_operator = false
   enable_aws_efs = false

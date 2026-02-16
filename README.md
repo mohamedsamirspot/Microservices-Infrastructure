@@ -6,9 +6,9 @@ These terraform components (modules and k8s-tools) can create the following so f
   - aws-eks
   - aws-efs
 - k8s-tools
-  - alb-ingress-controller
   - argocd
   - argocd-image-updater
+  - aws-load-balancer-controller
   - envoy-gateway-api
   - external-secrets-operator
   - gha-runner

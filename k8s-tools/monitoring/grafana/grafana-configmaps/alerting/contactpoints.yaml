@@ -15,5 +15,5 @@ data:
           - uid: email-mohamed-uid
             type: email
             settings:
-              addresses: mohamed.samir.emary@gmail.com
+              addresses: mohamedsamirspot@gmail.com
             disableResolveMessage: false
