@@ -1,19 +1,28 @@
+apiVersion: gateway.k8s.aws/v1beta1
+kind: LoadBalancerConfiguration
+metadata:
+  name: internet-facing-config
+  namespace: aws-load-balancer-controller
+spec:
+  scheme: internet-facing
+---
 apiVersion: gateway.networking.k8s.io/v1
 kind: GatewayClass
 metadata:
   name: alb-gateway-class
 spec:
-  controllerName: ingress.k8s.aws/gateway-controller
+  controllerName: gateway.k8s.aws/alb
+  parametersRef:
+    kind: LoadBalancerConfiguration
+    name: internet-facing-config
+    namespace: aws-load-balancer-controller
+    group: gateway.k8s.aws
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
 metadata:
-  name: alb-gateway
-  namespace: envoy-gateway-api
-  annotations:
-    alb.ingress.kubernetes.io/scheme: internet-facing
-    alb.ingress.kubernetes.io/target-type: ip
-    alb.ingress.kubernetes.io/load-balancer-name: alb-gateway
+  name: external-gateway
+  namespace: aws-load-balancer-controller
 spec:
   gatewayClassName: alb-gateway-class
   listeners:
@@ -66,7 +75,7 @@ metadata:
 spec:
   parentRefs:
     - name: alb-gateway
-      namespace: envoy-gateway-api
+      namespace: aws-load-balancer-controller
       sectionName: http
   rules:
     - matches:

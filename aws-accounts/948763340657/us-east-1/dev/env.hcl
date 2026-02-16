@@ -3,7 +3,7 @@ locals {
   enable_argocd = false
   enable_argocd_image_updater = false
   enable_aws_load_balancer_controller = true
-  enable_envoy_gateway_api = false
+  enable_envoy_gateway_api = true
   enable_external_secrets_operator = false
   enable_gateway_api_crds = true
   enable_aws_efs = false
