@@ -53,6 +53,7 @@ inputs = {
   cluster_name     = dependency.eks.outputs.cluster_name
   oidc_provider_arn = dependency.eks.outputs.oidc_provider_arn
 }
+
 generate "provider-aws-load-balancer-controller" {
   path      = "provider-aws-load-balancer-controller.tf"
   if_exists = "overwrite_terragrunt"

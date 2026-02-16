@@ -28,7 +28,6 @@ dependency "eks" {
   }
 }
 
-
 generate "provider-gateway-api-crds" {
   path      = "provider-gateway-api-crds.tf"
   if_exists = "overwrite_terragrunt"
