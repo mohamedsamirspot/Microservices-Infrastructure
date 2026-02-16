@@ -1,20 +1,20 @@
 # This chart include both the Envoy Gateway and Gateway API crds and you can skip the gateway api crds if you want to install them separately and i think it's better to install them separately if you have more than one gateway implementation in the cluster
 # https://gateway.envoyproxy.io/v1.5/install/install-helm/
 
-variable "custome_envoy_gateway_crds_chart_version" {
-  default = "1.6.2"
-}
+# variable "custome_envoy_gateway_crds_chart_version" {
+#   default = "1.6.2"
+# }
 
-resource "kubectl_manifest" "envoy_gateway_crds" {
-  for_each = toset(["eg-crds"])
+# resource "kubectl_manifest" "envoy_gateway_crds" {
+#   for_each = toset(["eg-crds"])
 
-  yaml_body = <<EOT
-${chomp(trimspace(shell("helm template ${each.key} oci://docker.io/envoyproxy/gateway-crds-helm \
-  --version ${var.custome_envoy_gateway_crds_chart_version} \
-  --set crds.gatewayAPI.enabled=false \
-  --set crds.envoyGateway.enabled=true")))}
-EOT
-}
+#   yaml_body = <<EOT
+# ${chomp(trimspace(shell("helm template ${each.key} oci://docker.io/envoyproxy/gateway-crds-helm \
+#   --version ${var.custome_envoy_gateway_crds_chart_version} \
+#   --set crds.gatewayAPI.enabled=false \
+#   --set crds.envoyGateway.enabled=true")))}
+# EOT
+# }
 
 # The controller itself
 resource "helm_release" "envoy-gateway-api" {
