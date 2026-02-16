@@ -12,7 +12,7 @@ include "root" {
 # apply and destroy ordering
 dependencies {
   paths = [
-    "${get_terragrunt_dir()/../aws-eks",
+    "${get_terragrunt_dir()}/../aws-eks",
     "${get_terragrunt_dir()}/../karpenter"
   ]
 }
