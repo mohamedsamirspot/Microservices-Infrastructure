@@ -1,5 +1,5 @@
 data "http" "gateway_api_crds" {
-  url = "https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.4.1/config/standard-install.yaml"
+  url = "https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.4.1/standard-install.yaml"
 }
 
 resource "kubectl_manifest" "gateway_api_crds" {
