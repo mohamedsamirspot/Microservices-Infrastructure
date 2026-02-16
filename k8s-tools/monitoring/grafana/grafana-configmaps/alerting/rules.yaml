@@ -11,7 +11,7 @@ data:
     groups:
       - orgId: 1
         name: kubernetes-alerts
-        folder: Kubernetes
+        folder: kubernetes
         interval: 1m
         rules:
           - uid: high-cpu-alert
