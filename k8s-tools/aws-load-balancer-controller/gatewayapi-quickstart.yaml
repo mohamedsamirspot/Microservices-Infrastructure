@@ -1,7 +1,19 @@
 apiVersion: gateway.k8s.aws/v1beta1
+kind: TargetGroupConfiguration
+metadata:
+  name: tg-config
+  namespace: default
+spec:
+  targetReference:
+    name: hello
+  defaultConfiguration:
+    targetGroupName: hello-target-group
+    targetType: ip
+---
+apiVersion: gateway.k8s.aws/v1beta1
 kind: LoadBalancerConfiguration
 metadata:
-  name: internet-facing-config
+  name: lb-config
   namespace: aws-load-balancer-controller
 spec:
   scheme: internet-facing
@@ -14,7 +26,7 @@ spec:
   controllerName: gateway.k8s.aws/alb
   parametersRef:
     kind: LoadBalancerConfiguration
-    name: internet-facing-config
+    name: lb-config
     namespace: aws-load-balancer-controller
     group: gateway.k8s.aws
 ---
@@ -74,7 +86,7 @@ metadata:
   namespace: default
 spec:
   parentRefs:
-    - name: alb-gateway
+    - name: external-gateway
       namespace: aws-load-balancer-controller
       sectionName: http
   rules:
