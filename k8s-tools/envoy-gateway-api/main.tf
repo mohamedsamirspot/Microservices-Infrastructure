@@ -4,7 +4,6 @@
 # https://gateway.envoyproxy.io/v1.5/install/gateway-crds-helm-api/
 # The envoy gateway api custome crds like the EnvoyProxy and the EnvoyFilter
 # crds.gatewayAPI.enabled=false this is the gateway api crds themeselves and we will install them separately in another module
-# Step 1: render the manifests locally using helm template
 data "helm_template" "custome_envoy_gateway_crds" {
   name       = "eg-crds"
   repository = "oci://docker.io/envoyproxy"
@@ -21,18 +20,14 @@ data "helm_template" "custome_envoy_gateway_crds" {
     value = "true"
   }
 }
-# Step 2: split the rendered YAML into individual manifests and apply server-side
-resource "kubectl_manifest" "custome_envoy_gateway_crds" {
-  for_each = {
-    for idx, manifest in split("---", data.helm_template.custome_envoy_gateway_crds.manifest) :
-    idx => manifest
-    if trimspace(manifest) != ""
-  }
+resource "kubectl_manifest" "envoy_gateway_crds" {
+  for_each = data.helm_template.custome_envoy_gateway_crds.manifests  # <-- use .manifests not .manifest
 
   yaml_body         = each.value
-  server_side_apply = true   # equivalent to --server-side flag
-  force_conflicts   = true   # recommended for CRDs to avoid field manager conflicts
+  server_side_apply = true
+  force_conflicts   = true
 }
+
 
 # https://gateway.envoyproxy.io/v1.5/install/gateway-helm-api/
 # The envoy gateway api controller itself
