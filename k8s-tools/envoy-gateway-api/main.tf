@@ -24,7 +24,7 @@ data "helm_template" "custome_envoy_gateway_crds" {
 # Step 2: split the rendered YAML into individual manifests and apply server-side
 resource "kubectl_manifest" "custome_envoy_gateway_crds" {
   for_each = {
-    for idx, manifest in split("---", data.helm_template.envoy_gateway_crds.manifest) :
+    for idx, manifest in split("---", data.helm_template.custome_envoy_gateway_crds.manifest) :
     idx => manifest
     if trimspace(manifest) != ""
   }
