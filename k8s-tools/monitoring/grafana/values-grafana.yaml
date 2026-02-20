@@ -40,7 +40,7 @@ sidecar:
     labelValue: "1"
     searchNamespace: monitoring
     reloadURL: "http://localhost:3000/api/admin/provisioning/datasources/reload"
-  
+
   # cd /etc/grafana/provisioning/dashboards --> here you just define the place where the dashboards are located
   dashboards:
     enabled: true
@@ -51,7 +51,7 @@ sidecar:
     folderAnnotation: grafana_folder
     provider:
       foldersFromFilesStructure: true
-  
+
   # cd /etc/grafana/provisioning/alerting
   alerts:
     enabled: true

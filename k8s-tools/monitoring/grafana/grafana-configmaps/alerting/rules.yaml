@@ -62,7 +62,7 @@ data:
               summary: High CPU detected
             labels:
               severity: warning
-          
+
           - uid: high-memory-alert
             title: High Memory Usage
             condition: C
