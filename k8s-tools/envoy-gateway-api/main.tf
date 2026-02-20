@@ -2,7 +2,7 @@
 # https://gateway.envoyproxy.io/v1.5/install/install-helm/
 
 # https://gateway.envoyproxy.io/v1.5/install/gateway-crds-helm-api/
-# The envoy gateway api custome crds like the EnvoyProxy and the EnvoyFilter
+# The envoy gateway api custome crds like the EnvoyProxy
 # crds.gatewayAPI.enabled=false this is the gateway api crds themeselves and we will install them separately in another module
 data "helm_template" "custome_envoy_gateway_crds" {
   name       = "eg-crds"
