@@ -4,7 +4,8 @@ repos:
     hooks:
       - id: trailing-whitespace        # removes trailing whitespace
       - id: end-of-file-fixer          # ensures files end with a newline
-      - id: check-yaml                  # validates YAML filesv6.0.0
+      - id: check-yaml                  # validates YAML filesv6.0.0\
+        args: ["--allow-multiple-documents"]
         exclude: (^|/)(example|quickstart)\.ya?ml$
 
   - repo: https://github.com/gitleaks/gitleaks
