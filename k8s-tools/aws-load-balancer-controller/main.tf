@@ -1,3 +1,9 @@
+# https://github.com/kubernetes-sigs/aws-load-balancer-controller
+# It satisfies Kubernetes Ingress resources by provisioning Application Load Balancers.
+# It satisfies Kubernetes Service resources by provisioning Network Load Balancers.
+# It satisfies Kubernetes Gateway resources by provisioning Network Load Balancers and Application Load Balancers.
+# This project was formerly known as "AWS ALB Ingress Controller", we rebranded it to be "AWS Load Balancer Controller".
+
 resource "kubectl_manifest" "aws-load-balancer-controller_namespace" {
   yaml_body = <<-YAML
 apiVersion: v1
@@ -31,7 +37,7 @@ resource "helm_release" "aws_load_balancer_controller" {
   namespace  = "aws-load-balancer-controller"
 
   values = [
-    templatefile("${path.module}/values-alb-ingress-controller.yaml", {
+    templatefile("${path.module}/values-aws-load-balancer-controller.yaml", {
       vpcId      = var.vpcId
       clusterName = var.cluster_name
       roleArn     = module.aws_load_balancer_controller_irsa_role.arn

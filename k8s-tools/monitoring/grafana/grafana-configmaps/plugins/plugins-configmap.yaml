@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-plugins
+  namespace: monitoring
+  labels:
+    grafana_plugin: "1"  # ⬅️ Sidecar watches for this label!
+data:
+  plugins: "grafana-github-datasource"

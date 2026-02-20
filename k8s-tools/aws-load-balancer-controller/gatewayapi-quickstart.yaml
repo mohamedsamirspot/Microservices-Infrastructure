@@ -1,0 +1,102 @@
+# https://kubernetes-sigs.github.io/aws-load-balancer-controller/latest/guide/gateway/customization/
+
+apiVersion: gateway.k8s.aws/v1beta1
+kind: LoadBalancerConfiguration
+metadata:
+  name: lb-config
+  namespace: aws-load-balancer-controller
+spec:
+  scheme: internet-facing
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: GatewayClass
+metadata:
+  name: alb-gateway-class
+spec:
+  controllerName: gateway.k8s.aws/alb
+  parametersRef:
+    kind: LoadBalancerConfiguration
+    name: lb-config
+    namespace: aws-load-balancer-controller
+    group: gateway.k8s.aws
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: external-gateway
+  namespace: aws-load-balancer-controller
+spec:
+  gatewayClassName: alb-gateway-class
+  listeners:
+    - name: http
+      protocol: HTTP
+      port: 80
+      allowedRoutes:
+        namespaces:
+          from: All
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hello
+  namespace: default
+spec:
+  type: ClusterIP
+  selector:
+    app: hello
+  ports:
+    - port: 80
+      targetPort: 80
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hello
+  template:
+    metadata:
+      labels:
+        app: hello
+    spec:
+      containers:
+        - name: hello
+          image: nginxdemos/hello:0.4
+          ports:
+            - containerPort: 80
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: aws-load-balancer-controller-backend-httproute
+  namespace: default
+spec:
+  parentRefs:
+    - name: external-gateway
+      namespace: aws-load-balancer-controller
+      sectionName: http
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: hello
+          port: 80
+          weight: 1
+---
+apiVersion: gateway.k8s.aws/v1beta1
+kind: TargetGroupConfiguration
+metadata:
+  name: tg-config
+  namespace: default
+spec:
+  targetReference:
+    name: hello
+  defaultConfiguration:
+    targetGroupName: hello-target-group
+    targetType: ip

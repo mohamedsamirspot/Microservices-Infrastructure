@@ -17,7 +17,7 @@ alertmanager:
     enabled: false
 
 
-# just for adding the extra label "clustername"
+# just for adding the extra label "clustername" for the current cluster "the parent prometheus" to identify the source cluster when remote-write to a "centralized prometheus"
 scrapeConfigs:
   prometheus:
     enabled: true

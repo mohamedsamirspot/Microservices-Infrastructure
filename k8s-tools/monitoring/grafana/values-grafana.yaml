@@ -17,58 +17,54 @@ resources:
     cpu: 100m
     memory: 128Mi
 
+# Disable password leak detection (allows inline passwords)
+# assertNoLeakedSecrets: false
+# grafana.ini:
+#   smtp:
+#     enabled: true
+#     host: smtp.gmail.com:587
+#     user: mohamed.samir.emary@gmail.com
+#     password: urzxrxlwneyiapcw
+#     from_address: mohamed.samir.emary@gmail.com
+#     from_name: Grafana Alerts
+#     startTLS_policy: MandatoryStartTLS
+#     skip_verify: false
 
-# cd /etc/grafana/datasources
-datasources:
-  datasources.yaml:
-    apiVersion: 1
-    datasources:
-    - name: Prometheus
-      uid: bdvw8iqhzrm68d
-      type: prometheus
-      url: http://prometheus-server.monitoring.svc.cluster.local
-      access: proxy
-      isDefault: true
-      editable: true
+# ==================== SIDECAR CONFIGURATION ====================
+# All datasources, dashboards, plugins, and alerts are managed via ConfigMaps
+sidecar:
+  # cd /etc/grafana/provisioning/datasources
+  datasources:
+    enabled: true
+    label: grafana_datasource
+    labelValue: "1"
+    searchNamespace: monitoring
+    reloadURL: "http://localhost:3000/api/admin/provisioning/datasources/reload"
 
-# cd /etc/grafana/provisioning/dashboards --> here you just define the place where the dashboards are located
-## Configure grafana dashboard to import
-## NOTE: To use dashboards you must also enable/configure dashboardProviders
-## ref: https://grafana.com/dashboards
-##
-## dashboards per provider, use provider name as key.
-# take care these configs will create an empty directory called default under /var/lib/grafana/dashboards/ anyway
-dashboardProviders:
-  dashboardproviders.yaml:
-    apiVersion: 1
-    providers:
-      - name: general
-        orgId: 1
-        folder: ""                # This puts dashboards in the 'General' folder in Grafana UI
-        type: file
-        disableDeletion: false
-        editable: true
-        options:
-          path: /var/lib/grafana/dashboards/  # dashboards go directly here
+  # cd /etc/grafana/provisioning/dashboards --> here you just define the place where the dashboards are located
+  dashboards:
+    enabled: true
+    label: grafana_dashboard
+    labelValue: "1"
+    folder: /var/lib/grafana/dashboards
+    searchNamespace: monitoring
+    folderAnnotation: grafana_folder
+    provider:
+      foldersFromFilesStructure: true
 
-      - name: kubernetes
-        orgId: 1
-        folder: "kubernetes"
-        type: file
-        disableDeletion: false
-        editable: true
-        options:
-          path: /var/lib/grafana/dashboards/kubernetes
+  # cd /etc/grafana/provisioning/alerting
+  alerts:
+    enabled: true
+    label: grafana_alert
+    labelValue: "1"
+    folder: /etc/grafana/provisioning/alerting
+    searchNamespace: monitoring
+    reloadURL: "http://localhost:3000/api/admin/provisioning/alerting/reload"
 
-# Define dashboards to be imported
-dashboards:
-  general:
-    blackbox-exporter:
-      url: https://raw.githubusercontent.com/mohamedsamirspot/Microservices-Infrastructure/refs/heads/test/k8s-tools/monitoring/grafana/dashboards/blackbox-exporter.json
-  kubernetes:
-    k8s-pods:
-      url: https://raw.githubusercontent.com/mohamedsamirspot/Microservices-Infrastructure/refs/heads/test/k8s-tools/monitoring/grafana/dashboards/k8s-pods.json
-
-# cd /var/lib/grafana/plugins --> here you define the plugins to be installed
-plugins:
-  - grafana-github-datasource
+  # cd /var/lib/grafana/plugins --> here you define the plugins to be installed
+  plugins:
+    enabled: true
+    label: grafana_plugin
+    labelValue: "1"
+    searchNamespace: monitoring
+    initPlugins: true  # Install before Grafana starts

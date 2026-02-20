@@ -1,7 +1,7 @@
-skip = !read_terragrunt_config(find_in_parent_folders("env.hcl")).locals.enable_alb_ingress_controller
+skip = !read_terragrunt_config(find_in_parent_folders("env.hcl")).locals.enable_aws_load_balancer_controller
 
 terraform {
-  source = "${find_in_parent_folders("k8s-tools")}/alb-ingress-controller"
+  source = "${find_in_parent_folders("k8s-tools")}/aws-load-balancer-controller"
 }
 
 include "root" {
@@ -14,6 +14,7 @@ dependencies {
   paths = [
     "${get_terragrunt_dir()}/../aws-network",
     "${get_terragrunt_dir()}/../aws-eks",
+    "${get_terragrunt_dir()}/../gateway-api-crds",
     "${get_terragrunt_dir()}/../karpenter"
   ]
 }
@@ -37,6 +38,11 @@ dependency "eks" {
   }
 }
 
+dependency "gateway-api-crds" {
+  config_path = "${get_terragrunt_dir()}/../gateway-api-crds"
+  skip_outputs = true
+}
+
 dependency "karpenter" {
   config_path = "${get_terragrunt_dir()}/../karpenter"
   skip_outputs = true
@@ -47,8 +53,9 @@ inputs = {
   cluster_name     = dependency.eks.outputs.cluster_name
   oidc_provider_arn = dependency.eks.outputs.oidc_provider_arn
 }
-generate "provider-alb-ingress-controller" {
-  path      = "provider-alb-ingress-controller.tf"
+
+generate "provider-aws-load-balancer-controller" {
+  path      = "provider-aws-load-balancer-controller.tf"
   if_exists = "overwrite_terragrunt"
   contents  = <<EOF
 
