@@ -5,8 +5,9 @@
 #   default = "1.6.2"
 # }
 
-
+# https://gateway.envoyproxy.io/v1.5/install/gateway-crds-helm-api/
 # The envoy gateway api custome crds like the EnvoyProxy and the EnvoyFilter
+# crds.gatewayAPI.enabled=false this is the gateway api crds themeselves and we will install them separately in another module
 # resource "kubectl_manifest" "envoy_gateway_custome_crds" {
 #   for_each = toset(["eg-crds"])
 
@@ -18,7 +19,8 @@
 # EOT
 # }
 
-# The controller itself
+# https://gateway.envoyproxy.io/v1.5/install/gateway-helm-api/
+# The envoy gateway api controller itself
 resource "helm_release" "envoy-gateway-api" {
   name             = "envoy-gateway-api"
   repository       = "oci://docker.io/envoyproxy"
@@ -28,4 +30,3 @@ resource "helm_release" "envoy-gateway-api" {
   create_namespace = true
   skip_crds        = true
 }
-

@@ -10,10 +10,10 @@ locals {
   enable_aws_eks = true
   enable_aws_network = true
   enable_gha_runner = false
-  enable_grafana = true
+  enable_grafana = false
   enable_karpenter = true
   enable_kube_downscaler = false
-  enable_prometheus = true
+  enable_prometheus = false
   enable_secrets_store_csi_driver = false
   enable_sonarqube = false
   enable_stakater_reloader = false
