@@ -5,7 +5,9 @@
 #   default = "1.6.2"
 # }
 
-# resource "kubectl_manifest" "envoy_gateway_crds" {
+
+# The envoy gateway api custome crds like the EnvoyProxy and the EnvoyFilter
+# resource "kubectl_manifest" "envoy_gateway_custome_crds" {
 #   for_each = toset(["eg-crds"])
 
 #   yaml_body = <<EOT
