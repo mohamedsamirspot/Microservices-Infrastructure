@@ -1,23 +1,38 @@
 # This chart include both the Envoy Gateway and Gateway API crds and you can skip the gateway api crds if you want to install them separately and i think it's better to install them separately if you have more than one gateway implementation in the cluster
 # https://gateway.envoyproxy.io/v1.5/install/install-helm/
 
-# variable "custome_envoy_gateway_crds_chart_version" {
-#   default = "1.6.2"
-# }
-
 # https://gateway.envoyproxy.io/v1.5/install/gateway-crds-helm-api/
 # The envoy gateway api custome crds like the EnvoyProxy and the EnvoyFilter
 # crds.gatewayAPI.enabled=false this is the gateway api crds themeselves and we will install them separately in another module
-# resource "kubectl_manifest" "envoy_gateway_custome_crds" {
-#   for_each = toset(["eg-crds"])
+# Step 1: render the manifests locally using helm template
+data "helm_template" "custome_envoy_gateway_crds" {
+  name       = "eg-crds"
+  repository = "oci://docker.io/envoyproxy"
+  chart      = "gateway-crds-helm"
+  version    = "1.6.2"
 
-#   yaml_body = <<EOT
-# ${chomp(trimspace(shell("helm template ${each.key} oci://docker.io/envoyproxy/gateway-crds-helm \
-#   --version ${var.custome_envoy_gateway_crds_chart_version} \
-#   --set crds.gatewayAPI.enabled=false \
-#   --set crds.envoyGateway.enabled=true")))}
-# EOT
-# }
+  set {
+    name  = "crds.gatewayAPI.enabled"
+    value = "false"
+  }
+
+  set {
+    name  = "crds.envoyGateway.enabled"
+    value = "true"
+  }
+}
+# Step 2: split the rendered YAML into individual manifests and apply server-side
+resource "kubectl_manifest" "custome_envoy_gateway_crds" {
+  for_each = {
+    for idx, manifest in split("---", data.helm_template.envoy_gateway_crds.manifest) :
+    idx => manifest
+    if trimspace(manifest) != ""
+  }
+
+  yaml_body         = each.value
+  server_side_apply = true   # equivalent to --server-side flag
+  force_conflicts   = true   # recommended for CRDs to avoid field manager conflicts
+}
 
 # https://gateway.envoyproxy.io/v1.5/install/gateway-helm-api/
 # The envoy gateway api controller itself
