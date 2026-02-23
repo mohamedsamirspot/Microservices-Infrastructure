@@ -1,0 +1,18 @@
+<!-- Set up branch protection rules
+
+Go to your repository → Settings → Branches → Branch protection rules.
+
+Add a rule for your default branch (e.g., main or master).
+
+Enable:
+
+Require pull request reviews before merging
+
+Require review from Code Owners
+
+This ensures the PR cannot be merged without the designated reviewer approving the files they own. -->
+
+# A CODEOWNERS file defines who must review changes for specific files or directories.
+
+# Give @mohamedsamirspot code owner access for all files
+*  @mohamedsamirspot
