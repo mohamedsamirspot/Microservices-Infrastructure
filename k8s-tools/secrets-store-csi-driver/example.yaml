@@ -50,5 +50,5 @@ spec:
   provider: aws
   parameters:
     objects: |
-        - objectName: "microservices-secret-2"
+        - objectName: "microservices-secret-store-csi-driver"
           objectType: "secretsmanager"
