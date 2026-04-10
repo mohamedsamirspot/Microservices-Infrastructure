@@ -109,7 +109,7 @@ module "secrets_manager" {
   source = "terraform-aws-modules/secrets-manager/aws"
 
   # Secret
-  name             = "microservices-secret-2"
+  name             = "microservices-secret-store-csi-driver"
   recovery_window_in_days = 0
 
   ignore_secret_changes = true
