@@ -1,5 +1,6 @@
 locals {
-  region_vars  = read_terragrunt_config(find_in_parent_folders("region.hcl"))
+  region_vars = read_terragrunt_config(find_in_parent_folders("region.hcl"))
+  account_vars = read_terragrunt_config(find_in_parent_folders("account.hcl"))
 }
 
 remote_state {
@@ -9,7 +10,7 @@ remote_state {
     if_exists = "overwrite_terragrunt"
   }
   config = {
-    bucket = "terraform-state-multi-env-spot"
+    bucket = "${local.account_vars.locals.account_id}-${local.region_vars.locals.aws_region}-terraform-state"
     key = "${path_relative_to_include()}/terraform.tfstate"
     region         = "${local.region_vars.locals.aws_region}"
     encrypt        = true
