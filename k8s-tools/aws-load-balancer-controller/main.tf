@@ -15,7 +15,7 @@ YAML
 
 module "aws_load_balancer_controller_irsa_role" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
-  version = "6.4.0"
+  version = "6.6.1"
   name = "aws-load-balancer-controller"
 
   attach_load_balancer_controller_policy = true
