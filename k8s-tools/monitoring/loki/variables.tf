@@ -7,7 +7,21 @@ variable "loki_chart_version" {
 variable "aws_region" {
   description = "AWS region for S3 bucket"
   type        = string
-  default     = "us-east-1"
+}
+
+variable "cluster_name" {
+  description = "EKS cluster name used for naming IRSA resources"
+  type        = string
+}
+
+variable "oidc_provider_arn" {
+  description = "OIDC provider ARN for EKS cluster"
+  type        = string
+}
+
+variable "cluster_oidc_provider_url" {
+  description = "OIDC issuer URL for EKS cluster"
+  type        = string
 }
 
 variable "bucket_name" {
