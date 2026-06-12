@@ -40,7 +40,7 @@ resource "aws_iam_policy" "loki_irsa_policy" {
           "s3:ListBucket",
           "s3:GetBucketLocation"
         ]
-        Resource = "arn:aws:s3:::${module.loki_s3.bucket}"
+        Resource = module.loki_s3.s3_bucket_arn
       },
       {
         Effect = "Allow"
@@ -52,7 +52,7 @@ resource "aws_iam_policy" "loki_irsa_policy" {
           "s3:ListBucketMultipartUploads",
           "s3:ListMultipartUploadParts"
         ]
-        Resource = "arn:aws:s3:::${module.loki_s3.bucket}/*"
+        Resource = "${module.loki_s3.s3_bucket_arn}/*"
       }
     ]
   })
@@ -113,7 +113,7 @@ resource "helm_release" "loki" {
 
   values = [
     templatefile("${path.module}/values-loki.yaml", {
-      s3_bucket                 = module.loki_s3.bucket
+      s3_bucket                 = module.loki_s3.s3_bucket_id
       region                    = var.aws_region
       loki_service_account_name = "loki-sa"
     })
@@ -123,5 +123,5 @@ resource "helm_release" "loki" {
 }
 
 output "loki_bucket" {
-  value = module.loki_s3.bucket
+  value = module.loki_s3.s3_bucket_id
 }
