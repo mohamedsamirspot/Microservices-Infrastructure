@@ -11,7 +11,7 @@ locals {
   enable_aws_network = true
   enable_gha_runner = false
   enable_grafana = true
-  enable_karpenter = false
+  enable_karpenter = true
   enable_kube_downscaler = false
   enable_loki = true
   enable_prometheus = false
