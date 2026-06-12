@@ -1,0 +1,30 @@
+replicaCount: 1
+
+fullnameOverride: "loki"
+
+config:
+  table_manager:
+    retention_deletes_enabled: false
+  schema_config:
+    configs:
+      - from: 2020-10-24
+        store: boltdb-shipper
+        object_store: s3
+        schema: v11
+        index:
+          prefix: index_
+  storage_config:
+    boltdb_shipper:
+      active_index_directory: /data/loki/index
+      shared_store: s3
+    aws:
+      s3: s3://${s3_bucket}
+      region: ${region}
+      s3forcepathstyle: false
+
+server:
+  http_listen_port: 3100
+
+limits_config: {}
+chunk_target_size: 1048576
+
