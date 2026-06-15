@@ -4,7 +4,9 @@ module "loki_s3" {
 
   bucket        = var.bucket_name
 
-  acl = "private"
+  # Keep ACLs disabled for S3 Object Ownership = BucketOwnerEnforced.
+  control_object_ownership = true
+  object_ownership         = "BucketOwnerEnforced"
 
   force_destroy = false
 
