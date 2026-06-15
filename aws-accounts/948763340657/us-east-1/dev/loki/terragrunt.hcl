@@ -39,6 +39,7 @@ inputs = {
   oidc_provider_arn = dependency.eks.outputs.oidc_provider_arn
   cluster_oidc_provider_url = dependency.eks.outputs.cluster_oidc_issuer_url
   aws_region = read_terragrunt_config(find_in_parent_folders("region.hcl")).locals.aws_region
+  bucket_name = "loki-storage-${read_terragrunt_config(find_in_parent_folders("account.hcl")).locals.account_id}-${read_terragrunt_config(find_in_parent_folders("region.hcl")).locals.aws_region}-${read_terragrunt_config(find_in_parent_folders("env.hcl")).locals.env}"
   tags       = read_terragrunt_config(find_in_parent_folders("env.hcl")).locals.tags
 }
 
