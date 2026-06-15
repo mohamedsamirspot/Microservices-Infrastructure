@@ -8,7 +8,7 @@ module "loki_s3" {
   control_object_ownership = true
   object_ownership         = "BucketOwnerEnforced"
 
-  force_destroy = false
+  force_destroy = true
 
   # Block public access
   block_public_acls       = true
