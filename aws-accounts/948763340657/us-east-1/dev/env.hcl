@@ -11,8 +11,9 @@ locals {
   enable_aws_network = true
   enable_gha_runner = false
   enable_grafana = false
-  enable_karpenter = false
+  enable_karpenter = true
   enable_kube_downscaler = false
+  enable_loki = false
   enable_prometheus = false
   enable_secrets_store_csi_driver = false
   enable_sonarqube = false
