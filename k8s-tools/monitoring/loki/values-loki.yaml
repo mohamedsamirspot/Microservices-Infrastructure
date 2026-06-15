@@ -9,6 +9,8 @@ singleBinary:
   serviceAccount:
     create: false
     name: ${loki_service_account_name}
+  persistence:
+    enabled: false
 
 # Disable all other deployment modes/components.
 backend:
