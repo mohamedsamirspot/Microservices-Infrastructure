@@ -7,6 +7,7 @@ module "karpenter" {
   version = "~> 21.0"
 
   cluster_name          = var.cluster_name
+  enable_inline_policy  = true
   create_pod_identity_association = true
   namespace           = "karpenter"
   # Used to attach additional IAM policies to the Karpenter node IAM role
