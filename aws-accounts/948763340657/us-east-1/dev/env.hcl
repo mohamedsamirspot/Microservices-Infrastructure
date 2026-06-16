@@ -10,7 +10,6 @@ locals {
   enable_aws_eks = true
   enable_aws_network = true
   enable_gha_runner = false
-  enable_grafana_alloy = true
   enable_grafana = true
   enable_karpenter = true
   enable_kube_downscaler = false
