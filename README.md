@@ -17,6 +17,7 @@ These terraform components (modules and k8s-tools) can create the following so f
   - kube-downscaler
   - monitoring
     - grafana
+    - loki
     - prometheus
   - secrets-store-csi-driver
   - sonarqube
