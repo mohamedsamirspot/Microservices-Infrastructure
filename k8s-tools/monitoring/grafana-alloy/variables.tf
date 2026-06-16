@@ -21,12 +21,6 @@ variable "namespace_selector_regex" {
   default     = ".*"
 }
 
-variable "enable_service_monitor" {
-  description = "Create ServiceMonitor resource for Alloy metrics scraping. Requires monitoring.coreos.com/v1 CRDs."
-  type        = bool
-  default     = false
-}
-
 variable "tags" {
   description = "Map of tags to assign. Kept for consistency with other modules."
   type        = map(string)

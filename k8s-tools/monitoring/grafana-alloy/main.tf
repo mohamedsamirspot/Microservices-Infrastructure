@@ -11,7 +11,6 @@ resource "helm_release" "grafana_alloy" {
       loki_push_api_url         = var.loki_push_api_url
       cluster_name              = var.cluster_name
       namespace_selector_regex  = var.namespace_selector_regex
-      enable_service_monitor    = var.enable_service_monitor
     })
   ]
 }

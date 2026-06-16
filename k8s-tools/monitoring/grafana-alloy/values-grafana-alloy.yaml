@@ -90,5 +90,3 @@ alloy:
         forward_to = [loki.write.default.receiver]
       }
 
-serviceMonitor:
-  enabled: ${enable_service_monitor}
