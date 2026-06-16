@@ -14,7 +14,8 @@ dependencies {
   paths = [
     "${get_terragrunt_dir()}/../aws-eks",
     "${get_terragrunt_dir()}/../karpenter",
-    "${get_terragrunt_dir()}/../loki"
+    "${get_terragrunt_dir()}/../loki",
+    "${get_terragrunt_dir()}/../prometheus"
   ]
 }
 
@@ -39,10 +40,16 @@ dependency "loki" {
   skip_outputs = true
 }
 
+dependency "prometheus" {
+  config_path  = "${get_terragrunt_dir()}/../prometheus"
+  skip_outputs = true
+}
+
 inputs = {
   cluster_name             = dependency.eks.outputs.cluster_name
   loki_push_api_url        = "http://loki.monitoring.svc.cluster.local:3100/loki/api/v1/push"
   namespace_selector_regex = ".*"
+  enable_service_monitor   = read_terragrunt_config(find_in_parent_folders("env.hcl")).locals.enable_prometheus
   tags                     = read_terragrunt_config(find_in_parent_folders("env.hcl")).locals.tags
 }
 
