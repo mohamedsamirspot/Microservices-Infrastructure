@@ -81,19 +81,19 @@ jobs:
       # ------------------ TERRAGRUNT INIT ------------------
       - name: Terragrunt Init
         working-directory: ${{ env.WORKING_DIR }}
-        run: terragrunt run-all init
+        run: terragrunt init --all --backend-bootstrap --non-interactive
 
       # ------------------ TERRAGRUNT VALIDATE ------------------
       - name: Terragrunt Validate
         working-directory: ${{ env.WORKING_DIR }}
-        run: terragrunt run-all validate
+        run: terragrunt validate --all
 
       # ------------------ TERRAGRUNT PLAN ------------------
       - name: Terragrunt Plan
         working-directory: ${{ env.WORKING_DIR }}
-        run: terragrunt run-all plan
+        run: terragrunt plan --all
 
       # ------------------ TERRAGRUNT APPLY ------------------
       - name: Terragrunt Apply
         working-directory: ${{ env.WORKING_DIR }}
-        run: terragrunt run-all apply --auto-approve --terragrunt-non-interactive
+        run: terragrunt apply --all --auto-approve --non-interactive

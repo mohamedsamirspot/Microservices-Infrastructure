@@ -16,6 +16,12 @@ remote_state {
     region         = "${local.region_vars.locals.aws_region}"
     encrypt        = true
     use_lockfile = true
+
+    skip_bucket_versioning = false
+    skip_bucket_ssencryption = false
+    skip_bucket_root_access = false
+    skip_bucket_enforced_tls = false
+    disable_bucket_update = false
   }
 }
 
