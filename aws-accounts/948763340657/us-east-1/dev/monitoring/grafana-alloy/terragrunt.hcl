@@ -12,14 +12,14 @@ include "root" {
 # apply and destroy ordering
 dependencies {
   paths = [
-    "${get_terragrunt_dir()}/../aws-eks",
-    "${get_terragrunt_dir()}/../karpenter",
+    "${get_terragrunt_dir()}/../../aws-eks",
+    "${get_terragrunt_dir()}/../../karpenter",
     "${get_terragrunt_dir()}/../loki"
   ]
 }
 
 dependency "eks" {
-  config_path = "${get_terragrunt_dir()}/../aws-eks"
+  config_path = "${get_terragrunt_dir()}/../../aws-eks"
 
   # Fix for run-all init
   mock_outputs = {
@@ -30,7 +30,7 @@ dependency "eks" {
 }
 
 dependency "karpenter" {
-  config_path  = "${get_terragrunt_dir()}/../karpenter"
+  config_path  = "${get_terragrunt_dir()}/../../karpenter"
   skip_outputs = true
 }
 
