@@ -3,7 +3,7 @@
 #---------------------------------- RDS Database Module ----------------------------------
 module "security_group" {
   source  = "terraform-aws-modules/security-group/aws"
-  version = "~> 5.0"
+  version = "~> 6.0"
 
   name        = "postgresql-db-sg"
   vpc_id      = var.vpc_id
