@@ -1,0 +1,54 @@
+replicaCount: 1
+
+image:
+  registry: docker.io
+  repository: prom/blackbox-exporter
+  tag: v0.26.0
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 9115
+
+serviceMonitor:
+  enabled: true
+  namespace: monitoring
+  interval: 30s
+
+config:
+  modules:
+    http_2xx:
+      prober: http
+      timeout: 5s
+      http:
+        valid_http_versions: ["HTTP/1.1", "HTTP/2.0"]
+        valid_status_codes: []
+        method: GET
+        follow_redirects: true
+        preferred_ip_protocol: ip4
+    http_post_2xx:
+      prober: http
+      timeout: 5s
+      http:
+        valid_http_versions: ["HTTP/1.1", "HTTP/2.0"]
+        valid_status_codes: []
+        method: POST
+        follow_redirects: true
+        preferred_ip_protocol: ip4
+    tcp_connect:
+      prober: tcp
+      timeout: 5s
+    pop3s_banner:
+      prober: pop3s
+      timeout: 5s
+    grpc:
+      prober: grpc
+      timeout: 5s
+      grpc:
+        tls: true
+        preferred_ip_protocol: ip4
+    grpc_plain:
+      prober: grpc
+      timeout: 5s
+      grpc:
+        tls: false
