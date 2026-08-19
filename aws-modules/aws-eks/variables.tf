@@ -5,7 +5,7 @@ variable "cluster_name" {
 
 variable "kubernetes_version" {
   type    = string
-  default = "1.34"
+  default = "1.36"
   description = "Kubernetes / EKS cluster version to create and to use as a default for addon compatibility."
 }
 
