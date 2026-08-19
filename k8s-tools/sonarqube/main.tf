@@ -3,28 +3,27 @@
 #---------------------------------- RDS Database Module ----------------------------------
 module "security_group" {
   source  = "terraform-aws-modules/security-group/aws"
-  version = "~> 5.0"
+  version = "~> 6.0"
 
   name        = "postgresql-db-sg"
   vpc_id      = var.vpc_id
 
-  # ingress
-  ingress_with_cidr_blocks = [
-    {
+  ingress_rules = {
+    postgres_from_vpc = {
       from_port   = 5432
       to_port     = 5432
-      protocol    = "tcp"
+      ip_protocol = "tcp"
       description = "PostgreSQL access from within VPC"
-      cidr_blocks = var.vpc_cidr_block
-    },
-  ]
+      cidr_ipv4   = var.vpc_cidr_block
+    }
+  }
 
   tags = var.tags
 }
 
 module "db" {
   source  = "terraform-aws-modules/rds/aws"
-  version = "7.2.0"
+  version = "7.2.1"
 
   identifier                     = "sonarqube-postgresql-db"
   instance_use_identifier_prefix = true
@@ -61,7 +60,7 @@ module "db" {
   publicly_accessible = false
 
   db_subnet_group_name   = var.database_subnet_group_name
-  vpc_security_group_ids = [module.security_group.security_group_id]
+  vpc_security_group_ids = [module.security_group.id]
 
   skip_final_snapshot       = true
 
