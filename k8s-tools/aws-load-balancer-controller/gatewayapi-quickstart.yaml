@@ -1,6 +1,6 @@
 # https://kubernetes-sigs.github.io/aws-load-balancer-controller/latest/guide/gateway/customization/
 
-apiVersion: gateway.k8s.aws/v1beta1
+apiVersion: gateway.k8s.aws/v1
 kind: LoadBalancerConfiguration
 metadata:
   name: lb-config
@@ -89,7 +89,7 @@ spec:
           port: 80
           weight: 1
 ---
-apiVersion: gateway.k8s.aws/v1beta1
+apiVersion: gateway.k8s.aws/v1
 kind: TargetGroupConfiguration
 metadata:
   name: tg-config
