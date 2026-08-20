@@ -13,6 +13,30 @@ metadata:
 YAML
 }
 
+data "http" "aws_load_balancer_controller_gateway_crds" {
+  url = "https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v3.5.0/config/crd/gateway/gateway-crds.yaml"
+}
+
+# These are AWS Load Balancer Controller-specific Gateway CRDs (gateway.k8s.aws),
+# such as LoadBalancerConfiguration/TargetGroupConfiguration/ListenerRuleConfiguration.
+# They are different from the generic Gateway API CRDs (gateway.networking.k8s.io)
+# installed by the shared gateway-api-crds module.
+# Starting from controller v3.5.0, Gateway users should explicitly update/apply
+# these AWS-specific CRDs because the controller moved from v1beta1-era CRDs to
+# v1 storage/serving expectations for gateway.k8s.aws resources.
+# Apply them before the Helm upgrade to keep Gateway features fully enabled and
+# avoid API version/storage mismatches.
+resource "kubectl_manifest" "aws_load_balancer_controller_gateway_crds" {
+  for_each = { for idx, manifest in split("---", data.http.aws_load_balancer_controller_gateway_crds.response_body) :
+    "${idx}-${md5(manifest)}" => manifest
+    if trimspace(manifest) != "" && can(yamldecode(manifest))
+  }
+
+  yaml_body          = each.value
+  server_side_apply = true
+  force_conflicts   = true
+}
+
 module "aws_load_balancer_controller_irsa_role" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
   version = "~> 6.0"
@@ -33,7 +57,7 @@ resource "helm_release" "aws_load_balancer_controller" {
   name = "aws-load-balancer-controller"
   repository = "https://aws.github.io/eks-charts"
   chart      = "aws-load-balancer-controller"
-  version    = "3.2.1"
+  version    = "3.5.0"
   namespace  = "aws-load-balancer-controller"
 
   values = [
@@ -43,7 +67,11 @@ resource "helm_release" "aws_load_balancer_controller" {
       roleArn     = module.aws_load_balancer_controller_irsa_role.arn
     })
   ]
-  depends_on = [kubectl_manifest.aws-load-balancer-controller_namespace, module.aws_load_balancer_controller_irsa_role]
+  depends_on = [
+    kubectl_manifest.aws-load-balancer-controller_namespace,
+    kubectl_manifest.aws_load_balancer_controller_gateway_crds,
+    module.aws_load_balancer_controller_irsa_role
+  ]
 
   # set {
   #   name  = "vpcId"

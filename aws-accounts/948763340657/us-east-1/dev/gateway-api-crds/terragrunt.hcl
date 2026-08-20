@@ -13,6 +13,7 @@ include "root" {
 dependencies {
   paths = [
     "${get_terragrunt_dir()}/../aws-eks",
+    "${get_terragrunt_dir()}/../karpenter",
   ]
 }
 
@@ -26,6 +27,11 @@ dependency "eks" {
     oidc_provider_arn      = "arn:aws:iam::123456789012:oidc-provider/oidc.eks.us-east-1.amazonaws.com/id/EXAMPLED539D4633E53DE1B716D3041E"
     cluster_oidc_issuer_url      = "oidc.eks.us-east-1.amazonaws.com/id/EXAMPLED539D4633E53DE1B716D3041E"
   }
+}
+
+dependency "karpenter" {
+  config_path  = "${get_terragrunt_dir()}/../karpenter"
+  skip_outputs = true
 }
 
 generate "provider-gateway-api-crds" {
