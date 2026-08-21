@@ -1,4 +1,16 @@
 # You’ll always need some kind of AWS load-balancer to get traffic in from the internet (routed into a public subnet) to your worker nodes (hopefully situated in a private subnet). However, if you’re running Envoy Gateway, you don’t need the complexity, cost, and relatively high latency of an ALB; an NLB is optimal.
+# Alternative pattern: you can create an ALB manually (AWS Console or IaC) and
+# register Envoy (NodePort/Service endpoints, depending on your setup) in that
+# ALB target group. The same pattern can be used for Ingress as well when you
+# want explicit LB ownership/tracking and prefer to avoid auto-provisioned LBs.
+# Caveat: this is operationally heavier because you manage LB lifecycle, listener
+# rules, health checks, and drift yourself. A safer hybrid is externally managed
+# ALB + TargetGroupBinding so target registration can still be handled by k8s.
+# Note: this hybrid ALB approach requires both Envoy Gateway CRDs/controller and
+# AWS Load Balancer Controller (for TargetGroupBinding reconciliation).
+# If you use Envoy only with Service type LoadBalancer (NLB path), you do not
+# need TargetGroupBinding, and may not need AWS LBC depending on cluster mode.
+
 apiVersion: gateway.envoyproxy.io/v1alpha1
 kind: EnvoyProxy
 metadata:
