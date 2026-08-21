@@ -75,6 +75,14 @@ resource "kubectl_manifest" "karpenter_node_class" {
     spec:
       amiFamily: AL2023
       role: ${module.karpenter.node_iam_role_name}
+      kubelet:
+        # EKS practical supported pod-density ceilings are usually 110 pods for nodes with <30 vCPUs,
+        # and up to 250 for larger nodes. Higher values may parse but are not realistically achievable.
+        # You may see pod capacity as 110 here, but that does not always mean it will work effectively.
+        # Actual usable pods still depend on CNI/IP availability and node CPU/memory.
+        # To make higher pod density effective, VPC CNI prefix delegation must be enabled.
+        # Example: in prefix mode, t3.small has a network-side ceiling of 144 pod IPs (before kubelet/resource limits).
+        maxPods: 110
       subnetSelectorTerms:
         - tags:
             karpenter.sh/discovery: ${var.cluster_name}
