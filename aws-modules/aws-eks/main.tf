@@ -53,7 +53,17 @@ module "eks" {
     # before_compute = true --> means before node group creation
     coredns = {resolve_conflicts_on_update = "PRESERVE"}
     kube-proxy = {resolve_conflicts_on_update = "PRESERVE"}
-    vpc-cni = {resolve_conflicts_on_update = "PRESERVE", before_compute = true ,resolve_conflicts_on_create = "OVERWRITE"}
+    vpc-cni = {
+      resolve_conflicts_on_update = "OVERWRITE"
+      before_compute              = true
+      resolve_conflicts_on_create = "OVERWRITE"
+      configuration_values = jsonencode({
+        env = {
+          ENABLE_PREFIX_DELEGATION = "true"
+          WARM_PREFIX_TARGET       = "1"
+        }
+      })
+    }
     aws-ebs-csi-driver = {resolve_conflicts_on_update = "PRESERVE" , service_account_role_arn = module.ebs_csi_driver_irsa.arn}
     aws-efs-csi-driver = {resolve_conflicts_on_update = "PRESERVE" , service_account_role_arn = module.efs_csi_driver_irsa.arn}
     eks-pod-identity-agent = {resolve_conflicts_on_update = "PRESERVE", before_compute = true}
@@ -81,6 +91,28 @@ module "eks" {
       min_size     = var.min_size
       max_size     = var.max_size
       desired_size = var.desired_size
+
+      # Ensure kubelet pod limit is explicitly set for AL2023 nodes.
+      cloudinit_pre_nodeadm = [
+        {
+          content_type = "application/node.eks.aws"
+          content      = <<-EOT
+            ---
+            apiVersion: node.eks.aws/v1alpha1
+            kind: NodeConfig
+            spec:
+              kubelet:
+                config:
+                  # EKS practical supported pod-density ceilings are usually 110 pods for nodes with <30 vCPUs,
+                  # and up to 250 for larger nodes. Higher values may parse but are not realistically achievable.
+                  # You may see pod capacity as 110 here, but that does not always mean it will work effectively.
+                  # Actual usable pods still depend on CNI/IP availability and node CPU/memory.
+                  # To make higher pod density effective, VPC CNI prefix delegation must be enabled.
+                  # Example: in prefix mode, t3.small has a network-side ceiling of 144 pod IPs (before kubelet/resource limits).
+                  maxPods: 110
+          EOT
+        }
+      ]
 
       labels = {
         # Used to ensure Karpenter runs on nodes that it does not manage (the node group created by this module)
