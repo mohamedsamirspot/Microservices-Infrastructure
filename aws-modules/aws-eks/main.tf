@@ -160,8 +160,8 @@ module "eks" {
 
 
   # Cluster access entry
-  # To add the current caller identity as an administrator
-  enable_cluster_creator_admin_permissions = true
+  # AWS auto-grants the cluster-creating principal admin access; leaving this true causes a 409 conflict on re-apply
+  enable_cluster_creator_admin_permissions = false
   access_entries = {
     # you can use users or roles arns only no groups so you need to put more than one user or just put one role and make all the users you want to assume it so they can have access from one access entry only
     spot = {
@@ -175,17 +175,17 @@ module "eks" {
         }
       }
     }
-    # github-action-role = {
-    #   principal_arn     = "arn:aws:iam::948763340657:role/github-action-role"
-    #   policy_associations = {
-    #     example = {
-    #       policy_arn = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy"
-    #       access_scope = {
-    #             type = "cluster"
-    #       }
-    #     }
-    #   }
-    # }
+    github-action-role = {
+      principal_arn     = "arn:aws:iam::948763340657:role/github-action-role"
+      policy_associations = {
+        example = {
+          policy_arn = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy"
+          access_scope = {
+                type = "cluster"
+          }
+        }
+      }
+    }
     # moataznaguib = {
     #   principal_arn     = "arn:aws:iam::948763340657:user/moataznaguib"
     #   policy_associations = {

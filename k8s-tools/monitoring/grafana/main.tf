@@ -51,9 +51,9 @@ metadata:
   name: grafana-admin-credentials
   namespace: monitoring
 type: Opaque
-stringData:
-  userKey: admin
-  passwordKey: ${random_password.grafana_admin_password.result}
+data:
+  userKey: ${base64encode("admin")}
+  passwordKey: ${base64encode(random_password.grafana_admin_password.result)}
 YAML
 
   depends_on = [kubectl_manifest.monitoring_namespace]
