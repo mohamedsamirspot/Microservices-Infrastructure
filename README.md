@@ -13,12 +13,14 @@ These terraform components (modules and k8s-tools) can create the following so f
   - external-secrets-operator
   - gateway-api-crds
   - gha-runner
+  - istio
   - karpenter
   - kube-downscaler
   - monitoring
     - blackbox-exporter
     - grafana-alloy
     - grafana
+    - kiali (optional Istio dashboard)
     - loki
     - prometheus
   - secrets-store-csi-driver

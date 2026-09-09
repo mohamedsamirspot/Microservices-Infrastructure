@@ -1,0 +1,33 @@
+# https://istio.io/latest/docs/reference/config/istio.operator.v1alpha1/#MeshConfig
+meshConfig:
+  # Send access logs to stdout so they're picked up by the cluster's log stack (e.g. Loki/Alloy)
+  accessLogFile: /dev/stdout
+  # Emit metrics in a format Prometheus can merge/scrape from the sidecar without extra annotations
+  enablePrometheusMerge: true
+  defaultConfig:
+    # Fail closed if istiod is unreachable instead of allowing unauthenticated traffic
+    holdApplicationUntilProxyStarts: true
+
+pilot:
+  autoscaleEnabled: true
+  autoscaleMin: 1
+  autoscaleMax: 3
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+
+# Keep the control plane itself out of the mesh's own mTLS trust checks confusion for learning purposes,
+# actual mesh-wide mTLS enforcement is done via the PeerAuthentication resource in main.tf
+global:
+  proxy:
+    resources:
+      requests:
+        cpu: 50m
+        memory: 128Mi
+      limits:
+        cpu: 200m
+        memory: 256Mi

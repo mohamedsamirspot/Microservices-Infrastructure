@@ -155,6 +155,11 @@ module "eks" {
     "karpenter.sh/discovery" = "${var.cluster_name}"
   }
 
+  # The module's own defaults already open the well-known webhook ports (443/4443/6443/8443/9443/10250/10251)
+  # from the control plane to nodes, for anything else (e.g. istiod's webhook on 15017) the caller passes
+  # the extra rule(s) in explicitly, this module stays agnostic to which k8s-tools are actually installed.
+  node_security_group_additional_rules = var.additional_node_security_group_rules
+
   # IAM roles for service accounts (IRSA)
   enable_irsa = true  # Enable IAM roles for service accounts
 

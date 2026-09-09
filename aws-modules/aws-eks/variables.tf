@@ -63,6 +63,14 @@ variable "subnet_ids" {
   type        = list(string)
 }
 
+variable "additional_node_security_group_rules" {
+  # This module doesn't need to know what any of these are for (Istio, another webhook, etc.),
+  # it just merges whatever the caller passes in on top of the module's own default rules.
+  description = "Extra node security group rules to merge in on top of this module's defaults, keyed by rule name (aws_eks module's node_security_group_additional_rules format)"
+  type        = any
+  default     = {}
+}
+
 # variable "control_plane_subnet_ids" {
 #   type        = list(string)
 # }
