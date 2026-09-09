@@ -1,0 +1,28 @@
+# Kiali is only an observability/visualization dashboard for the mesh (topology graph, config
+# validation, traffic flow), it is entirely OPTIONAL - Istio itself works fully without it.
+# It's the same relationship as Grafana is to Prometheus in this repo: nice to have, not a dependency.
+
+auth:
+  # Anonymous is fine for learning, use "openid"/"oauth" or front it with your SSO for anything real.
+  strategy: anonymous
+
+istio_namespace: istio-system
+
+external_services:
+  istio:
+    root_namespace: istio-system
+  prometheus:
+    # Matches the prometheus-community "prometheus" chart's default service name in this repo
+    url: "http://prometheus-server.monitoring:80"
+  grafana:
+    enabled: true
+    internal_url: "http://grafana.monitoring:80"
+    external_url: "http://grafana.monitoring:80"
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 128Mi
+  limits:
+    cpu: 200m
+    memory: 256Mi
