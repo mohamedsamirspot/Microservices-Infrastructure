@@ -7,13 +7,13 @@ locals {
   enable_external_secrets_operator = false
   enable_gateway_api_crds = false
   enable_aws_efs = false
-  enable_aws_eks = true
+  enable_aws_eks = false
   enable_aws_network = true
   enable_gha_runner = false
   enable_grafana = false
   enable_grafana_alloy = false
   enable_istio = false
-  enable_karpenter = true
+  enable_karpenter = false
   enable_kiali = false
   enable_kube_downscaler = false
   enable_loki = false
