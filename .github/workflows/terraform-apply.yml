@@ -81,7 +81,7 @@ jobs:
       # ------------------ TERRAGRUNT INIT ------------------
       - name: Terragrunt Init
         working-directory: ${{ env.WORKING_DIR }}
-        run: terragrunt init --all --backend-bootstrap --non-interactive
+        run: terragrunt init --all --backend-bootstrap --non-interactive -- -lockfile=readonly
 
       # ------------------ TERRAGRUNT VALIDATE ------------------
       - name: Terragrunt Validate
