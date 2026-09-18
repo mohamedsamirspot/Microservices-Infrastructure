@@ -104,7 +104,7 @@ YAML
 # Example secret
 module "secrets_manager" {
   source = "terraform-aws-modules/secrets-manager/aws"
-  version = "2.1.0"
+  version = "2.1.1"
 
   # Secret
   name             = "microservices-secret-2"
