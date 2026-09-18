@@ -23,7 +23,7 @@ module "security_group" {
 
 module "db" {
   source  = "terraform-aws-modules/rds/aws"
-  version = "7.2.1"
+  version = "7.2.2"
 
   identifier                     = "sonarqube-postgresql-db"
   instance_use_identifier_prefix = true
