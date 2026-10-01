@@ -121,7 +121,7 @@ resource "helm_release" "gha_runner_scale_set" {
   namespace  = "gha-runner"
   chart      = "gha-runner-scale-set"
   repository = "oci://ghcr.io/actions/actions-runner-controller-charts"
-  version    = "0.14.2"
+  version    = "0.15.0"
 
   # Optional: if you have a default values.yaml for all sizes
   values = [file("${path.module}/values-scale-set-${each.key}.yaml")]
