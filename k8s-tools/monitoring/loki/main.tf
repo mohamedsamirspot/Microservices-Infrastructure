@@ -1,6 +1,6 @@
 module "loki_s3" {
   source  = "terraform-aws-modules/s3-bucket/aws"
-  version = "5.15.4"
+  version = "5.17.0"
 
   bucket        = var.bucket_name
 
