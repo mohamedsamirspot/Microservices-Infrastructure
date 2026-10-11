@@ -38,7 +38,9 @@ These terraform components (modules and k8s-tools) can create the following so f
 
 ## Terraform and Terragrunt versions
 
-The repository pins Terraform to `1.14.6` in `.terraform-version` and Terragrunt to `0.82.2` in `.terragrunt-version`. GitHub Actions uses the same versions.
+The repository pins Terraform to `1.14.6` in `.terraform-version` and Terragrunt to `0.82.2` in `.terragrunt-version`. GitHub Actions uses the same versions through the explicit `terraform_version` and `tg_version` workflow inputs.
+
+The version files are read by `tfenv` and `tgenv` on the local machine. GitHub Actions does not automatically read these files, so changing a version file requires updating the workflow input as well. Keep both locations synchronized.
 
 For local Terraform, install or select the pinned version with tfenv:
 
