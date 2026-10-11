@@ -45,9 +45,11 @@ Version files:
 - `.terraform-version` - Terraform version used by `tfenv`
 - `.terragrunt-version` - Terragrunt version used by `tgenv`
 
-The version files are read by `tfenv` and `tgenv` on the local machine. GitHub Actions does not automatically read these files, so changing a version file requires updating the workflow input as well. Keep both locations synchronized.
+The version files are read by `tfenv` and `tgenv` on the local machine. GitHub Actions does not automatically read these files, so changing a version file requires updating the workflow input as well. Please keep both locations synchronized.
 
 You need `tfenv` and `tgenv` installed to manage the local versions.
+
+When `.terraform-version` or `.terragrunt-version` exists in the current repository, the corresponding version manager uses that file. When the file does not exist, `tfenv use <version>` or `tgenv use <version>` selects the version instead. To switch manually in a repository that has a version file, change that file or temporarily move it out of the way before selecting another version.
 
 For local Terraform, list installed and available versions:
 
@@ -76,8 +78,6 @@ Select a specific installed version:
 tgenv use 0.82.2
 terragrunt --version
 ```
-
-When `.terraform-version` or `.terragrunt-version` exists in the current repository, the corresponding version manager uses that file. When the file does not exist, `tfenv use <version>` or `tgenv use <version>` selects the version instead. To switch manually in a repository that has a version file, change that file or temporarily move it out of the way before selecting another version.
 
 ## Updating provider lockfiles
 Terraform lockfiles remember the provider versions to use, such as AWS `6.61.0`. They also store checksums proving that downloaded providers are authentic. This repository includes checksums for Linux, macOS Apple Silicon, and Windows so the same lockfile works on every supported platform.
