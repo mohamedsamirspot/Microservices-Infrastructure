@@ -36,6 +36,27 @@ These terraform components (modules and k8s-tools) can create the following so f
 ![Image Description](screenshots/1.png)
 ![Image Description](screenshots/2.png)
 
+## Terraform and Terragrunt versions
+
+The repository pins Terraform to `1.14.6` in `.terraform-version` and Terragrunt to `0.82.2` in `.terragrunt-version`. GitHub Actions uses the same versions.
+
+For local Terraform, install or select the pinned version with tfenv:
+
+```bash
+tfenv install
+tfenv use
+terraform version
+```
+
+For local Terragrunt, install tgenv and select the repository version:
+
+```bash
+brew install tgenv
+tgenv install
+tgenv use
+terragrunt --version
+```
+
 ## Updating provider lockfiles
 Terraform lockfiles remember the provider versions to use, such as AWS `6.61.0`. They also store checksums proving that downloaded providers are authentic. This repository includes checksums for Linux, macOS Apple Silicon, and Windows so the same lockfile works on every supported platform.
 
