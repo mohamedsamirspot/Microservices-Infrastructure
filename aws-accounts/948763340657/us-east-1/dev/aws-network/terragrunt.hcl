@@ -18,6 +18,10 @@ include "root" {
   expose = true
 }
 
+include "shared-providers" {
+  path = find_in_parent_folders("shared-providers.hcl")
+}
+
 locals {
   account = read_terragrunt_config(find_in_parent_folders("account.hcl")).locals.account_id
   env     = read_terragrunt_config(find_in_parent_folders("env.hcl")).locals.env

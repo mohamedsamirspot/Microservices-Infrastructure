@@ -9,6 +9,10 @@ include "root" {
   expose = true
 }
 
+include "shared-providers" {
+  path = find_in_parent_folders("shared-providers.hcl")
+}
+
 # apply and destroy ordering
 dependencies {
   paths = [
