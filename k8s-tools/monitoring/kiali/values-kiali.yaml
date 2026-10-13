@@ -26,3 +26,9 @@ resources:
   limits:
     cpu: 200m
     memory: 256Mi
+
+deployment:
+  probes:
+    startup:
+      initial_delay_seconds: 60
+      failure_threshold: 18
