@@ -124,7 +124,6 @@ resource "kubectl_manifest" "karpenter_node_pool" {
             - key: "node.kubernetes.io/instance-type"
               operator: In
               values:
-                - "t3.small"
                 - "t3.medium"
                 - "c5.large"
                 - "c5.xlarge"
@@ -144,8 +143,8 @@ resource "kubectl_manifest" "karpenter_node_pool" {
             #   operator: Lt
             #   values: ["10240"]  # 10 GB in MB
       limits:
-        cpu: "6"
-        memory: "8Gi"
+        cpu: "12"
+        memory: "16Gi"
       disruption:
         consolidationPolicy: WhenEmpty
         consolidateAfter: 30s
