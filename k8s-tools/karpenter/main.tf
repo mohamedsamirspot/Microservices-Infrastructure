@@ -154,3 +154,52 @@ resource "kubectl_manifest" "karpenter_node_pool" {
     kubectl_manifest.karpenter_node_class
   ]
 }
+
+resource "kubectl_manifest" "karpenter_apps_node_pool" {
+  yaml_body = <<-YAML
+    apiVersion: karpenter.sh/v1
+    kind: NodePool
+    metadata:
+      name: apps
+    spec:
+      template:
+        metadata:
+          labels:
+            workload: apps
+        spec:
+          nodeClassRef:
+            name: default
+            kind: EC2NodeClass
+            group: karpenter.k8s.aws
+          taints:
+            - key: workload
+              value: apps
+              effect: NoSchedule
+          requirements:
+            - key: "node.kubernetes.io/instance-type"
+              operator: In
+              values:
+                - "t3.medium"
+                - "c5.large"
+                - "c5.xlarge"
+                - "c6i.large"
+                - "m5.large"
+                - "m6i.large"
+            - key: "karpenter.sh/capacity-type"
+              operator: In
+              values: ["on-demand"]
+            - key: "kubernetes.io/arch"
+              operator: In
+              values: ["amd64"]
+      limits:
+        cpu: "12"
+        memory: "16Gi"
+      disruption:
+        consolidationPolicy: WhenEmpty
+        consolidateAfter: 30s
+  YAML
+
+  depends_on = [
+    kubectl_manifest.karpenter_node_class
+  ]
+}
