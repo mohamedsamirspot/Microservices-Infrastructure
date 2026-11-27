@@ -36,6 +36,31 @@ These terraform components (modules and k8s-tools) can create the following so f
 ![Image Description](screenshots/1.png)
 ![Image Description](screenshots/2.png)
 
+## Kubernetes workload placement
+
+The EKS managed node group is the baseline system capacity. It is tainted with
+`CriticalAddonsOnly=true:NoSchedule` and hosts the Karpenter controller through
+the `karpenter.sh/controller=true` label.
+
+Karpenter currently keeps the existing `default` NodePool for compatibility
+with the installed tools. A separate tainted `apps` NodePool is also created
+for application workloads. Application deployments must opt in to that pool:
+
+```yaml
+nodeSelector:
+  workload: apps
+tolerations:
+  - key: workload
+    operator: Equal
+    value: apps
+    effect: NoSchedule
+```
+
+The `apps` NodePool is intentionally additive. Platform tools may continue to
+use the shared `default` NodePool; a separate platform NodePool is only needed
+if those tools later require independent scaling, stronger isolation, or
+different instance and capacity policies.
+
 ## Terraform and Terragrunt versions
 
 The repository pins Terraform to `1.14.6` in `.terraform-version` and Terragrunt to `0.82.2` in `.terragrunt-version`. GitHub Actions uses the same versions through the explicit `terraform_version` and `tg_version` workflow inputs.
